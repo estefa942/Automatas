@@ -7,7 +7,7 @@ package automatafinito;
 
 /**
  *
- * @author ACER
+ * @author ACER trabajos :'v
  */
 public class AutomataFinito {
 
