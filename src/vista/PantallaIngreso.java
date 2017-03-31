@@ -5,6 +5,8 @@
  */
 package vista;
 
+import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PantallaIngreso extends javax.swing.JFrame {
 
+    Vector vEstados = new Vector();
     /**
      * Creates new form PantallaIngreso
      */
@@ -32,6 +35,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Fondo = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtSimbolos = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -39,8 +43,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
         panelMostrador = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaEstados = new javax.swing.JTable();
-        btn_aceptar = new javax.swing.JButton();
-        Fondo = new javax.swing.JLabel();
+        btnIngresar = new javax.swing.JButton();
+        btnConversor = new javax.swing.JButton();
+
+        Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo2.jpg"))); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(810, 530));
@@ -48,18 +54,18 @@ public class PantallaIngreso extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Ingrese los simbolos de entrada, seguidos por coma:");
+        jLabel2.setText("Ingrese los símbolos de entrada, separados por coma.");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(30, 130, 260, 17);
+        jLabel2.setBounds(30, 107, 260, 40);
         getContentPane().add(txtSimbolos);
-        txtSimbolos.setBounds(30, 160, 210, 27);
+        txtSimbolos.setBounds(30, 160, 250, 27);
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Ingrese los estados, seguidos por coma:");
         getContentPane().add(jLabel3);
         jLabel3.setBounds(30, 230, 260, 17);
         getContentPane().add(txtEstados);
-        txtEstados.setBounds(30, 260, 210, 27);
+        txtEstados.setBounds(30, 260, 250, 27);
 
         panelMostrador.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -81,23 +87,28 @@ public class PantallaIngreso extends javax.swing.JFrame {
         getContentPane().add(panelMostrador);
         panelMostrador.setBounds(330, 60, 450, 380);
 
-        btn_aceptar.setText("Aceptar");
-        btn_aceptar.addActionListener(new java.awt.event.ActionListener() {
+        btnIngresar.setText("Ingresar");
+        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_aceptarActionPerformed(evt);
+                btnIngresarActionPerformed(evt);
             }
         });
-        getContentPane().add(btn_aceptar);
-        btn_aceptar.setBounds(96, 350, 110, 31);
+        getContentPane().add(btnIngresar);
+        btnIngresar.setBounds(30, 320, 110, 31);
 
-        Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo2.jpg"))); // NOI18N
-        getContentPane().add(Fondo);
-        Fondo.setBounds(0, 0, 810, 529);
+        btnConversor.setText("AFND a AF");
+        btnConversor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConversorActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnConversor);
+        btnConversor.setBounds(150, 320, 130, 31);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_aceptarActionPerformed
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:
         String[] simbolosEntrando = txtSimbolos.getText().split(",");
         String[] simbolos = new String[simbolosEntrando.length + 2];
@@ -114,8 +125,14 @@ public class PantallaIngreso extends javax.swing.JFrame {
             String[] charles = new String[1];
             charles[0] = estados[machete];
             dtm.addRow(charles);
+            vEstados.add(estados[machete]);
         }
-    }//GEN-LAST:event_btn_aceptarActionPerformed
+        JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
+    }//GEN-LAST:event_btnIngresarActionPerformed
+
+    private void btnConversorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConversorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnConversorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -154,7 +171,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Fondo;
-    private javax.swing.JButton btn_aceptar;
+    private javax.swing.JButton btnConversor;
+    private javax.swing.JButton btnIngresar;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;
