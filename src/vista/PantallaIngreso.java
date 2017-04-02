@@ -6,21 +6,23 @@
 package vista;
 
 import com.sun.org.apache.xml.internal.dtm.DTM;
+import controlador.ControladorAutomata;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import modelo.AutomataF;
 
 /**
  *
  * @author ACER
  */
 public class PantallaIngreso extends javax.swing.JFrame {
-
+    ControladorAutomata ca = new ControladorAutomata(); 
+   AutomataF af = new AutomataF();
     Vector vEstados = new Vector();
-    private String[] simbolosEntrando;
-    private String[] simbolos;
-    private String[] estados;
+    
+    private String[] estadosAceptacion;
     DefaultTableModel dtm;
     /**
      * Creates new form PantallaIngreso
@@ -124,14 +126,15 @@ public class PantallaIngreso extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        simbolosEntrando = txtSimbolos.getText().split(",");
-        simbolos = new String[simbolosEntrando.length + 2];
+        
+        String []simbolosEntrando = txtSimbolos.getText().split(",");
+        String []simbolos = new String[simbolosEntrando.length + 2];
         simbolos[0] = "Estados";
         for (int sym = 1; sym < simbolos.length - 1; sym++) {
             simbolos[sym] = simbolosEntrando[sym - 1];
         }
         simbolos[simbolos.length - 1] = "E.A.";
-        estados = txtEstados.getText().split(",");
+        String[]estados = txtEstados.getText().split(",");
         dtm = new DefaultTableModel(simbolos, 0);
         tablaEstados.setModel(dtm);
         for (int machete = 0; machete < estados.length; machete++) {
@@ -140,6 +143,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
             dtm.addRow(charles);
             vEstados.add(estados[machete]);
         }
+        af.setEstados(estados);
+        af.setSimbolos(simbolosEntrando);
         JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
     }//GEN-LAST:event_btnIngresarActionPerformed
     
@@ -148,14 +153,18 @@ public class PantallaIngreso extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConversorActionPerformed
 
     private void btn_IngresarAutomataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_IngresarAutomataActionPerformed
-      int m[][]=matrizAutomata();
-      esDeterministico();
+//      
+        int m[][]= matrizAutomata();
+        af.setMatrizTransiciones(m);
+        esDeterministico();
+        
     }//GEN-LAST:event_btn_IngresarAutomataActionPerformed
-
+   
+      
     public int convertirEstados(String a){
         int valor=0;
-        for(int i=0;i<estados.length;i++){
-            if(estados[i].equals(a)){
+        for(int i=0;i<af.getEstados().length;i++){
+            if(af.getEstados()[i].equals(a)){
                 valor=i;
                 
             }
@@ -163,21 +172,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
         return valor;
     }
     
-    public int convertirSimbolos(String a){
-        int valor=0;
-        for(int i=0;i<simbolosEntrando.length;i++){
-            if(simbolosEntrando[i].equals(a)){
-                valor=i;
-            }
-        }
-        return valor;
-    }
-    
     public int [][] matrizAutomata(){
         
-        int[][] ma = new int[estados.length][simbolosEntrando.length];
+        int[][] ma = new int[af.getEstados().length][af.getSimbolos().length];
         for (int i = 0; i < dtm.getRowCount() ; i++) {
-            for (int j = 0; j < simbolosEntrando.length; j++) {
+            for (int j = 0; j < af.getSimbolos().length; j++) {
 //                System.out.println(dtm.getColumnCount());
 //                System.out.println(j);
                 String estado = (String) dtm.getValueAt(i,j+1);
@@ -197,7 +196,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         int count=0;
         boolean b=true;
         for (int i = 0; i < dtm.getRowCount() ; i++) {
-            for (int j = 0; j < simbolosEntrando.length; j++) {
+            for (int j = 0; j < af.getSimbolos().length; j++) {
               String estado = (String) dtm.getValueAt(i,j+1);
               if(estado!=null){
                   if(estado.indexOf("-")!=-1){
