@@ -148,7 +148,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConversorActionPerformed
 
     private void btn_IngresarAutomataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_IngresarAutomataActionPerformed
-      matrizAutomata();
+      int m[][]=matrizAutomata();
+      esDeterministico();
     }//GEN-LAST:event_btn_IngresarAutomataActionPerformed
 
     public int convertirEstados(String a){
@@ -173,20 +174,45 @@ public class PantallaIngreso extends javax.swing.JFrame {
     }
     
     public int [][] matrizAutomata(){
+        
         int[][] ma = new int[estados.length][simbolosEntrando.length];
         for (int i = 0; i < dtm.getRowCount() ; i++) {
-            for (int j = 1; j < dtm.getColumnCount()-1; j++) {
-                String estado = (String) dtm.getValueAt(i,0);
+            for (int j = 0; j < simbolosEntrando.length; j++) {
+//                System.out.println(dtm.getColumnCount());
+//                System.out.println(j);
+                String estado = (String) dtm.getValueAt(i,j+1);
                 if(estado!=null){
                     int numEstado = convertirEstados(estado);
                     ma[i][j]=numEstado;
                 }else{
-                    ma[i][j]=0;
+                    ma[i][j]=-1;
                 }
                 System.out.println(ma[i][j]);
             }
         }
         return ma;
+    }
+    
+    public boolean esDeterministico(){
+        int count=0;
+        boolean b=true;
+        for (int i = 0; i < dtm.getRowCount() ; i++) {
+            for (int j = 0; j < simbolosEntrando.length; j++) {
+              String estado = (String) dtm.getValueAt(i,j+1);
+              if(estado!=null){
+                  if(estado.indexOf("-")!=-1){
+                      b=false;
+                      break;
+                  }
+              }
+            }
+        }
+        if(b){
+            JOptionPane.showMessageDialog(rootPane, "El autómata es deterministico");
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "El autómata es no deterministico");
+        }
+        return b;
     }
     
     /**
