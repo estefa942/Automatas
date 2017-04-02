@@ -5,6 +5,7 @@
  */
 package vista;
 
+import com.sun.org.apache.xml.internal.dtm.DTM;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -17,6 +18,10 @@ import javax.swing.table.DefaultTableModel;
 public class PantallaIngreso extends javax.swing.JFrame {
 
     Vector vEstados = new Vector();
+    private String[] simbolosEntrando;
+    private String[] simbolos;
+    private String[] estados;
+    DefaultTableModel dtm;
     /**
      * Creates new form PantallaIngreso
      */
@@ -45,6 +50,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         tablaEstados = new javax.swing.JTable();
         btnIngresar = new javax.swing.JButton();
         btnConversor = new javax.swing.JButton();
+        btn_IngresarAutomata = new javax.swing.JButton();
 
         Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo2.jpg"))); // NOI18N
 
@@ -58,14 +64,14 @@ public class PantallaIngreso extends javax.swing.JFrame {
         getContentPane().add(jLabel2);
         jLabel2.setBounds(30, 107, 260, 40);
         getContentPane().add(txtSimbolos);
-        txtSimbolos.setBounds(30, 160, 250, 27);
+        txtSimbolos.setBounds(30, 160, 250, 24);
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Ingrese los estados, seguidos por coma:");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(30, 230, 260, 17);
+        jLabel3.setBounds(30, 230, 260, 16);
         getContentPane().add(txtEstados);
-        txtEstados.setBounds(30, 260, 250, 27);
+        txtEstados.setBounds(30, 260, 250, 24);
 
         panelMostrador.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -94,7 +100,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnIngresar);
-        btnIngresar.setBounds(30, 320, 110, 31);
+        btnIngresar.setBounds(30, 320, 110, 32);
 
         btnConversor.setText("AFND a AF");
         btnConversor.addActionListener(new java.awt.event.ActionListener() {
@@ -103,23 +109,30 @@ public class PantallaIngreso extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnConversor);
-        btnConversor.setBounds(150, 320, 130, 31);
+        btnConversor.setBounds(150, 320, 130, 32);
+
+        btn_IngresarAutomata.setText("Ingresar datos ");
+        btn_IngresarAutomata.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_IngresarAutomataActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_IngresarAutomata);
+        btn_IngresarAutomata.setBounds(490, 450, 200, 32);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        // TODO add your handling code here:
-        String[] simbolosEntrando = txtSimbolos.getText().split(",");
-        String[] simbolos = new String[simbolosEntrando.length + 2];
+        simbolosEntrando = txtSimbolos.getText().split(",");
+        simbolos = new String[simbolosEntrando.length + 2];
         simbolos[0] = "Estados";
         for (int sym = 1; sym < simbolos.length - 1; sym++) {
             simbolos[sym] = simbolosEntrando[sym - 1];
         }
         simbolos[simbolos.length - 1] = "E.A.";
-        String[] estados = txtEstados.getText().split(",");
-        
-        DefaultTableModel dtm = new DefaultTableModel(simbolos, 0);
+        estados = txtEstados.getText().split(",");
+        dtm = new DefaultTableModel(simbolos, 0);
         tablaEstados.setModel(dtm);
         for (int machete = 0; machete < estados.length; machete++) {
             String[] charles = new String[1];
@@ -129,11 +142,53 @@ public class PantallaIngreso extends javax.swing.JFrame {
         }
         JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
     }//GEN-LAST:event_btnIngresarActionPerformed
-
+    
     private void btnConversorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConversorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnConversorActionPerformed
 
+    private void btn_IngresarAutomataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_IngresarAutomataActionPerformed
+      matrizAutomata();
+    }//GEN-LAST:event_btn_IngresarAutomataActionPerformed
+
+    public int convertirEstados(String a){
+        int valor=0;
+        for(int i=0;i<estados.length;i++){
+            if(estados[i].equals(a)){
+                valor=i;
+                
+            }
+        }
+        return valor;
+    }
+    
+    public int convertirSimbolos(String a){
+        int valor=0;
+        for(int i=0;i<simbolosEntrando.length;i++){
+            if(simbolosEntrando[i].equals(a)){
+                valor=i;
+            }
+        }
+        return valor;
+    }
+    
+    public int [][] matrizAutomata(){
+        int[][] ma = new int[estados.length][simbolosEntrando.length];
+        for (int i = 0; i < dtm.getRowCount() ; i++) {
+            for (int j = 1; j < dtm.getColumnCount()-1; j++) {
+                String estado = (String) dtm.getValueAt(i,0);
+                if(estado!=null){
+                    int numEstado = convertirEstados(estado);
+                    ma[i][j]=numEstado;
+                }else{
+                    ma[i][j]=0;
+                }
+                System.out.println(ma[i][j]);
+            }
+        }
+        return ma;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -173,6 +228,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private javax.swing.JLabel Fondo;
     private javax.swing.JButton btnConversor;
     private javax.swing.JButton btnIngresar;
+    private javax.swing.JButton btn_IngresarAutomata;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;
