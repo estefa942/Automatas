@@ -9,6 +9,7 @@ import com.sun.javafx.scene.control.skin.VirtualFlow;
 import com.sun.org.apache.xml.internal.dtm.DTM;
 import controlador.ControladorAutomata;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -24,10 +25,6 @@ public class PantallaIngreso extends javax.swing.JFrame {
     ControladorAutomata ca;
     AutomataF af = new AutomataF();
     Vector vEstados = new Vector();
-    //Para probar
-    ArrayList<ArrayList> automataNuevo = new ArrayList<>();
-    int[] visitados ;
-
     private String[] estadosAceptacion;
     DefaultTableModel dtm;
 
@@ -143,7 +140,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {                                            
-
+      
         String[] simbolosEntrando = txtSimbolos.getText().split(",");
         String[] simbolos = new String[simbolosEntrando.length + 2];
         simbolos[0] = "Estados";
@@ -174,7 +171,12 @@ public class PantallaIngreso extends javax.swing.JFrame {
 //      
         af.setTransiciones(ca.guardarAutomata());
         ca.imprimir(ca.guardarAutomata());
-        ca.esDeterministico();
+        if(ca.esDeterministico()){
+            JOptionPane.showMessageDialog(rootPane,"El autómata es deterministico");
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "El autómata es no deterministico");
+        }
+        
         ca.EstadosAceptacion();
 
     }                                                    
@@ -183,7 +185,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
        //Probando
         ca.llenarVisitados();
         ca.estadosExtraños(0);
-        ca.imprimir(automataNuevo);
+        ca.imprimir(af.getAutomataSinExtraños());
     }                                        
 
     

@@ -10,6 +10,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.AutomataF;
+import sun.misc.Queue;
 /**
  *
  * @author ACER
@@ -98,7 +99,9 @@ public class ControladorAutomata {
             indicador = (String) dtm.getValueAt(i, af.getSimbolos().length + 1);
             estadosAceptacion[i] = indicador;
         }
+         af.setEstadosAceptacion(estadosAceptacion);
         return estadosAceptacion;
+       
     }
 
     public boolean esDeterministico() {
@@ -131,44 +134,29 @@ public class ControladorAutomata {
                 estadosExtraños(convertirEstados(b));
             }
         }
+        af.setAutomataSinExtraños(automataNuevo);
     }
     
-//    
-//    public int [][] matrizAutomata( DefaultTableModel dtm){
-//        
-//        int[][] ma = new int[estados.length][simbolos.length];
-//        for (int i = 0; i < dtm.getRowCount() ; i++) {
-//            for (int j = 0; j < simbolos.length; j++) {
-////                System.out.println(dtm.getColumnCount());
-////                System.out.println(j);
-//                String estado = (String) dtm.getValueAt(i,j+1);
-//                if(estado!=null){
-//                    int numEstado = convertirEstados(estado);
-//                    ma[i][j]=numEstado;
-//                }else{
-//                    ma[i][j]=-1;
-//                }
-//                System.out.println(ma[i][j]);
-//            }
-//        }
-//        return ma;
-//    }
-//    
-//    public boolean esDeterministico(DefaultTableModel dtm){
-//        int count=0;
-//        boolean b=true;
-//        for (int i = 0; i < dtm.getRowCount() ; i++) {
-//            for (int j = 0; j < simbolos.length; j++) {
-//              String estado = (String) dtm.getValueAt(i,j+1);
-//              if(estado!=null){
-//                  if(estado.indexOf("-")!=-1){
-//                      b=false;
-//                      break;
-//                  }
-//              }
-//            }
-//        }
-//       
-//        return b;
-//    }
+    public void convertirEnDeterministico(){
+       ArrayList<ArrayList> automata =af.getTransiciones();
+        Queue estadosConcatenados = new Queue();
+        Queue estados = new Queue();
+        
+        for (int i = 0; i < automata.size(); i++) {
+            ArrayList<String> transiciones = automata.get(i);
+            for (int j = 0; j < 10; j++) {
+                String estado= transiciones.get(j);
+                if(estado!="error"){
+                    if(estado.indexOf(",")==-1){
+                     estados.enqueue(estado);
+                     String [] concatenado =estado.split(",");
+                     estadosConcatenados.enqueue(String.join("", concatenado));
+                    }
+                }
+                
+            }
+        }
+    }
+    
+
 }

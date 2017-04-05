@@ -18,6 +18,7 @@ public class AutomataF {
     public String[] estados;
     public String[] estadosAceptacion;
     public ArrayList<ArrayList> Transiciones;
+    public ArrayList<ArrayList> automataSinExtraños;
 //
 //    public AutomataF(String[] simbolos, String[] estados, String[] estadosAceptacion, int[][] matrizTransiciones) {
 //        this.simbolos = simbolos;
@@ -56,6 +57,14 @@ public class AutomataF {
 
     public void setTransiciones(ArrayList<ArrayList> Transiciones) {
         this.Transiciones = Transiciones;
+    }
+
+    public ArrayList<ArrayList> getAutomataSinExtraños() {
+        return automataSinExtraños;
+    }
+
+    public void setAutomataSinExtraños(ArrayList<ArrayList> automataSinExtraños) {
+        this.automataSinExtraños = automataSinExtraños;
     }
 
  
