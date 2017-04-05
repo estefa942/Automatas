@@ -5,8 +5,10 @@
  */
 package vista;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import com.sun.org.apache.xml.internal.dtm.DTM;
 import controlador.ControladorAutomata;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -18,19 +20,24 @@ import modelo.AutomataF;
  * @author ACER
  */
 public class PantallaIngreso extends javax.swing.JFrame {
-    ControladorAutomata ca = new ControladorAutomata(); 
-   AutomataF af = new AutomataF();
+
+    ControladorAutomata ca = new ControladorAutomata();
+    AutomataF af = new AutomataF();
     Vector vEstados = new Vector();
-    
+    //Para probar
+    ArrayList<ArrayList> automataNuevo = new ArrayList<>();
+    int[] visitados ;
+
     private String[] estadosAceptacion;
     DefaultTableModel dtm;
+
     /**
      * Creates new form PantallaIngreso
      */
     public PantallaIngreso() {
         initComponents();
         setLocationRelativeTo(null);
-        
+
     }
 
     /**
@@ -53,6 +60,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnIngresar = new javax.swing.JButton();
         btnConversor = new javax.swing.JButton();
         btn_IngresarAutomata = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo2.jpg"))); // NOI18N
 
@@ -122,19 +130,28 @@ public class PantallaIngreso extends javax.swing.JFrame {
         getContentPane().add(btn_IngresarAutomata);
         btn_IngresarAutomata.setBounds(490, 450, 200, 32);
 
+        jButton1.setText("extraño");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(350, 450, 74, 32);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        
-        String []simbolosEntrando = txtSimbolos.getText().split(",");
-        String []simbolos = new String[simbolosEntrando.length + 2];
+
+        String[] simbolosEntrando = txtSimbolos.getText().split(",");
+        String[] simbolos = new String[simbolosEntrando.length + 2];
         simbolos[0] = "Estados";
         for (int sym = 1; sym < simbolos.length - 1; sym++) {
             simbolos[sym] = simbolosEntrando[sym - 1];
         }
         simbolos[simbolos.length - 1] = "E.A.";
-        String[]estados = txtEstados.getText().split(",");
+        String[] estados = txtEstados.getText().split(",");
         dtm = new DefaultTableModel(simbolos, 0);
         tablaEstados.setModel(dtm);
         for (int machete = 0; machete < estados.length; machete++) {
@@ -147,73 +164,117 @@ public class PantallaIngreso extends javax.swing.JFrame {
         af.setSimbolos(simbolosEntrando);
         JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
     }//GEN-LAST:event_btnIngresarActionPerformed
-    
+
     private void btnConversorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConversorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnConversorActionPerformed
 
     private void btn_IngresarAutomataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_IngresarAutomataActionPerformed
 //      
-        int m[][]= matrizAutomata();
-        af.setMatrizTransiciones(m);
+        af.setTransiciones(guardarAutomata());
+        imprimir(guardarAutomata());
         esDeterministico();
-        
+        EstadosAceptacion();
+
     }//GEN-LAST:event_btn_IngresarAutomataActionPerformed
-   
-      
-    public int convertirEstados(String a){
-        int valor=0;
-        for(int i=0;i<af.getEstados().length;i++){
-            if(af.getEstados()[i].equals(a)){
-                valor=i;
-                
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       //Probando
+        llenarVisitados();
+        estadosExtraños(0);
+        imprimir(automataNuevo);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    public int convertirEstados(String a) {
+        int valor = 0;
+        for (int i = 0; i < af.getEstados().length; i++) {
+            if (af.getEstados()[i].equals(a)) {
+                valor = i;
+
             }
         }
         return valor;
     }
-    
-    public int [][] matrizAutomata(){
-        
-        int[][] ma = new int[af.getEstados().length][af.getSimbolos().length];
-        for (int i = 0; i < dtm.getRowCount() ; i++) {
-            for (int j = 0; j < af.getSimbolos().length; j++) {
-//                System.out.println(dtm.getColumnCount());
-//                System.out.println(j);
-                String estado = (String) dtm.getValueAt(i,j+1);
-                if(estado!=null){
-                    int numEstado = convertirEstados(estado);
-                    ma[i][j]=numEstado;
-                }else{
-                    ma[i][j]=-1;
-                }
-                System.out.println(ma[i][j]);
-            }
+    //probar
+    public void llenarVisitados(){
+         visitados = new int[af.getTransiciones().size()];
+        for (int i = 0; i < visitados.length; i++) {
+            visitados[i]=0;
         }
-        return ma;
     }
     
-    public boolean esDeterministico(){
-        int count=0;
-        boolean b=true;
-        for (int i = 0; i < dtm.getRowCount() ; i++) {
+    public ArrayList<ArrayList> guardarAutomata() {
+
+        ArrayList<ArrayList> automata = new ArrayList<>();
+        for (int i = 0; i < dtm.getRowCount(); i++) {
+            ArrayList<String> transiciones = new ArrayList<>();
             for (int j = 0; j < af.getSimbolos().length; j++) {
-              String estado = (String) dtm.getValueAt(i,j+1);
-              if(estado!=null){
-                  if(estado.indexOf("-")!=-1){
-                      b=false;
-                      break;
-                  }
-              }
+                String estado = (String) dtm.getValueAt(i, j + 1);
+
+                if (estado != null) {
+                    transiciones.add(estado);
+                } else {
+                    transiciones.add("Error");
+                }
+            }
+             automata.add(transiciones);
+        }
+        return automata;
+    }
+    
+    public void imprimir(ArrayList<ArrayList>a){
+        for (int i = 0; i < a.size(); i++) {
+            ArrayList b= a.get(i);
+            for (int j = 0; j < b.size(); j++) {
+                System.out.print("|"+b.get(j)+"|");
+            }
+            System.out.println("");
+        }
+    }
+    
+    public String[] EstadosAceptacion() {
+        String[] estadosAceptacion = new String[af.getEstados().length];
+        String indicador;
+        for (int i = 0; i < dtm.getRowCount(); i++) {
+            indicador = (String) dtm.getValueAt(i, af.getSimbolos().length + 1);
+            estadosAceptacion[i] = indicador;
+        }
+        return estadosAceptacion;
+    }
+
+    public boolean esDeterministico() {
+        int count = 0;
+        boolean b = true;
+        for (int i = 0; i < dtm.getRowCount(); i++) {
+            for (int j = 0; j < af.getSimbolos().length; j++) {
+                String estado = (String) dtm.getValueAt(i, j + 1);
+                if (estado != null) {
+                    if (estado.indexOf("-") != -1) {
+                        b = false;
+                        break;
+                    }
+                }
             }
         }
-        if(b){
+        if (b) {
             JOptionPane.showMessageDialog(rootPane, "El autómata es deterministico");
-        }else{
+        } else {
             JOptionPane.showMessageDialog(rootPane, "El autómata es no deterministico");
         }
         return b;
     }
-    
+
+    public void estadosExtraños(int p){
+        visitados[p]=1;
+        automataNuevo.add(af.getTransiciones().get(p));
+        for (int i = 0; i < af.getSimbolos().length; i++) {
+            String b=  (String) af.getTransiciones().get(p).get(i);
+             if(visitados[convertirEstados(b)]==0){
+                estadosExtraños(convertirEstados(b));
+            }
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -254,6 +315,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private javax.swing.JButton btnConversor;
     private javax.swing.JButton btnIngresar;
     private javax.swing.JButton btn_IngresarAutomata;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;

@@ -5,6 +5,7 @@
  */
 package modelo;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -16,7 +17,7 @@ public class AutomataF {
     public String[] simbolos;
     public String[] estados;
     public String[] estadosAceptacion;
-    public int [][] matrizTransiciones;
+    public ArrayList<ArrayList> Transiciones;
 //
 //    public AutomataF(String[] simbolos, String[] estados, String[] estadosAceptacion, int[][] matrizTransiciones) {
 //        this.simbolos = simbolos;
@@ -49,13 +50,15 @@ public class AutomataF {
         this.estadosAceptacion = estadosAceptacion;
     }
 
-    public int[][] getMatrizTransiciones() {
-        return matrizTransiciones;
+    public ArrayList<ArrayList> getTransiciones() {
+        return Transiciones;
     }
 
-    public void setMatrizTransiciones(int[][] matrizTransiciones) {
-        this.matrizTransiciones = matrizTransiciones;
+    public void setTransiciones(ArrayList<ArrayList> Transiciones) {
+        this.Transiciones = Transiciones;
     }
+
+ 
     
      
 }
