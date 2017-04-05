@@ -70,6 +70,7 @@ public class ControladorAutomata {
                 String estado = (String) dtm.getValueAt(i, j + 1);
 
                 if (estado != null) {
+                    
                     transiciones.add(estado);
                 } else {
                     transiciones.add("Error");
