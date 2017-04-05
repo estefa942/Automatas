@@ -101,7 +101,7 @@ public class ControladorAutomata {
     }
 
     public boolean esDeterministico() {
-        int count = 0;
+        int count = 0;   
         boolean b = true;
         for (int i = 0; i < dtm.getRowCount(); i++) {
             for (int j = 0; j < af.getSimbolos().length; j++) {
