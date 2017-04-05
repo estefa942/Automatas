@@ -21,7 +21,7 @@ import modelo.AutomataF;
  */
 public class PantallaIngreso extends javax.swing.JFrame {
 
-    ControladorAutomata ca = new ControladorAutomata();
+    ControladorAutomata ca;
     AutomataF af = new AutomataF();
     Vector vEstados = new Vector();
     //Para probar
@@ -162,6 +162,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         }
         af.setEstados(estados);
         af.setSimbolos(simbolosEntrando);
+        ca = new ControladorAutomata(af, dtm);
         JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
     }//GEN-LAST:event_btnIngresarActionPerformed
 
@@ -171,109 +172,21 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
     private void btn_IngresarAutomataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_IngresarAutomataActionPerformed
 //      
-        af.setTransiciones(guardarAutomata());
-        imprimir(guardarAutomata());
-        esDeterministico();
-        EstadosAceptacion();
+        af.setTransiciones(ca.guardarAutomata());
+        ca.imprimir(ca.guardarAutomata());
+        ca.esDeterministico();
+        ca.EstadosAceptacion();
 
     }//GEN-LAST:event_btn_IngresarAutomataActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        //Probando
-        llenarVisitados();
-        estadosExtraños(0);
-        imprimir(automataNuevo);
+        ca.llenarVisitados();
+        ca.estadosExtraños(0);
+        ca.imprimir(automataNuevo);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public int convertirEstados(String a) {
-        int valor = 0;
-        for (int i = 0; i < af.getEstados().length; i++) {
-            if (af.getEstados()[i].equals(a)) {
-                valor = i;
-
-            }
-        }
-        return valor;
-    }
-    //probar
-    public void llenarVisitados(){
-         visitados = new int[af.getTransiciones().size()];
-        for (int i = 0; i < visitados.length; i++) {
-            visitados[i]=0;
-        }
-    }
     
-    public ArrayList<ArrayList> guardarAutomata() {
-
-        ArrayList<ArrayList> automata = new ArrayList<>();
-        for (int i = 0; i < dtm.getRowCount(); i++) {
-            ArrayList<String> transiciones = new ArrayList<>();
-            for (int j = 0; j < af.getSimbolos().length; j++) {
-                String estado = (String) dtm.getValueAt(i, j + 1);
-
-                if (estado != null) {
-                    transiciones.add(estado);
-                } else {
-                    transiciones.add("Error");
-                }
-            }
-             automata.add(transiciones);
-        }
-        return automata;
-    }
-    
-    public void imprimir(ArrayList<ArrayList>a){
-        for (int i = 0; i < a.size(); i++) {
-            ArrayList b= a.get(i);
-            for (int j = 0; j < b.size(); j++) {
-                System.out.print("|"+b.get(j)+"|");
-            }
-            System.out.println("");
-        }
-    }
-    
-    public String[] EstadosAceptacion() {
-        String[] estadosAceptacion = new String[af.getEstados().length];
-        String indicador;
-        for (int i = 0; i < dtm.getRowCount(); i++) {
-            indicador = (String) dtm.getValueAt(i, af.getSimbolos().length + 1);
-            estadosAceptacion[i] = indicador;
-        }
-        return estadosAceptacion;
-    }
-
-    public boolean esDeterministico() {
-        int count = 0;
-        boolean b = true;
-        for (int i = 0; i < dtm.getRowCount(); i++) {
-            for (int j = 0; j < af.getSimbolos().length; j++) {
-                String estado = (String) dtm.getValueAt(i, j + 1);
-                if (estado != null) {
-                    if (estado.indexOf("-") != -1) {
-                        b = false;
-                        break;
-                    }
-                }
-            }
-        }
-        if (b) {
-            JOptionPane.showMessageDialog(rootPane, "El autómata es deterministico");
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "El autómata es no deterministico");
-        }
-        return b;
-    }
-
-    public void estadosExtraños(int p){
-        visitados[p]=1;
-        automataNuevo.add(af.getTransiciones().get(p));
-        for (int i = 0; i < af.getSimbolos().length; i++) {
-            String b=  (String) af.getTransiciones().get(p).get(i);
-             if(visitados[convertirEstados(b)]==0){
-                estadosExtraños(convertirEstados(b));
-            }
-        }
-    }
 
     /**
      * @param args the command line arguments
