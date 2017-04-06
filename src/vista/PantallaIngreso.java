@@ -6,7 +6,10 @@
 package vista;
 
 import controlador.ControladorAutomata;
+import controlador.ControladorEntradaDatos;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Vector;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -18,9 +21,11 @@ import modelo.AutomataF;
  * @author alejandro.castanor
  */
 public class PantallaIngreso extends javax.swing.JFrame {
+
     JFileChooser abrirArchivo = new JFileChooser();
     File archivo;
     ControladorAutomata ca;
+    ControladorEntradaDatos ced;
     AutomataF af = new AutomataF();
     Vector vEstados = new Vector();
     private String[] estadosAceptacion;
@@ -49,11 +54,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
         txtSimbolos = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtEstados = new javax.swing.JTextField();
-        btnIngresar = new javax.swing.JButton();
+        btnIngreso = new javax.swing.JButton();
         btnConversor = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         btnOperar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnArchivo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(826, 504));
@@ -91,13 +96,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
         txtEstados.setToolTipText("");
         getContentPane().add(txtEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 240, -1));
 
-        btnIngresar.setText("Ingresar");
-        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
+        btnIngreso.setText("Ingresar");
+        btnIngreso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIngresarActionPerformed(evt);
+                btnIngresoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 80, -1));
+        getContentPane().add(btnIngreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 100, -1));
 
         btnConversor.setText("AFND a AF");
         btnConversor.addActionListener(new java.awt.event.ActionListener() {
@@ -105,7 +110,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 btnConversorActionPerformed(evt);
             }
         });
-        getContentPane().add(btnConversor, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 220, 130, 30));
+        getContentPane().add(btnConversor, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 240, 30));
 
         jButton1.setText("extraño");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -124,30 +129,29 @@ public class PantallaIngreso extends javax.swing.JFrame {
         });
         getContentPane().add(btnOperar, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 460, 130, -1));
 
-        jButton2.setText("Abrir archivo");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnArchivo.setText("Abrir archivo");
+        btnArchivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnArchivoActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 160, -1));
+        getContentPane().add(btnArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 220, 110, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+    private void btnIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresoActionPerformed
         // TODO add your handling code here:
-        
         String[] simbolosEntrando = txtSimbolos.getText().split(",");
-        String[] simbolos = new String[simbolosEntrando.length + 2];
-        simbolos[0] = "Estados";
-        for (int sym = 1; sym < simbolos.length - 1; sym++) {
-            simbolos[sym] = simbolosEntrando[sym - 1];
+        String[] simbolosArr = new String[simbolosEntrando.length + 2];
+        simbolosArr[0] = "Estados";
+        for (int sym = 1; sym < simbolosArr.length - 1; sym++) {
+            simbolosArr[sym] = simbolosEntrando[sym - 1];
         }
-        simbolos[simbolos.length - 1] = "E.A.";
+        simbolosArr[simbolosArr.length - 1] = "E.A.";
         String[] estados = txtEstados.getText().split(",");
-        dtm = new DefaultTableModel(simbolos, 0);
-        tablaEstados.setModel(dtm);
+        dtm = new DefaultTableModel(simbolosArr, 0);
+
         for (int machete = 0; machete < estados.length; machete++) {
             String[] charles = new String[1];
             charles[0] = estados[machete];
@@ -156,14 +160,15 @@ public class PantallaIngreso extends javax.swing.JFrame {
         }
         af.setEstados(estados);
         af.setSimbolos(simbolosEntrando);
+        tablaEstados.setModel(dtm);
         ca = new ControladorAutomata(af, dtm);
         JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
-    }//GEN-LAST:event_btnIngresarActionPerformed
+    }//GEN-LAST:event_btnIngresoActionPerformed
 
     private void btnConversorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConversorActionPerformed
         // TODO add your handling code here:
-        if(ca.esDeterministico()==false){
-        ca.imprimir(ca.convertirEnDeterministico());
+        if (ca.esDeterministico() == false) {
+            ca.imprimir(ca.convertirEnDeterministico());
         }
     }//GEN-LAST:event_btnConversorActionPerformed
 
@@ -177,29 +182,73 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private void btnOperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperarActionPerformed
         af.setTransiciones(ca.guardarAutomata());
         ca.imprimir(ca.guardarAutomata());
-        if(ca.esDeterministico()){
-            JOptionPane.showMessageDialog(rootPane,"El autómata es deterministico");
-        }else{
+        if (ca.esDeterministico()) {
+            JOptionPane.showMessageDialog(rootPane, "El autómata es deterministico");
+        } else {
             JOptionPane.showMessageDialog(rootPane, "El autómata es no deterministico");
         }
         ca.EstadosAceptacion();
-        
+
     }//GEN-LAST:event_btnOperarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       if (abrirArchivo.showDialog(null, "ABRIR ARCHIVO") == JFileChooser.APPROVE_OPTION) {
+    private void btnArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArchivoActionPerformed
+        if (abrirArchivo.showDialog(null, "ABRIR ARCHIVO") == JFileChooser.APPROVE_OPTION) {
             archivo = abrirArchivo.getSelectedFile();
             if (archivo.canRead()) {
                 if (archivo.getName().endsWith("txt")) {
-//                    automata = datos.crearAutomata(archivo);
-//                    automata.escribir();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Seleccione un archivo de texto.");
+                    try {
+                        File fichero_entrada;
+                        fichero_entrada = new File(archivo.getAbsolutePath());
+                        Scanner scaneoPapu = new Scanner(fichero_entrada);
+                        Vector<String> datosDeEntrada = new Vector<String>();
+                        String[] slapChop;
+                        int contador = 0;
+                        while (scaneoPapu.hasNext()) {
+                            String lineaExtraida = scaneoPapu.nextLine();
+                            switch (contador) {
+                                case 0:
+                                    txtSimbolos.setText(lineaExtraida);
+                                    break;
+                                case 1:
+                                    txtEstados.setText(lineaExtraida);
+                                    break;
+                                default:
+
+                                    break;
+                            }
+                            contador++;
+                            datosDeEntrada.add(lineaExtraida);
+                        }
+                        String[] simbolosEntrando = txtSimbolos.getText().split(",");
+                        String[] simbolosArr = new String[simbolosEntrando.length + 2];
+                        simbolosArr[0] = "Estados";
+                        for (int sym = 1; sym < simbolosArr.length - 1; sym++) {
+                            simbolosArr[sym] = simbolosEntrando[sym - 1];
+                        }
+                        simbolosArr[simbolosArr.length - 1] = "E.A.";
+                        String[] estados = txtEstados.getText().split(",");
+                        dtm = new DefaultTableModel(simbolosArr, 0);
+
+                        for (int machete = 0; machete < estados.length; machete++) {
+                            String[] charles = new String[1];
+                            charles[0] = estados[machete];
+                            dtm.addRow(charles);
+                            vEstados.add(estados[machete]);
+                        }
+                        af.setEstados(estados);
+                        af.setSimbolos(simbolosEntrando);
+                        tablaEstados.setModel(dtm);
+                        ca = new ControladorAutomata(af, dtm);
+                        JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
+                    } catch (Exception e) {
+                        System.out.println("Se ha producido un error " + e + ". Revise argumentos y datos");
+                    }
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione un archivo de texto.");
             }
         }
-
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnArchivoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -215,16 +264,24 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PantallaIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PantallaIngreso.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PantallaIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PantallaIngreso.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PantallaIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PantallaIngreso.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PantallaIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PantallaIngreso.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -237,11 +294,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnArchivo;
     private javax.swing.JButton btnConversor;
-    private javax.swing.JButton btnIngresar;
+    private javax.swing.JButton btnIngreso;
     private javax.swing.JButton btnOperar;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;
