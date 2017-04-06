@@ -72,8 +72,7 @@ public class ControladorAutomata {
             for (int j = 0; j < af.getSimbolos().length; j++) {
                 String estado = (String) dtm.getValueAt(i, j + 1);
 
-                if (estado != null) {
-
+                if (estado.trim().length() != 0) {
                     transiciones.add(estado);
                 } else {
                     transiciones.add("\u0020");
