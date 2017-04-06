@@ -6,7 +6,9 @@
 package vista;
 
 import controlador.ControladorAutomata;
+import java.io.File;
 import java.util.Vector;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.AutomataF;
@@ -16,7 +18,8 @@ import modelo.AutomataF;
  * @author alejandro.castanor
  */
 public class PantallaIngreso extends javax.swing.JFrame {
-    
+    JFileChooser abrirArchivo = new JFileChooser();
+    File archivo;
     ControladorAutomata ca;
     AutomataF af = new AutomataF();
     Vector vEstados = new Vector();
@@ -50,6 +53,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnConversor = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         btnOperar = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(826, 504));
@@ -120,6 +124,14 @@ public class PantallaIngreso extends javax.swing.JFrame {
         });
         getContentPane().add(btnOperar, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 460, 130, -1));
 
+        jButton2.setText("Abrir archivo");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 160, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -174,6 +186,21 @@ public class PantallaIngreso extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnOperarActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       if (abrirArchivo.showDialog(null, "ABRIR ARCHIVO") == JFileChooser.APPROVE_OPTION) {
+            archivo = abrirArchivo.getSelectedFile();
+            if (archivo.canRead()) {
+                if (archivo.getName().endsWith("txt")) {
+//                    automata = datos.crearAutomata(archivo);
+//                    automata.escribir();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Seleccione un archivo de texto.");
+                }
+            }
+        }
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -214,6 +241,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private javax.swing.JButton btnIngresar;
     private javax.swing.JButton btnOperar;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;

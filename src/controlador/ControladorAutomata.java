@@ -129,6 +129,23 @@ public class ControladorAutomata {
         particiones.add(estadosRec);
         particiones.add(estadosAcp);
     }
+    
+    /**
+     * Permite determinar si el estado ingresado es de aceptación.
+     * @param estado
+     * @return un booleano con la confirmación de si es un estado de acpetación o no.
+     */
+    public boolean esEstadoDeAceptacion(String estado){
+        boolean b = false;
+        String[] aceptacion =particiones.get(1);
+        for (int i = 0; i < aceptacion.length; i++) {
+            if(aceptacion[i].equals(estado)){
+                b=true;
+                break;
+            }
+        }
+        return b;
+    }
 /**
  * Permite verificar si el autómata ingresado es deterministico o no deterministico,
  * mediante la revision de sus transiciones
@@ -207,6 +224,16 @@ public class ControladorAutomata {
         return b;
     }
 
+    public boolean definirEstadoDeAceptacion(String[] estados){
+        boolean b=false;
+        for (int i = 0; i < estados.length; i++) {
+            if(esEstadoDeAceptacion(estados[i])){
+                b=true;
+                break;
+            }
+        }
+        return b;
+    }
     /**
      * Este método permite revisar las transiciones de un estado, y en caso de
      * que un transición vaya a dos estados, los concatena.
@@ -240,12 +267,16 @@ public class ControladorAutomata {
      * @return un ArrayList<ArrayList> con el nuevo autómata.
      */
     public ArrayList<ArrayList> convertirEnDeterministico() {
+        ArrayList<String> estadosAceptacion= new ArrayList<>();
         ArrayList<ArrayList> automata = af.getTransiciones();
         ArrayList<ArrayList> automataD = new ArrayList<>();
         ArrayList<String> estados = new ArrayList<>();
         estados.add(af.getEstados()[0]);
+        if(esEstadoDeAceptacion(af.getEstados()[0])){
+        estadosAceptacion.add(af.getEstados()[0]);
+        }
         automataD.add(revisarTransiciones(af.getTransiciones().get(0)));
-
+        
         for (int i = 0; i < automata.size(); i++) {
             ArrayList<String> transicionesD = new ArrayList<>();
             ArrayList<String> transiciones = automata.get(i);
@@ -254,16 +285,22 @@ public class ControladorAutomata {
                 if (estado != "\u0020") {
                     if (estado.contains(",")) {
 
-                        String[] concatenado = estado.split(",");
+                        String[] concatenado = estado.split(","); //Acá
                         String nuevoEstado = String.join("", concatenado);
                         if (existeEstado(estados, nuevoEstado) == false) {
-                            estados.add(nuevoEstado);
+                             estados.add(nuevoEstado);
+                             if(definirEstadoDeAceptacion(concatenado)){
+                             estadosAceptacion.add(nuevoEstado);
+                             }
                             ArrayList<String> a = unirTransiciones(concatenado);
                             automataD.add(a);
                         }
 
-                    } else if (existeEstado(estados, estado) == false) {
+                    } else if (existeEstado(estados, estado) == false && estado!="\u0020") {
                         estados.add(estado);
+                        if(esEstadoDeAceptacion(estado)){
+                        estadosAceptacion.add(estado);
+                        }
                         int b = convertirEstados(estado);                        
                         automataD.add(revisarTransiciones(automata.get(b)));
                         
@@ -273,7 +310,18 @@ public class ControladorAutomata {
 
         }
         af.setTransiciones(automataD);
-//        af.setEstados(estados); Falta convertir ese arreglo en array
+        String[] nEstados= new String[estados.size()];
+        String[] nAceptacion = new String[estadosAceptacion.size()];
+        for (int i = 0; i < estados.size(); i++) {
+            nEstados[i]=estados.get(i);
+           
+        }
+         for (int i = 0; i < estadosAceptacion.size(); i++) {
+           
+             nAceptacion[i]=estadosAceptacion.get(i);
+        }
+        af.setEstados(nEstados);
+        af.setEstadosAceptacion(nAceptacion);
         return automataD;
     }
 }
