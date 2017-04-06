@@ -157,7 +157,7 @@ public class ControladorAutomata {
             for (int j = 0; j < af.getSimbolos().length; j++) {
                 String estado = (String) dtm.getValueAt(i, j + 1);
                 if (estado != null) {
-                    if (estado.indexOf(",") != -1) {
+                    if (estado.indexOf("-") != -1) {
                         b = false;
                         break;
                     }
@@ -244,8 +244,8 @@ public class ControladorAutomata {
         for (int i = 0; i < transiciones.size(); i++) {
             String a = transiciones.get(i);
             if (a != "\u0020") {
-                if (a.contains(",")) {
-                    String[] concatenado = a.split(",");
+                if (a.contains("-")) {
+                    String[] concatenado = a.split("-");
                     String nuevoEstado = String.join("", concatenado);
                     transicionesNuevas.add(nuevoEstado);
                 } else {
@@ -282,9 +282,9 @@ public class ControladorAutomata {
             for (int j = 0; j < transiciones.size(); j++) {
                 String estado = transiciones.get(j);
                 if (estado != "\u0020") {
-                    if (estado.contains(",")) {
+                    if (estado.contains("-")) {
 
-                        String[] concatenado = estado.split(","); //Acá
+                        String[] concatenado = estado.split("-"); //Acá
                         String nuevoEstado = String.join("", concatenado);
                         if (existeEstado(estados, nuevoEstado) == false) {
                              estados.add(nuevoEstado);
@@ -306,7 +306,6 @@ public class ControladorAutomata {
                     }
                 }
             }
-
         }
         af.setTransiciones(automataD);
         String[] nEstados= new String[estados.size()];
