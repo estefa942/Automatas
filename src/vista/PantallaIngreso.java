@@ -252,39 +252,42 @@ public class PantallaIngreso extends javax.swing.JFrame {
                             String lineaExtraida = scaneoPapu.nextLine();
                             switch (contador) {
                                 case 0:
+                                    slapChop = lineaExtraida.split(":");
+                                    lineaExtraida = slapChop[1];
                                     txtSimbolos.setText(lineaExtraida);
                                     break;
                                 case 1:
+                                    slapChop = lineaExtraida.split(":");
+                                    lineaExtraida = slapChop[1];
                                     txtEstados.setText(lineaExtraida);
                                     break;
                                 default:
-
+                                    
                                     break;
                             }
                             contador++;
                             datosDeEntrada.add(lineaExtraida);
                         }
-                        String[] simbolosEntrando = txtSimbolos.getText().split(",");
-                        String[] simbolosArr = new String[simbolosEntrando.length + 2];
-                        simbolosArr[0] = "Estados";
-                        for (int sym = 1; sym < simbolosArr.length - 1; sym++) {
-                            simbolosArr[sym] = simbolosEntrando[sym - 1];
-                        }
-                        simbolosArr[simbolosArr.length - 1] = "E.A.";
-                        String[] estados = txtEstados.getText().split(",");
-                        dtm = new DefaultTableModel(simbolosArr, 0);
-
-                        for (int machete = 0; machete < estados.length; machete++) {
-                            String[] charles = new String[1];
-                            charles[0] = estados[machete];
-                            dtm.addRow(charles);
-                            vEstados.add(estados[machete]);
-                        }
-                        af.setEstados(estados);
-                        af.setSimbolos(simbolosEntrando);
-                        tablaEstados.setModel(dtm);
-                        ca = new ControladorAutomata(af, dtm);
-                        JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
+//                        String[] simbolosEntrando = txtSimbolos.getText().split(",");
+//                        String[] simbolosArr = new String[simbolosEntrando.length + 2];
+//                        simbolosArr[0] = "Estados";
+//                        for (int sym = 1; sym < simbolosArr.length - 1; sym++) {
+//                            simbolosArr[sym] = simbolosEntrando[sym - 1];
+//                        }
+//                        simbolosArr[simbolosArr.length - 1] = "E.A.";
+//                        String[] estados = txtEstados.getText().split(",");
+//                        dtm = new DefaultTableModel(simbolosArr, 0);
+//                        for (int machete = 0; machete < estados.length; machete++) {
+//                            String[] charles = new String[1];
+//                            charles[0] = estados[machete];
+//                            dtm.addRow(charles);
+//                            vEstados.add(estados[machete]);
+//                        }
+//                        af.setEstados(estados);
+//                        af.setSimbolos(simbolosEntrando);
+//                        tablaEstados.setModel(dtm);
+//                        ca = new ControladorAutomata(af, dtm);
+//                        JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
                     } catch (Exception e) {
                         System.out.println("Se ha producido un error " + e + ". Revise argumentos y datos");
                     }
