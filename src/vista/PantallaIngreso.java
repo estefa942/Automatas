@@ -6,7 +6,6 @@
 package vista;
 
 import controlador.ControladorAutomata;
-import controlador.ControladorEntradaDatos;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -25,7 +24,6 @@ public class PantallaIngreso extends javax.swing.JFrame {
     JFileChooser abrirArchivo = new JFileChooser();
     File archivo;
     ControladorAutomata ca;
-    ControladorEntradaDatos ced;
     AutomataF af = new AutomataF();
     Vector vEstados = new Vector();
     private String[] estadosAceptacion;
@@ -192,6 +190,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOperarActionPerformed
 
     private void btnArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArchivoActionPerformed
+        String[] estadotes;
+        String[] ouch = null;
         if (abrirArchivo.showDialog(null, "ABRIR ARCHIVO") == JFileChooser.APPROVE_OPTION) {
             archivo = abrirArchivo.getSelectedFile();
             if (archivo.canRead()) {
@@ -202,6 +202,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                         Scanner scaneoPapu = new Scanner(fichero_entrada);
                         Vector<String> datosDeEntrada = new Vector<String>();
                         String[] slapChop;
+                        String symbols = "";
                         int contador = 0;
                         while (scaneoPapu.hasNext()) {
                             String lineaExtraida = scaneoPapu.nextLine();
@@ -209,40 +210,38 @@ public class PantallaIngreso extends javax.swing.JFrame {
                                 case 0:
                                     slapChop = lineaExtraida.split(":");
                                     lineaExtraida = slapChop[1];
+                                    symbols = lineaExtraida;
                                     txtSimbolos.setText(lineaExtraida);
                                     break;
                                 case 1:
                                     slapChop = lineaExtraida.split(":");
                                     lineaExtraida = slapChop[1];
                                     txtEstados.setText(lineaExtraida);
+                                    ouch = symbols.split(",");
+                                    slapChop = new String[ouch.length + 2];
+                                    slapChop[0] = "Estados";
+                                    for (int i = 0; i < ouch.length; i++) {
+                                        slapChop[i+1] = ouch[i];
+                                    }
+                                    slapChop[slapChop.length - 1] = "E.A.";
+                                    dtm = new DefaultTableModel(slapChop,0);
                                     break;
                                 default:
-                                    
+                                    slapChop = lineaExtraida.split(":");
+                                    lineaExtraida = slapChop[0] + "," + slapChop[1];
+                                    slapChop = lineaExtraida.split(",");
+                                    dtm.addRow(slapChop);
+                                    tablaEstados.setModel(dtm);
                                     break;
                             }
                             contador++;
                             datosDeEntrada.add(lineaExtraida);
                         }
-//                        String[] simbolosEntrando = txtSimbolos.getText().split(",");
-//                        String[] simbolosArr = new String[simbolosEntrando.length + 2];
-//                        simbolosArr[0] = "Estados";
-//                        for (int sym = 1; sym < simbolosArr.length - 1; sym++) {
-//                            simbolosArr[sym] = simbolosEntrando[sym - 1];
-//                        }
-//                        simbolosArr[simbolosArr.length - 1] = "E.A.";
-//                        String[] estados = txtEstados.getText().split(",");
-//                        dtm = new DefaultTableModel(simbolosArr, 0);
-//                        for (int machete = 0; machete < estados.length; machete++) {
-//                            String[] charles = new String[1];
-//                            charles[0] = estados[machete];
-//                            dtm.addRow(charles);
-//                            vEstados.add(estados[machete]);
-//                        }
-//                        af.setEstados(estados);
-//                        af.setSimbolos(simbolosEntrando);
-//                        tablaEstados.setModel(dtm);
-//                        ca = new ControladorAutomata(af, dtm);
-//                        JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
+                        estadotes =  txtEstados.getText().split(",");
+                        af.setEstados(estadotes);
+                        af.setSimbolos(ouch);
+                        ca = new ControladorAutomata(af, dtm);
+                        JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
                     } catch (Exception e) {
                         System.out.println("Se ha producido un error " + e + ". Revise argumentos y datos");
                     }
