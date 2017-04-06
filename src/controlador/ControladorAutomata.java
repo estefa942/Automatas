@@ -322,6 +322,7 @@ public class ControladorAutomata {
         }
         af.setEstados(nEstados);
         af.setEstadosAceptacion(nAceptacion);
+        af.setTransiciones(automataD);
         return automataD;
     }
 }

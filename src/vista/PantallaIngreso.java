@@ -6,7 +6,7 @@
 package vista;
 
 import controlador.ControladorAutomata;
-import controlador.ControladorEntradaDatos;
+//import controlador.ControladorEntradaDatos;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -25,7 +25,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     JFileChooser abrirArchivo = new JFileChooser();
     File archivo;
     ControladorAutomata ca;
-    ControladorEntradaDatos ced;
+//    ControladorEntradaDatos ced;
     AutomataF af = new AutomataF();
     Vector vEstados = new Vector();
     private String[] estadosAceptacion;
@@ -59,6 +59,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         btnOperar = new javax.swing.JButton();
         btnArchivo = new javax.swing.JButton();
+        panel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaNuevoAutomata = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(826, 504));
@@ -82,7 +85,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tablaEstados);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, -1, -1));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 380, -1));
 
         txtSimbolos.setText("0,1");
         txtSimbolos.setToolTipText("");
@@ -136,6 +139,22 @@ public class PantallaIngreso extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 220, 110, -1));
+        getContentPane().add(panel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 360, 400));
+
+        tablaNuevoAutomata.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(tablaNuevoAutomata);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 370, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -170,6 +189,32 @@ public class PantallaIngreso extends javax.swing.JFrame {
         if (ca.esDeterministico() == false) {
             ca.imprimir(ca.convertirEnDeterministico());
         }
+        String[] simbolosEntrando = af.getSimbolos();
+        String[] estados = af.getEstados();
+        ArrayList<ArrayList> automata = af.getTransiciones();
+        String[] simbolosArr = new String[simbolosEntrando.length + 2];
+        simbolosArr[0] = "Estados";
+        for (int sym = 1; sym < simbolosArr.length - 1; sym++) {
+            simbolosArr[sym] = simbolosEntrando[sym - 1];
+        }
+        simbolosArr[simbolosArr.length - 1] = "E.A.";
+        dtm = new DefaultTableModel(simbolosArr, 0);
+        
+        for (int i = 0; i < estados.length; i++) {
+            String[] fila= new String [simbolosArr.length];
+            fila[0] = estados[i];
+            ArrayList<String> transiciones= automata.get(i);
+            for (int j = 0; j < transiciones.size(); j++) {
+                fila[j+1]=transiciones.get(j);
+            }
+            if(ca.esEstadoDeAceptacion(estados[i])){
+            fila[estados.length-1]="1";
+                    }else{
+                fila[estados.length-1]="0";
+            }
+            dtm.addRow(fila);
+        }
+        tablaNuevoAutomata.setModel(dtm);
     }//GEN-LAST:event_btnConversorActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -301,8 +346,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPanel panel2;
     private javax.swing.JTable tablaEstados;
+    private javax.swing.JTable tablaNuevoAutomata;
     private javax.swing.JTextField txtEstados;
     private javax.swing.JTextField txtSimbolos;
     // End of variables declaration//GEN-END:variables
