@@ -74,11 +74,17 @@ public class PantallaIngreso extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tablaEstados);
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, -1, -1));
+
+        txtSimbolos.setText("0,1");
+        txtSimbolos.setToolTipText("");
         getContentPane().add(txtSimbolos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 240, -1));
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Ingrese los estados, seguidos por coma:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, -1, -1));
+
+        txtEstados.setText("a,b,c");
+        txtEstados.setToolTipText("");
         getContentPane().add(txtEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 240, -1));
 
         btnIngresar.setText("Ingresar");
@@ -119,6 +125,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:
+        
         String[] simbolosEntrando = txtSimbolos.getText().split(",");
         String[] simbolos = new String[simbolosEntrando.length + 2];
         simbolos[0] = "Estados";
@@ -143,6 +150,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
     private void btnConversorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConversorActionPerformed
         // TODO add your handling code here:
+        if(ca.esDeterministico()==false){
+        ca.imprimir(ca.convertirEnDeterministico());
+        }
     }//GEN-LAST:event_btnConversorActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

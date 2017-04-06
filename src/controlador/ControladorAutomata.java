@@ -76,7 +76,7 @@ public class ControladorAutomata {
 
                     transiciones.add(estado);
                 } else {
-                    transiciones.add("Error");
+                    transiciones.add("\u0020");
                 }
             }
             automata.add(transiciones);
@@ -109,7 +109,7 @@ public class ControladorAutomata {
         String indicador;
         for (int i = 0; i < dtm.getRowCount(); i++) {
             indicador = (String) dtm.getValueAt(i, af.getSimbolos().length + 1);
-            if(indicador.compareTo("1") == 0){
+            if (indicador.compareTo("1") == 0) {
                 estAcp.add((String) dtm.getValueAt(i, 0));
             }else{
                 estRec.add((String) dtm.getValueAt(i, 0));
@@ -117,7 +117,7 @@ public class ControladorAutomata {
         }
         arrAuxiliar = estAcp.toArray();
         estadosAcp = new String[arrAuxiliar.length];
-        for(int c = 0; c < arrAuxiliar.length; c++){
+        for (int c = 0; c < arrAuxiliar.length; c++) {
             estadosAcp[c] = arrAuxiliar[c].toString();
         }
         arrAuxiliar = estRec.toArray();
@@ -129,7 +129,11 @@ public class ControladorAutomata {
         particiones.add(estadosRec);
         particiones.add(estadosAcp);
     }
-
+/**
+ * Permite verificar si el autómata ingresado es deterministico o no deterministico,
+ * mediante la revision de sus transiciones
+ * @return un booleano con la confirmación de si es deterministico o no.
+ */
     public boolean esDeterministico() {
         int count = 0;
         boolean b = true;
@@ -162,93 +166,114 @@ public class ControladorAutomata {
         }
         af.setAutomataSinExtraños(automataNuevo);
     }
-
+/**
+ * Este método permite hacer la unión de las transiciones de varios estados
+ * @param estados
+ * @return 
+ */
     public ArrayList<String> unirTransiciones(String[] estados) {
         ArrayList<String> transicionesUnidas = new ArrayList<>();
         for (int i = 0; i < estados.length; i++) {
             int a = convertirEstados(estados[i]);
-            ArrayList<String> transiciones = af.getTransiciones().get(a);
+            ArrayList<String> transiciones = revisarTransiciones(af.getTransiciones().get(a));
             for (int j = 0; j < transiciones.size(); j++) {
                 String estado = transiciones.get(j);
                 if (transicionesUnidas.size() == 0) {
-                    transicionesUnidas.add(estado);
-                } else {
-                    if (transicionesUnidas.get(j).indexOf(estado) != -1) {
-                        transicionesUnidas.set(j, transicionesUnidas.get(j) + estado);
-                    }
-
+                    transicionesUnidas=transiciones;
+                } else if (transicionesUnidas.get(j).contains(estado)==false) {
+                    
+                    transicionesUnidas.set(j, transicionesUnidas.get(j) + estado);
                 }
             }
 
         }
         return transicionesUnidas;
     }
-
-    public boolean existeEstado(ArrayList<String> estados, String estado){
+/**
+ * Este método permite verificar si ya existe un estado, para evitar las repeticiones en el momento de agregar.
+ * @param estados
+ * @param estado
+ * @return 
+ */
+    public boolean existeEstado(ArrayList<String> estados, String estado) {
         boolean b = false;
         for (int i = 0; i < estados.size(); i++) {
-            String a= estados.get(i);
-            if(a.equals(estado)){
-                b=true;
+            String a = estados.get(i);
+            if (a.equals(estado)) {
+                b = true;
                 break;
             }
         }
         return b;
     }
-    public void convertirEnDeterministico() {
-        ArrayList<ArrayList> automata = af.getTransiciones();
-        ArrayList<ArrayList> automataD= new ArrayList<>();
-        
-        Queue estadosConcatenados = new Queue();
-        ArrayList<String> estados = new ArrayList<>();
-         ArrayList<String> transi = new ArrayList<>();
-        estados.add(af.getEstados()[0]);
-        estados= af.getTransiciones().get(0);
-       //Apartescxzito
-        for (int i = 0; i <estados.size(); i++) {
-            String a= estados.get(i);
-            if(a.indexOf(",")==-1){
-                 String[] concatenado = a.split(",");
-                 String nuevoEstado = String.join("", concatenado);
-                 transi.add(nuevoEstado);
+
+    /**
+     * Este método permite revisar las transiciones de un estado, y en caso de
+     * que un transición vaya a dos estados, los concatena.
+     * @param transiciones
+     * @return 
+     */
+    public ArrayList<String> revisarTransiciones(ArrayList<String> transiciones) {
+      ArrayList<String> transicionesNuevas = new ArrayList<>();
+        for (int i = 0; i < transiciones.size(); i++) {
+            String a = transiciones.get(i);
+            if (a != "\u0020") {
+                if (a.contains(",")) {
+                    String[] concatenado = a.split(",");
+                    String nuevoEstado = String.join("", concatenado);
+                    transicionesNuevas.add(nuevoEstado);
+                } else {
+                    transicionesNuevas.add(a);
+                }
             }else{
-                transi.add(a);
+                transicionesNuevas.add(a);
             }
-            
+
         }
-        automataD.add(transi);
+        return transicionesNuevas;
+    }
+    
+    /**
+     * Este método permite convertir un autómata no deterministico a deterministico, tomando el primer estado
+     * con sus transiciones del automata inicial, y a partir de este mediante la concatenación de estado y transiciones, 
+     * contruir el autómata final.
+     * @return un ArrayList<ArrayList> con el nuevo autómata.
+     */
+    public ArrayList<ArrayList> convertirEnDeterministico() {
+        ArrayList<ArrayList> automata = af.getTransiciones();
+        ArrayList<ArrayList> automataD = new ArrayList<>();
+        ArrayList<String> estados = new ArrayList<>();
+        estados.add(af.getEstados()[0]);
+        automataD.add(revisarTransiciones(af.getTransiciones().get(0)));
 
         for (int i = 0; i < automata.size(); i++) {
             ArrayList<String> transicionesD = new ArrayList<>();
             ArrayList<String> transiciones = automata.get(i);
-            for (int j = 0; j < 10; j++) {
+            for (int j = 0; j < transiciones.size(); j++) {
                 String estado = transiciones.get(j);
-                if (estado != "error") {
-                    if (estado.indexOf(",") == -1) {
-                        
+                if (estado != "\u0020") {
+                    if (estado.contains(",")) {
+
                         String[] concatenado = estado.split(",");
-//                        estadosConcatenados.enqueue(String.join("", concatenado));
                         String nuevoEstado = String.join("", concatenado);
-                         if(existeEstado(estados,nuevoEstado )==false){
-                             estados.add(nuevoEstado);
-                             ArrayList<String>a= unirTransiciones(concatenado);
-                             automataD.add(a);
-                         }
+                        if (existeEstado(estados, nuevoEstado) == false) {
+                            estados.add(nuevoEstado);
+                            ArrayList<String> a = unirTransiciones(concatenado);
+                            automataD.add(a);
+                        }
+
+                    } else if (existeEstado(estados, estado) == false) {
+                        estados.add(estado);
+                        int b = convertirEstados(estado);                        
+                        automataD.add(revisarTransiciones(automata.get(b)));
                         
-                    }else{
-                        if(existeEstado(estados,estado )==false){
-                             estados.add(estado);
-                             //Buscar las transiciones de este estado en  el automata inicial :8
-                            }
-                             
-                         }
                     }
-                }                    
-
+                }
             }
-            
+
         }
+        af.setTransiciones(automataD);
+//        af.setEstados(estados); Falta convertir ese arreglo en array
+        return automataD;
     }
-
-
-
+}
