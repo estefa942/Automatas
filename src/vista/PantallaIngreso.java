@@ -28,6 +28,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
      */
     public PantallaIngreso() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -48,9 +49,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnIngresar = new javax.swing.JButton();
         btnConversor = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
-        btn_IngresarAutomata = new javax.swing.JButton();
+        btnOperar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(826, 504));
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -100,15 +103,16 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 460, -1, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 460, 80, -1));
 
-        btn_IngresarAutomata.setText("Ingresar datos ");
-        btn_IngresarAutomata.addActionListener(new java.awt.event.ActionListener() {
+        btnOperar.setText("Operar");
+        btnOperar.setActionCommand("Operar ");
+        btnOperar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_IngresarAutomataActionPerformed(evt);
+                btnOperarActionPerformed(evt);
             }
         });
-        getContentPane().add(btn_IngresarAutomata, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 460, -1, -1));
+        getContentPane().add(btnOperar, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 460, 130, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -148,7 +152,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         ca.imprimir(af.getAutomataSinExtraños());
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void btn_IngresarAutomataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_IngresarAutomataActionPerformed
+    private void btnOperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperarActionPerformed
         af.setTransiciones(ca.guardarAutomata());
         ca.imprimir(ca.guardarAutomata());
         if(ca.esDeterministico()){
@@ -156,10 +160,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(rootPane, "El autómata es no deterministico");
         }
-        
         ca.EstadosAceptacion();
         
-    }//GEN-LAST:event_btn_IngresarAutomataActionPerformed
+    }//GEN-LAST:event_btnOperarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -199,7 +202,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConversor;
     private javax.swing.JButton btnIngresar;
-    private javax.swing.JButton btn_IngresarAutomata;
+    private javax.swing.JButton btnOperar;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

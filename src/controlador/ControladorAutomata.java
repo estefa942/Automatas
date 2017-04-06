@@ -21,6 +21,7 @@ public class ControladorAutomata {
     String[] simbolos;
     //Para probar
     ArrayList<ArrayList> automataNuevo = new ArrayList<>();
+    ArrayList<ArrayList> particiones = new ArrayList<>();
     int[] visitados ;
 
     private String[] estadosAceptacion;
@@ -93,11 +94,20 @@ public class ControladorAutomata {
     }
     
     public String[] EstadosAceptacion() {
-        String[] estadosAceptacion = new String[af.getEstados().length];
+        String[] estadosAceptacion;
+        Object[] arrAuxiliar;
+        ArrayList<String> estAcp = new ArrayList<>();
         String indicador;
         for (int i = 0; i < dtm.getRowCount(); i++) {
             indicador = (String) dtm.getValueAt(i, af.getSimbolos().length + 1);
-            estadosAceptacion[i] = indicador;
+            if(indicador.compareTo("1") == 0){
+                estAcp.add((String) dtm.getValueAt(i, 0));
+            }
+        }
+        arrAuxiliar = estAcp.toArray();
+        estadosAceptacion = new String[arrAuxiliar.length];
+        for(int c = 0; c < arrAuxiliar.length; c++){
+            estadosAceptacion[c] = arrAuxiliar[c].toString();
         }
          af.setEstadosAceptacion(estadosAceptacion);
         return estadosAceptacion;
