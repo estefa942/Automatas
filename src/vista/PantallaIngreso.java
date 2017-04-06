@@ -219,9 +219,16 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         //Probando
-        ca.llenarVisitados();
-        ca.estadosExtraños(0);
-        ca.imprimir(af.getAutomataSinExtraños());
+//        ca.llenarVisitados();
+//        ca.estadosExtraños(0);
+//        ca.imprimir(af.getAutomataSinExtraños());
+     String a ="1000011*";
+     if(ca.verificarHilera(a)){
+         System.out.println("acepta");
+     }else{
+         System.out.println("rechaza");
+     }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnOperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperarActionPerformed

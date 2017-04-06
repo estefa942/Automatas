@@ -222,7 +222,29 @@ public class ControladorAutomata {
         }
         return b;
     }
-
+    /**
+     * Este método permite verificar si el simbolo es correcto, para evitar 
+     * evaluar simbolos que no pertenecen al autómata.
+     * @param simbolo
+     * @return 
+     */
+    public boolean existeSimbolo(String simbolo){
+        boolean b=false;
+        String[] simbolos= af.getSimbolos();
+        for (int i = 0; i < simbolos.length; i++) {
+            String a = simbolos[i];
+            if (a.equals(simbolo)) {
+                b = true;
+                break;
+            }
+        }
+        return b;
+    }
+    /**
+     * Permite verificar decidir que estado de aceptación va a tener la unión de avrios estados
+     * @param estados
+     * @return 
+     */
     public boolean definirEstadoDeAceptacion(String[] estados){
         boolean b=false;
         for (int i = 0; i < estados.length; i++) {
@@ -324,4 +346,46 @@ public class ControladorAutomata {
         af.setTransiciones(automataD);
         return automataD;
     }
+    
+    public boolean verificarHilera(String hilera){
+        boolean b=true;
+        ArrayList<ArrayList> automata = af.getTransiciones();
+        ArrayList<String> transicionesEstado= new ArrayList<>();
+        String siguienteEstado="";
+        if (hilera==null) {
+            b=false;
+            return b;
+        }
+        for (int i = 0; i < hilera.length(); i++) {
+            char c= hilera.charAt(i);
+            String caracter =  (new StringBuffer().append(c)).toString();
+            if (caracter.equals("*")) {
+                if (esEstadoDeAceptacion(siguienteEstado)==false) {
+                   b=false;
+                }
+            }
+            if(existeSimbolo(caracter)){
+                if (i==0) {
+                    transicionesEstado= automata.get(0);
+                     siguienteEstado= transicionesEstado.get(convertirSimbolos(caracter));
+                    if(siguienteEstado.equals("\u0020")){
+                        b=false;
+                        break;
+                    }else{
+                        
+                    }
+                }else{
+                    int a= convertirEstados(siguienteEstado);
+                    transicionesEstado= automata.get(a);
+                     siguienteEstado= transicionesEstado.get(convertirSimbolos(caracter));
+                    if(siguienteEstado.equals("\u0020")){
+                        b=false;
+                        break;
+                    }
+                }
+            }
+        }
+        return b;
+    }
+   
 }
