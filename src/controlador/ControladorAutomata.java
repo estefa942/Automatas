@@ -23,9 +23,9 @@ public class ControladorAutomata {
     String[] simbolos;
     //Para probar
     ArrayList<ArrayList> automataNuevo = new ArrayList<>();
+    ArrayList<String[]> particiones = new ArrayList<>();
     int[] visitados;
 
-    private String[] estadosAceptacion;
     DefaultTableModel dtm;
 
     public ControladorAutomata(AutomataF af, DefaultTableModel dtm) {
@@ -94,25 +94,40 @@ public class ControladorAutomata {
         }
     }
 
-    public String[] EstadosAceptacion() {
-        String[] estadosAceptacion;
+    /**
+     * Aunque su nombre indique que selecciona los estados de aceptación, en
+     * realidad separa estados de aceptación de los estados de rechazo
+     * generando así 2 particiones; una partición P0 con los estados de rechazo
+     * y una particion P1 con los estados de aceptación.
+     */
+    public void EstadosAceptacion() {
+        String[] estadosAcp;
+        String[] estadosRec;
         Object[] arrAuxiliar;
         ArrayList<String> estAcp = new ArrayList<>();
+        ArrayList<String> estRec = new ArrayList<>();
         String indicador;
         for (int i = 0; i < dtm.getRowCount(); i++) {
             indicador = (String) dtm.getValueAt(i, af.getSimbolos().length + 1);
             if(indicador.compareTo("1") == 0){
                 estAcp.add((String) dtm.getValueAt(i, 0));
+            }else{
+                estRec.add((String) dtm.getValueAt(i, 0));
             }
         }
         arrAuxiliar = estAcp.toArray();
-        estadosAceptacion = new String[arrAuxiliar.length];
+        estadosAcp = new String[arrAuxiliar.length];
         for(int c = 0; c < arrAuxiliar.length; c++){
-            estadosAceptacion[c] = arrAuxiliar[c].toString();
+            estadosAcp[c] = arrAuxiliar[c].toString();
         }
-        af.setEstadosAceptacion(estadosAceptacion);
-        return estadosAceptacion;
-
+        arrAuxiliar = estRec.toArray();
+        estadosRec = new String[arrAuxiliar.length];
+        for(int c = 0; c < arrAuxiliar.length; c++){
+            estadosRec[c] = arrAuxiliar[c].toString();
+        }
+        af.setEstadosAceptacion(estadosAcp);
+        particiones.add(estadosRec);
+        particiones.add(estadosAcp);
     }
 
     public boolean esDeterministico() {
