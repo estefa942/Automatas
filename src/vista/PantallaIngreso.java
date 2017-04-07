@@ -72,7 +72,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnSimplificar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(826, 504));
+        setMinimumSize(new java.awt.Dimension(1244, 514));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -176,6 +176,14 @@ public class PantallaIngreso extends javax.swing.JFrame {
         });
         getContentPane().add(btnSimplificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 240, -1));
 
+        btnSimplificar.setText("Simplificar");
+        btnSimplificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimplificarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSimplificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 240, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -189,8 +197,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
         }
         simbolosArr[simbolosArr.length - 1] = "E.A.";
         String[] estados = txtEstados.getText().split(",");
+        
         dtm = new DefaultTableModel(simbolosArr, 0);
-
         for (int machete = 0; machete < estados.length; machete++) {
             String[] charles = new String[1];
             charles[0] = estados[machete];
@@ -299,7 +307,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSimplificarActionPerformed
 
     private void btnVerificarHileraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarHileraActionPerformed
-        PantallaVerificarHilera p = new PantallaVerificarHilera();
+        PantallaVerificarHilera p = new PantallaVerificarHilera(af,dtm);
         p.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnVerificarHileraActionPerformed

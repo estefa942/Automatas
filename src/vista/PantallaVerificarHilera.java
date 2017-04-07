@@ -24,10 +24,15 @@ public class PantallaVerificarHilera extends javax.swing.JFrame {
     /**
      * Creates new form PantallaVerificarHilera
      */
+    public PantallaVerificarHilera(AutomataF af, DefaultTableModel dtm) {
+        initComponents();
+        this.af = af;
+        this.dtm = dtm;
+        tablaEstados.setModel(this.dtm);
+    }
+    
     public PantallaVerificarHilera() {
         initComponents();
-    
-
     }
 
     /**
@@ -49,6 +54,7 @@ public class PantallaVerificarHilera extends javax.swing.JFrame {
         btnGuardarAutomata = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(937, 526));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tablaEstados.setModel(new javax.swing.table.DefaultTableModel(
