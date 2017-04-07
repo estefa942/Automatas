@@ -62,9 +62,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaNuevoAutomata = new javax.swing.JTable();
         panel2 = new javax.swing.JPanel();
+        btnSimplificar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(826, 504));
+        setMinimumSize(new java.awt.Dimension(1244, 514));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -121,7 +122,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 460, 110, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 240, -1));
 
         btnOperar.setText("Operar");
         btnOperar.setActionCommand("Operar ");
@@ -156,6 +157,14 @@ public class PantallaIngreso extends javax.swing.JFrame {
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 370, -1));
         getContentPane().add(panel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 360, 400));
 
+        btnSimplificar.setText("Simplificar");
+        btnSimplificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimplificarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSimplificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 240, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -169,8 +178,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
         }
         simbolosArr[simbolosArr.length - 1] = "E.A.";
         String[] estados = txtEstados.getText().split(",");
+        
         dtm = new DefaultTableModel(simbolosArr, 0);
-
         for (int machete = 0; machete < estados.length; machete++) {
             String[] charles = new String[1];
             charles[0] = estados[machete];
@@ -210,7 +219,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
             if (ca.esEstadoDeAceptacion(estados[i])){
                 fila[estados.length-1] = "1";
             } else {
-                fila[estados.length-1] = "0";
+                fila[estados.length] = "0";
             }
             dtm.addRow(fila);
         }
@@ -306,6 +315,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnArchivoActionPerformed
 
+    private void btnSimplificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimplificarActionPerformed
+        // TODO add your handling code here:
+        ca.Simplificar();
+    }//GEN-LAST:event_btnSimplificarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -354,6 +368,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private javax.swing.JButton btnConversor;
     private javax.swing.JButton btnIngreso;
     private javax.swing.JButton btnOperar;
+    private javax.swing.JButton btnSimplificar;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
