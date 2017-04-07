@@ -6,7 +6,12 @@
 package vista;
 
 import controlador.ControladorAutomata;
+//import controlador.ControladorEntradaDatos;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Vector;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.AutomataF;
@@ -16,8 +21,11 @@ import modelo.AutomataF;
  * @author alejandro.castanor
  */
 public class PantallaIngreso extends javax.swing.JFrame {
-    
+
+    JFileChooser abrirArchivo = new JFileChooser();
+    File archivo;
     ControladorAutomata ca;
+//    ControladorEntradaDatos ced;
     AutomataF af = new AutomataF();
     Vector vEstados = new Vector();
     private String[] estadosAceptacion;
@@ -46,10 +54,14 @@ public class PantallaIngreso extends javax.swing.JFrame {
         txtSimbolos = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtEstados = new javax.swing.JTextField();
-        btnIngresar = new javax.swing.JButton();
+        btnIngreso = new javax.swing.JButton();
         btnConversor = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         btnOperar = new javax.swing.JButton();
+        btnArchivo = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaNuevoAutomata = new javax.swing.JTable();
+        panel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(826, 504));
@@ -73,7 +85,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tablaEstados);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, -1, -1));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 380, -1));
 
         txtSimbolos.setText("0,1");
         txtSimbolos.setToolTipText("");
@@ -87,13 +99,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
         txtEstados.setToolTipText("");
         getContentPane().add(txtEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 240, -1));
 
-        btnIngresar.setText("Ingresar");
-        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
+        btnIngreso.setText("Ingresar");
+        btnIngreso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIngresarActionPerformed(evt);
+                btnIngresoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 80, -1));
+        getContentPane().add(btnIngreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 100, -1));
 
         btnConversor.setText("AFND a AF");
         btnConversor.addActionListener(new java.awt.event.ActionListener() {
@@ -101,7 +113,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 btnConversorActionPerformed(evt);
             }
         });
-        getContentPane().add(btnConversor, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 220, 130, 30));
+        getContentPane().add(btnConversor, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 240, 30));
 
         jButton1.setText("extraño");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -120,23 +132,46 @@ public class PantallaIngreso extends javax.swing.JFrame {
         });
         getContentPane().add(btnOperar, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 460, 130, -1));
 
+        btnArchivo.setText("Abrir archivo");
+        btnArchivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnArchivoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 220, 110, -1));
+
+        tablaNuevoAutomata.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(tablaNuevoAutomata);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 370, -1));
+        getContentPane().add(panel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 360, 400));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+    private void btnIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresoActionPerformed
         // TODO add your handling code here:
-        
         String[] simbolosEntrando = txtSimbolos.getText().split(",");
-        String[] simbolos = new String[simbolosEntrando.length + 2];
-        simbolos[0] = "Estados";
-        for (int sym = 1; sym < simbolos.length - 1; sym++) {
-            simbolos[sym] = simbolosEntrando[sym - 1];
+        String[] simbolosArr = new String[simbolosEntrando.length + 2];
+        simbolosArr[0] = "Estados";
+        for (int sym = 1; sym < simbolosArr.length - 1; sym++) {
+            simbolosArr[sym] = simbolosEntrando[sym - 1];
         }
-        simbolos[simbolos.length - 1] = "E.A.";
+        simbolosArr[simbolosArr.length - 1] = "E.A.";
         String[] estados = txtEstados.getText().split(",");
-        dtm = new DefaultTableModel(simbolos, 0);
-        tablaEstados.setModel(dtm);
-        for(int machete = 0; machete < estados.length; machete++) {
+        dtm = new DefaultTableModel(simbolosArr, 0);
+
+        for (int machete = 0; machete < estados.length; machete++) {
             String[] charles = new String[1];
             charles[0] = estados[machete];
             dtm.addRow(charles);
@@ -144,35 +179,132 @@ public class PantallaIngreso extends javax.swing.JFrame {
         }
         af.setEstados(estados);
         af.setSimbolos(simbolosEntrando);
+        tablaEstados.setModel(dtm);
         ca = new ControladorAutomata(af, dtm);
         JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
-    }//GEN-LAST:event_btnIngresarActionPerformed
+    }//GEN-LAST:event_btnIngresoActionPerformed
 
     private void btnConversorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConversorActionPerformed
         // TODO add your handling code here:
-        if(ca.esDeterministico()==false){
-        ca.imprimir(ca.convertirEnDeterministico());
+        if (ca.esDeterministico() == false) {
+            ca.imprimir(ca.convertirEnDeterministico());
         }
+        String[] simbolosEntrando = af.getSimbolos();
+        String[] estados = af.getEstados();
+        ArrayList<ArrayList> automata = af.getTransiciones();
+        String[] simbolosArr = new String[simbolosEntrando.length + 2];
+        simbolosArr[0] = "Estados";
+        for (int sym = 1; sym < simbolosArr.length - 1; sym++) {
+            simbolosArr[sym] = simbolosEntrando[sym - 1];
+        }
+        simbolosArr[simbolosArr.length - 1] = "E.A.";
+        dtm = new DefaultTableModel(simbolosArr, 0);
+
+        for (int i = 0; i < estados.length; i++) {
+            String[] fila = new String[simbolosArr.length];
+            fila[0] = estados[i];
+            ArrayList<String> transiciones = automata.get(i);
+            for (int j = 0; j < transiciones.size(); j++) {
+                fila[j + 1] = transiciones.get(j);
+            }
+            if (ca.esEstadoDeAceptacion(estados[i])){
+                fila[estados.length-1] = "1";
+            } else {
+                fila[estados.length-1] = "0";
+            }
+            dtm.addRow(fila);
+        }
+        tablaNuevoAutomata.setModel(dtm);
     }//GEN-LAST:event_btnConversorActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         //Probando
-        ca.llenarVisitados();
-        ca.estadosExtraños(0);
-        ca.imprimir(af.getAutomataSinExtraños());
+//        ca.llenarVisitados();
+//        ca.estadosExtraños(0);
+//        ca.imprimir(af.getAutomataSinExtraños());
+     String a ="1000011*";
+     if(ca.verificarHilera(a)){
+         System.out.println("acepta");
+     }else{
+         System.out.println("rechaza");
+     }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnOperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperarActionPerformed
         af.setTransiciones(ca.guardarAutomata());
         ca.imprimir(ca.guardarAutomata());
-        if(ca.esDeterministico()){
-            JOptionPane.showMessageDialog(rootPane,"El autómata es deterministico");
-        }else{
+        if (ca.esDeterministico()) {
+            JOptionPane.showMessageDialog(rootPane, "El autómata es deterministico");
+        } else {
             JOptionPane.showMessageDialog(rootPane, "El autómata es no deterministico");
         }
         ca.EstadosAceptacion();
-        
+
     }//GEN-LAST:event_btnOperarActionPerformed
+
+    private void btnArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArchivoActionPerformed
+        String[] estadotes;
+        String[] ouch = null;
+        if (abrirArchivo.showDialog(null, "ABRIR ARCHIVO") == JFileChooser.APPROVE_OPTION) {
+            archivo = abrirArchivo.getSelectedFile();
+            if (archivo.canRead()) {
+                if (archivo.getName().endsWith("txt")) {
+                    try {
+                        File fichero_entrada;
+                        fichero_entrada = new File(archivo.getAbsolutePath());
+                        Scanner scaneoPapu = new Scanner(fichero_entrada);
+                        Vector<String> datosDeEntrada = new Vector<String>();
+                        String[] slapChop;
+                        String symbols = "";
+                        int contador = 0;
+                        while (scaneoPapu.hasNext()) {
+                            String lineaExtraida = scaneoPapu.nextLine();
+                            switch (contador) {
+                                case 0:
+                                    slapChop = lineaExtraida.split(":");
+                                    lineaExtraida = slapChop[1];
+                                    symbols = lineaExtraida;
+                                    txtSimbolos.setText(lineaExtraida);
+                                    break;
+                                case 1:
+                                    slapChop = lineaExtraida.split(":");
+                                    lineaExtraida = slapChop[1];
+                                    txtEstados.setText(lineaExtraida);
+                                    ouch = symbols.split(",");
+                                    slapChop = new String[ouch.length + 2];
+                                    slapChop[0] = "Estados";
+                                    for (int i = 0; i < ouch.length; i++) {
+                                        slapChop[i + 1] = ouch[i];
+                                    }
+                                    slapChop[slapChop.length - 1] = "E.A.";
+                                    dtm = new DefaultTableModel(slapChop, 0);
+                                    break;
+                                default:
+                                    slapChop = lineaExtraida.split(":");
+                                    lineaExtraida = slapChop[0] + "," + slapChop[1];
+                                    slapChop = lineaExtraida.split(",");
+                                    dtm.addRow(slapChop);
+                                    tablaEstados.setModel(dtm);
+                                    break;
+                            }
+                            contador++;
+                            datosDeEntrada.add(lineaExtraida);
+                        }
+                        estadotes = txtEstados.getText().split(",");
+                        af.setEstados(estadotes);
+                        af.setSimbolos(ouch);
+                        ca = new ControladorAutomata(af, dtm);
+                        JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
+                    } catch (Exception e) {
+                        System.out.println("Se ha producido un error " + e + ". Revise argumentos y datos");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione un archivo de texto.");
+            }
+        }
+    }//GEN-LAST:event_btnArchivoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -188,16 +320,24 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PantallaIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PantallaIngreso.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PantallaIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PantallaIngreso.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PantallaIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PantallaIngreso.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PantallaIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PantallaIngreso.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -210,14 +350,18 @@ public class PantallaIngreso extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnArchivo;
     private javax.swing.JButton btnConversor;
-    private javax.swing.JButton btnIngresar;
+    private javax.swing.JButton btnIngreso;
     private javax.swing.JButton btnOperar;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPanel panel2;
     private javax.swing.JTable tablaEstados;
+    private javax.swing.JTable tablaNuevoAutomata;
     private javax.swing.JTextField txtEstados;
     private javax.swing.JTextField txtSimbolos;
     // End of variables declaration//GEN-END:variables

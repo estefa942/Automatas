@@ -23,7 +23,7 @@ public class ControladorAutomata {
     String[] simbolos;
     //Para probar
     ArrayList<ArrayList> automataNuevo = new ArrayList<>();
-    ArrayList<String[]> particiones = new ArrayList<>();
+    ArrayList<ArrayList> particiones = new ArrayList<>();
     int[] visitados;
 
     DefaultTableModel dtm;
@@ -50,7 +50,6 @@ public class ControladorAutomata {
         for (int i = 0; i < af.getEstados().length; i++) {
             if (af.getEstados()[i].equals(a)) {
                 valor = i;
-
             }
         }
         return valor;
@@ -72,8 +71,7 @@ public class ControladorAutomata {
             for (int j = 0; j < af.getSimbolos().length; j++) {
                 String estado = (String) dtm.getValueAt(i, j + 1);
 
-                if (estado != null) {
-
+                if (estado.trim().length() != 0) {
                     transiciones.add(estado);
                 } else {
                     transiciones.add("\u0020");
@@ -96,9 +94,9 @@ public class ControladorAutomata {
 
     /**
      * Aunque su nombre indique que selecciona los estados de aceptación, en
-     * realidad separa estados de aceptación de los estados de rechazo
-     * generando así 2 particiones; una partición P0 con los estados de rechazo
-     * y una particion P1 con los estados de aceptación.
+     * realidad separa estados de aceptación de los estados de rechazo generando
+     * así 2 particiones; una partición P0 con los estados de rechazo y una
+     * particion P1 con los estados de aceptación.
      */
     public void EstadosAceptacion() {
         String[] estadosAcp;
@@ -111,29 +109,40 @@ public class ControladorAutomata {
             indicador = (String) dtm.getValueAt(i, af.getSimbolos().length + 1);
             if (indicador.compareTo("1") == 0) {
                 estAcp.add((String) dtm.getValueAt(i, 0));
-            }else{
+            } else {
                 estRec.add((String) dtm.getValueAt(i, 0));
             }
         }
-        arrAuxiliar = estAcp.toArray();
-        estadosAcp = new String[arrAuxiliar.length];
-        for (int c = 0; c < arrAuxiliar.length; c++) {
-            estadosAcp[c] = arrAuxiliar[c].toString();
-        }
-        arrAuxiliar = estRec.toArray();
-        estadosRec = new String[arrAuxiliar.length];
-        for(int c = 0; c < arrAuxiliar.length; c++){
-            estadosRec[c] = arrAuxiliar[c].toString();
-        }
-        af.setEstadosAceptacion(estadosAcp);
-        particiones.add(estadosRec);
-        particiones.add(estadosAcp);
+
+        particiones.add(estRec);
+        particiones.add(estAcp);
     }
-/**
- * Permite verificar si el autómata ingresado es deterministico o no deterministico,
- * mediante la revision de sus transiciones
- * @return un booleano con la confirmación de si es deterministico o no.
- */
+
+    /**
+     * Permite determinar si el estado ingresado es de aceptación.
+     *
+     * @param estado
+     * @return un booleano con la confirmación de si es un estado de acpetación
+     * o no.
+     */
+    public boolean esEstadoDeAceptacion(String estado) {
+        boolean b = false;
+        ArrayList<String> aceptacion = particiones.get(1);
+        for (int i = 0; i < aceptacion.size(); i++) {
+            if (aceptacion.get(i).equals(estado)) {
+                b = true;
+                break;
+            }
+        }
+        return b;
+    }
+
+    /**
+     * Permite verificar si el autómata ingresado es deterministico o no
+     * deterministico, mediante la revision de sus transiciones
+     *
+     * @return un booleano con la confirmación de si es deterministico o no.
+     */
     public boolean esDeterministico() {
         int count = 0;
         boolean b = true;
@@ -141,7 +150,7 @@ public class ControladorAutomata {
             for (int j = 0; j < af.getSimbolos().length; j++) {
                 String estado = (String) dtm.getValueAt(i, j + 1);
                 if (estado != null) {
-                    if (estado.indexOf(",") != -1) {
+                    if (estado.indexOf("-") != -1) {
                         b = false;
                         break;
                     }
@@ -166,11 +175,13 @@ public class ControladorAutomata {
         }
         af.setAutomataSinExtraños(automataNuevo);
     }
-/**
- * Este método permite hacer la unión de las transiciones de varios estados
- * @param estados
- * @return 
- */
+
+    /**
+     * Este método permite hacer la unión de las transiciones de varios estados
+     *
+     * @param estados
+     * @return
+     */
     public ArrayList<String> unirTransiciones(String[] estados) {
         ArrayList<String> transicionesUnidas = new ArrayList<>();
         for (int i = 0; i < estados.length; i++) {
@@ -179,9 +190,9 @@ public class ControladorAutomata {
             for (int j = 0; j < transiciones.size(); j++) {
                 String estado = transiciones.get(j);
                 if (transicionesUnidas.size() == 0) {
-                    transicionesUnidas=transiciones;
-                } else if (transicionesUnidas.get(j).contains(estado)==false) {
-                    
+                    transicionesUnidas = transiciones;
+                } else if (transicionesUnidas.get(j).contains(estado) == false) {
+
                     transicionesUnidas.set(j, transicionesUnidas.get(j) + estado);
                 }
             }
@@ -189,12 +200,15 @@ public class ControladorAutomata {
         }
         return transicionesUnidas;
     }
-/**
- * Este método permite verificar si ya existe un estado, para evitar las repeticiones en el momento de agregar.
- * @param estados
- * @param estado
- * @return 
- */
+
+    /**
+     * Este método permite verificar si ya existe un estado, para evitar las
+     * repeticiones en el momento de agregar.
+     *
+     * @param estados
+     * @param estado
+     * @return
+     */
     public boolean existeEstado(ArrayList<String> estados, String estado) {
         boolean b = false;
         for (int i = 0; i < estados.size(); i++) {
@@ -206,44 +220,84 @@ public class ControladorAutomata {
         }
         return b;
     }
+    /**
+     * Este método permite verificar si el simbolo es correcto, para evitar 
+     * evaluar simbolos que no pertenecen al autómata.
+     * @param simbolo
+     * @return 
+     */
+    public boolean existeSimbolo(String simbolo){
+        boolean b=false;
+        String[] simbolos= af.getSimbolos();
+        for (int i = 0; i < simbolos.length; i++) {
+            String a = simbolos[i];
+            if (a.equals(simbolo)) {
+                b = true;
+                break;
+            }
+        }
+        return b;
+    }
+    /**
+     * Permite verificar decidir que estado de aceptación va a tener la unión de avrios estados
+     * @param estados
+     * @return 
+     */
+    public boolean definirEstadoDeAceptacion(String[] estados){
+        boolean b=false;
+        for (int i = 0; i < estados.length; i++) {
+            if (esEstadoDeAceptacion(estados[i])) {
+                b = true;
+                break;
+            }
+        }
+        return b;
+    }
 
     /**
      * Este método permite revisar las transiciones de un estado, y en caso de
      * que un transición vaya a dos estados, los concatena.
+     *
      * @param transiciones
-     * @return 
+     * @return
      */
     public ArrayList<String> revisarTransiciones(ArrayList<String> transiciones) {
-      ArrayList<String> transicionesNuevas = new ArrayList<>();
+        ArrayList<String> transicionesNuevas = new ArrayList<>();
         for (int i = 0; i < transiciones.size(); i++) {
             String a = transiciones.get(i);
             if (a != "\u0020") {
-                if (a.contains(",")) {
-                    String[] concatenado = a.split(",");
+                if (a.contains("-")) {
+                    String[] concatenado = a.split("-");
                     String nuevoEstado = String.join("", concatenado);
                     transicionesNuevas.add(nuevoEstado);
                 } else {
                     transicionesNuevas.add(a);
                 }
-            }else{
+            } else {
                 transicionesNuevas.add(a);
             }
 
         }
         return transicionesNuevas;
     }
-    
+
     /**
-     * Este método permite convertir un autómata no deterministico a deterministico, tomando el primer estado
-     * con sus transiciones del automata inicial, y a partir de este mediante la concatenación de estado y transiciones, 
-     * contruir el autómata final.
+     * Este método permite convertir un autómata no deterministico a
+     * deterministico, tomando el primer estado con sus transiciones del
+     * automata inicial, y a partir de este mediante la concatenación de estado
+     * y transiciones, contruir el autómata final.
+     *
      * @return un ArrayList<ArrayList> con el nuevo autómata.
      */
     public ArrayList<ArrayList> convertirEnDeterministico() {
+        ArrayList<String> estadosAceptacion = new ArrayList<>();
         ArrayList<ArrayList> automata = af.getTransiciones();
         ArrayList<ArrayList> automataD = new ArrayList<>();
         ArrayList<String> estados = new ArrayList<>();
         estados.add(af.getEstados()[0]);
+        if (esEstadoDeAceptacion(af.getEstados()[0])) {
+            estadosAceptacion.add(af.getEstados()[0]);
+        }
         automataD.add(revisarTransiciones(af.getTransiciones().get(0)));
 
         for (int i = 0; i < automata.size(); i++) {
@@ -252,28 +306,110 @@ public class ControladorAutomata {
             for (int j = 0; j < transiciones.size(); j++) {
                 String estado = transiciones.get(j);
                 if (estado != "\u0020") {
-                    if (estado.contains(",")) {
+                    if (estado.contains("-")) {
 
-                        String[] concatenado = estado.split(",");
+                        String[] concatenado = estado.split("-"); //Acá
                         String nuevoEstado = String.join("", concatenado);
                         if (existeEstado(estados, nuevoEstado) == false) {
                             estados.add(nuevoEstado);
+                            if (definirEstadoDeAceptacion(concatenado)) {
+                                estadosAceptacion.add(nuevoEstado);
+                            }
                             ArrayList<String> a = unirTransiciones(concatenado);
                             automataD.add(a);
                         }
 
-                    } else if (existeEstado(estados, estado) == false) {
+                    } else if (existeEstado(estados, estado) == false && estado != "\u0020") {
                         estados.add(estado);
-                        int b = convertirEstados(estado);                        
+                        if (esEstadoDeAceptacion(estado)) {
+                            estadosAceptacion.add(estado);
+                        }
+                        int b = convertirEstados(estado);
                         automataD.add(revisarTransiciones(automata.get(b)));
-                        
+
                     }
                 }
             }
-
         }
         af.setTransiciones(automataD);
-//        af.setEstados(estados); Falta convertir ese arreglo en array
+        String[] nEstados = new String[estados.size()];
+        String[] nAceptacion = new String[estadosAceptacion.size()];
+        for (int i = 0; i < estados.size(); i++) {
+            nEstados[i] = estados.get(i);
+
+        }
+        for (int i = 0; i < estadosAceptacion.size(); i++) {
+
+            nAceptacion[i] = estadosAceptacion.get(i);
+        }
+        af.setEstados(nEstados);
+        af.setEstadosAceptacion(nAceptacion);
+        af.setTransiciones(automataD);
         return automataD;
+    }
+    
+    public boolean verificarHilera(String hilera){
+        boolean b=true;
+        ArrayList<ArrayList> automata = af.getTransiciones();
+        ArrayList<String> transicionesEstado= new ArrayList<>();
+        String siguienteEstado="";
+        if (hilera==null) {
+            b=false;
+            return b;
+        }
+        for (int i = 0; i < hilera.length(); i++) {
+            char c= hilera.charAt(i);
+            String caracter =  (new StringBuffer().append(c)).toString();
+            if (caracter.equals("*")) {
+                if (esEstadoDeAceptacion(siguienteEstado)==false) {
+                   b=false;
+                }
+            }
+            if(existeSimbolo(caracter)){
+                if (i==0) {
+                    transicionesEstado= automata.get(0);
+                     siguienteEstado= transicionesEstado.get(convertirSimbolos(caracter));
+                    if(siguienteEstado.equals("\u0020")){
+                        b=false;
+                        break;
+                    }else{
+                        
+                    }
+                }else{
+                    int a= convertirEstados(siguienteEstado);
+                    transicionesEstado= automata.get(a);
+                     siguienteEstado= transicionesEstado.get(convertirSimbolos(caracter));
+                    if(siguienteEstado.equals("\u0020")){
+                        b=false;
+                        break;
+                    }
+                }
+            }
+        }
+        return b;
+    }
+   
+
+    /**
+     * Método iniciado a las 1854 horas del jueves 6 de abril del 2017
+     *
+     * @return
+     */
+    public ArrayList<ArrayList> Simplificar() {
+        int indice;
+        String state;
+        for (int particion = 0; particion < particiones.size(); particion++) {
+            for (int estadoEnParticion = 0; estadoEnParticion < af.getSimbolos().length; estadoEnParticion++) {
+                ArrayList<String> transEnPart = particiones.get(particion);
+                for (int i = 0; i < transEnPart.size(); i++) {
+                    indice = convertirEstados(transEnPart.get(i));
+                    ArrayList<String> transOriginales = af.getTransiciones().get(indice);
+//                    if(!transOriginales.containsAll(transEnPart)){
+//                        particiones.add(transEnPart);
+//                    }
+                }
+            }
+        }
+        return null;
     }
 }
