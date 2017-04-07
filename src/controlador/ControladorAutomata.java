@@ -65,13 +65,14 @@ public class ControladorAutomata {
 
     public ArrayList<ArrayList> guardarAutomata() {
 
-        ArrayList<ArrayList> automata = new ArrayList<>();
+         ArrayList<ArrayList> automata = new ArrayList<>();
         for (int i = 0; i < dtm.getRowCount(); i++) {
             ArrayList<String> transiciones = new ArrayList<>();
             for (int j = 0; j < af.getSimbolos().length; j++) {
                 String estado = (String) dtm.getValueAt(i, j + 1);
 
-                if (estado.trim().length() != 0) {
+                if (estado != null) {
+
                     transiciones.add(estado);
                 } else {
                     transiciones.add("\u0020");
