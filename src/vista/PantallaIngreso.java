@@ -307,7 +307,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSimplificarActionPerformed
 
     private void btnVerificarHileraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarHileraActionPerformed
-        PantallaVerificarHilera p = new PantallaVerificarHilera();
+        PantallaVerificarHilera p = new PantallaVerificarHilera(af,dtm);
         p.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnVerificarHileraActionPerformed
