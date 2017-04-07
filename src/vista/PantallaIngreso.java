@@ -109,7 +109,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 460, 80, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 460, 110, -1));
 
         btnOperar.setText("Operar");
         btnOperar.setActionCommand("Operar ");
@@ -136,7 +136,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         String[] estados = txtEstados.getText().split(",");
         dtm = new DefaultTableModel(simbolos, 0);
         tablaEstados.setModel(dtm);
-        for (int machete = 0; machete < estados.length; machete++) {
+        for(int machete = 0; machete < estados.length; machete++) {
             String[] charles = new String[1];
             charles[0] = estados[machete];
             dtm.addRow(charles);
