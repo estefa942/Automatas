@@ -336,12 +336,15 @@ public class ControladorAutomata {
         String[] nEstados = new String[estados.size()];
         String[] nAceptacion = new String[estadosAceptacion.size()];
         for (int i = 0; i < estados.size(); i++) {
+           
             nEstados[i] = estados.get(i);
-
+         
         }
         for (int i = 0; i < estadosAceptacion.size(); i++) {
-
+           String a = estadosAceptacion.get(i);
+           
             nAceptacion[i] = estadosAceptacion.get(i);
+      
         }
         af.setEstados(nEstados);
         af.setEstadosAceptacion(nAceptacion);

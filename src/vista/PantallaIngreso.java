@@ -324,9 +324,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 fila[j + 1] = transiciones.get(j);
             }
             if (ca.esEstadoDeAceptacion(estados[i])) {
-                fila[estados.length - 1] = "1";
+                fila[simbolosArr.length - 1] = "1";
             } else {
-                fila[estados.length - 1] = "0";
+                fila[simbolosArr.length - 1] = "0";
             }
             dtm.addRow(fila);
         }
