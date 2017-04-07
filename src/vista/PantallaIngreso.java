@@ -59,9 +59,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         btnOperar = new javax.swing.JButton();
         btnArchivo = new javax.swing.JButton();
-        panel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaNuevoAutomata = new javax.swing.JTable();
+        panel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(826, 504));
@@ -139,7 +139,6 @@ public class PantallaIngreso extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 220, 110, -1));
-        getContentPane().add(panel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 360, 400));
 
         tablaNuevoAutomata.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -155,6 +154,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tablaNuevoAutomata);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 370, -1));
+        getContentPane().add(panel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 360, 400));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -199,18 +199,18 @@ public class PantallaIngreso extends javax.swing.JFrame {
         }
         simbolosArr[simbolosArr.length - 1] = "E.A.";
         dtm = new DefaultTableModel(simbolosArr, 0);
-        
+
         for (int i = 0; i < estados.length; i++) {
-            String[] fila= new String [simbolosArr.length];
+            String[] fila = new String[simbolosArr.length];
             fila[0] = estados[i];
-            ArrayList<String> transiciones= automata.get(i);
+            ArrayList<String> transiciones = automata.get(i);
             for (int j = 0; j < transiciones.size(); j++) {
-                fila[j+1]=transiciones.get(j);
+                fila[j + 1] = transiciones.get(j);
             }
-            if(ca.esEstadoDeAceptacion(estados[i])){
-            fila[estados.length-1]="1";
-                    }else{
-                fila[estados.length-1]="0";
+            if (ca.esEstadoDeAceptacion(estados[i])){
+                fila[estados.length] = "1";
+            } else {
+                fila[estados.length] = "0";
             }
             dtm.addRow(fila);
         }
@@ -268,10 +268,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
                                     slapChop = new String[ouch.length + 2];
                                     slapChop[0] = "Estados";
                                     for (int i = 0; i < ouch.length; i++) {
-                                        slapChop[i+1] = ouch[i];
+                                        slapChop[i + 1] = ouch[i];
                                     }
                                     slapChop[slapChop.length - 1] = "E.A.";
-                                    dtm = new DefaultTableModel(slapChop,0);
+                                    dtm = new DefaultTableModel(slapChop, 0);
                                     break;
                                 default:
                                     slapChop = lineaExtraida.split(":");
@@ -284,7 +284,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                             contador++;
                             datosDeEntrada.add(lineaExtraida);
                         }
-                        estadotes =  txtEstados.getText().split(",");
+                        estadotes = txtEstados.getText().split(",");
                         af.setEstados(estadotes);
                         af.setSimbolos(ouch);
                         ca = new ControladorAutomata(af, dtm);
