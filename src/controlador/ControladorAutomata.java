@@ -403,6 +403,7 @@ public class ControladorAutomata {
     public ArrayList<ArrayList> Simplificar() {
         ArrayList<String> enEvaluacion;
         ArrayList<String> transEstado;
+        ArrayList<String> excluido;
         String estEnPart;
         int posEstado;
         for (int contPart = 0; contPart < particiones.size(); contPart++) {
@@ -412,11 +413,21 @@ public class ControladorAutomata {
                 posEstado = convertirEstados(estEnPart);
                 transEstado = af.getTransiciones().get(posEstado);
                 if(!enEvaluacion.containsAll(transEstado)){
-                    //Aquí ya estoy preguntando qué hacer si la particion no contiene los estados de transición posibles.
-                    
+                    //Aquí ya estoy ordenando qué hacer si la particion no contiene los estados de transición posibles.
+                    excluido = new ArrayList<>();
+                    excluido.add(estEnPart);
+                    enEvaluacion.remove(enEvaluacion.indexOf(estEnPart));
+                    if(enEvaluacion.size() == 1){
+                        particiones.remove(particiones.indexOf(enEvaluacion));
+                    }
+                    particiones.add(excluido);
+                    contPart = 0; //Es esta madafakin línea la que no creo que me esté haciendo lo que yo quiero :c
+                    cpee = 0;
                 }
             }
         }
+        //Aquí ya solo es hacer la carpintería de llevar las particiones que ya tengo a la tabla :v
+        //gg izi
         return null;
     }
 }
