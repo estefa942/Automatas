@@ -304,6 +304,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private void btnSimplificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimplificarActionPerformed
         // TODO add your handling code here:
         btnVerificarHilera.setVisible(true);
+        af.setTransiciones(ca.Simplificar());
     }//GEN-LAST:event_btnSimplificarActionPerformed
 
     private void btnVerificarHileraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarHileraActionPerformed

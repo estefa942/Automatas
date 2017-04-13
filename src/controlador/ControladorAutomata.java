@@ -50,9 +50,10 @@ public class ControladorAutomata {
         for (int i = 0; i < af.getEstados().length; i++) {
             if (af.getEstados()[i].equals(a)) {
                 valor = i;
+                return valor;
             }
         }
-        return valor;
+        return -1;
     }
 
     //probar
@@ -400,31 +401,22 @@ public class ControladorAutomata {
      * @return
      */
     public ArrayList<ArrayList> Simplificar() {
-        EstadosAceptacion();
-        int indice;
-        String state;
-        ArrayList<String> aux = new ArrayList<>();
-        ArrayList<String> enPie = new ArrayList<>();
-        for (int particion = 0; particion < particiones.size(); particion++) {
-            for (int estadoEnParticion = 0; estadoEnParticion < af.getSimbolos().length; estadoEnParticion++) {
-                ArrayList<String> transEnPart = particiones.get(particion);
-                for (int i = 0; i < transEnPart.size(); i++) {
-                    indice = convertirEstados(transEnPart.get(i));
-                    ArrayList<String> transOriginales = af.getTransiciones().get(indice);
-                    if(!transOriginales.contains(transEnPart.get(i))){
-                        state = transEnPart.get(i);
-                        aux.add(state);
-                    } else{
-                        state = transEnPart.get(i);
-                        enPie.add(state);
-                    }
+        ArrayList<String> enEvaluacion;
+        ArrayList<String> transEstado;
+        String estEnPart;
+        int posEstado;
+        for (int contPart = 0; contPart < particiones.size(); contPart++) {
+            enEvaluacion = particiones.get(contPart);
+            for (int cpee = 0; cpee < enEvaluacion.size(); cpee++) {
+                estEnPart = enEvaluacion.get(cpee);
+                posEstado = convertirEstados(estEnPart);
+                transEstado = af.getTransiciones().get(posEstado);
+                if(!enEvaluacion.containsAll(transEstado)){
+                    //Aquí ya estoy preguntando qué hacer si la particion no contiene los estados de transición posibles.
+                    
                 }
-                particiones.remove(particion);
-                particiones.add(particion, enPie);
-                particiones.add(aux);
             }
         }
-        //state = new String[particiones.size()];
         return null;
     }
 }
