@@ -42,6 +42,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnConversor.setVisible(false);
         btnVerificarHilera.setVisible(false);
         btnSimplificar.setVisible(false);
+        btnOperar.setEnabled(false);
+        txtNuevoEstado.setEnabled(false);
+        btnRestaurar.setEnabled(false);
+        btnAddEstado.setEnabled(false);
     }
 
     /**
@@ -70,6 +74,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         btnVerificarHilera = new javax.swing.JButton();
         btnSimplificar = new javax.swing.JButton();
+        txtNuevoEstado = new javax.swing.JTextField();
+        btnAddEstado = new javax.swing.JButton();
+        btnRestaurar = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1244, 514));
@@ -77,8 +85,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Ingrese los símbolos de entrada, separados por coma.");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
+        jLabel2.setText("Ingrese los símbolos de entrada:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, -1));
 
         tablaEstados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -97,15 +105,15 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
         txtSimbolos.setText("0,1");
         txtSimbolos.setToolTipText("");
-        getContentPane().add(txtSimbolos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 240, -1));
+        getContentPane().add(txtSimbolos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 240, -1));
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Ingrese los estados, seguidos por coma:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
+        jLabel3.setText("Ingrese un nuevo estado:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 180, -1));
 
         txtEstados.setText("a,b,c");
         txtEstados.setToolTipText("");
-        getContentPane().add(txtEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 240, -1));
+        getContentPane().add(txtEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 240, -1));
 
         btnIngreso.setText("Ingresar");
         btnIngreso.addActionListener(new java.awt.event.ActionListener() {
@@ -113,7 +121,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 btnIngresoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnIngreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 100, -1));
+        getContentPane().add(btnIngreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 110, -1));
 
         btnConversor.setText("AFND a AF");
         btnConversor.addActionListener(new java.awt.event.ActionListener() {
@@ -175,14 +183,27 @@ public class PantallaIngreso extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnSimplificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 240, -1));
+        getContentPane().add(txtNuevoEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 240, -1));
 
-        btnSimplificar.setText("Simplificar");
-        btnSimplificar.addActionListener(new java.awt.event.ActionListener() {
+        btnAddEstado.setText("Agregar estado");
+        btnAddEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSimplificarActionPerformed(evt);
+                btnAddEstadoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSimplificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 240, -1));
+        getContentPane().add(btnAddEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 240, -1));
+
+        btnRestaurar.setText("Restaurar");
+        btnRestaurar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRestaurarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnRestaurar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, 120, -1));
+
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Ingrese los estados:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -197,7 +218,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         }
         simbolosArr[simbolosArr.length - 1] = "E.A.";
         String[] estados = txtEstados.getText().split(",");
-        
+
         dtm = new DefaultTableModel(simbolosArr, 0);
         for (int machete = 0; machete < estados.length; machete++) {
             String[] charles = new String[1];
@@ -208,8 +229,15 @@ public class PantallaIngreso extends javax.swing.JFrame {
         af.setEstados(estados);
         af.setSimbolos(simbolosEntrando);
         tablaEstados.setModel(dtm);
-        ca = new ControladorAutomata(af, dtm);
 
+        btnOperar.setEnabled(true);
+        btnAddEstado.setEnabled(true);
+        btnRestaurar.setEnabled(true);
+        txtNuevoEstado.setEnabled(true);
+
+        btnIngreso.setEnabled(false);
+        txtEstados.setEnabled(false);
+        txtSimbolos.setEnabled(false);
         JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
     }//GEN-LAST:event_btnIngresoActionPerformed
 
@@ -222,6 +250,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConversorActionPerformed
 
     private void btnOperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperarActionPerformed
+        ca = new ControladorAutomata(af, dtm);
         af.setTransiciones(ca.guardarAutomata());
         ca.imprimir(ca.guardarAutomata());
         if (ca.esDeterministico()) {
@@ -246,6 +275,15 @@ public class PantallaIngreso extends javax.swing.JFrame {
             if (archivo.canRead()) {
                 if (archivo.getName().endsWith("txt")) {
                     try {
+                        btnOperar.setEnabled(true);
+                        btnAddEstado.setEnabled(true);
+                        btnRestaurar.setEnabled(true);
+                        txtNuevoEstado.setEnabled(true);
+
+                        btnIngreso.setEnabled(false);
+                        txtEstados.setEnabled(false);
+                        txtSimbolos.setEnabled(false);
+                        
                         File fichero_entrada;
                         fichero_entrada = new File(archivo.getAbsolutePath());
                         Scanner scaneoPapu = new Scanner(fichero_entrada);
@@ -308,11 +346,32 @@ public class PantallaIngreso extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSimplificarActionPerformed
 
     private void btnVerificarHileraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarHileraActionPerformed
-        PantallaVerificarHilera p = new PantallaVerificarHilera(af,dtm);
+        PantallaVerificarHilera p = new PantallaVerificarHilera(af, dtm);
         p.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnVerificarHileraActionPerformed
-    
+
+    private void btnAddEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEstadoActionPerformed
+        // TODO add your handling code here:
+        String[] otroMx = new String[1];
+        otroMx[0] = txtNuevoEstado.getText().trim();
+        txtNuevoEstado.setText("");
+        dtm.addRow(otroMx);
+        JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
+    }//GEN-LAST:event_btnAddEstadoActionPerformed
+
+    private void btnRestaurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestaurarActionPerformed
+        // TODO add your handling code here:
+        btnIngreso.setEnabled(true);
+        txtEstados.setEnabled(true);
+        txtSimbolos.setEnabled(true);
+        
+        btnOperar.setEnabled(false);
+        txtNuevoEstado.setEnabled(false);
+        btnRestaurar.setEnabled(false);
+        btnAddEstado.setEnabled(false);
+    }//GEN-LAST:event_btnRestaurarActionPerformed
+
     public void llenarTabla(JTable tabla) {
 
         String[] simbolosEntrando = af.getSimbolos();
@@ -387,14 +446,17 @@ public class PantallaIngreso extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddEstado;
     private javax.swing.JButton btnArchivo;
     private javax.swing.JButton btnConversor;
     private javax.swing.JButton btnIngreso;
     private javax.swing.JButton btnOperar;
+    private javax.swing.JButton btnRestaurar;
     private javax.swing.JButton btnSimplificar;
     private javax.swing.JButton btnVerificarHilera;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
@@ -403,6 +465,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private javax.swing.JTable tablaEstados;
     private javax.swing.JTable tablaNuevoAutomata;
     private javax.swing.JTextField txtEstados;
+    private javax.swing.JTextField txtNuevoEstado;
     private javax.swing.JTextField txtSimbolos;
     // End of variables declaration//GEN-END:variables
 }
