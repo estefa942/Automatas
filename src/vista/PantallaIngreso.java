@@ -312,6 +312,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         p.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnVerificarHileraActionPerformed
+    
     public void llenarTabla(JTable tabla) {
 
         String[] simbolosEntrando = af.getSimbolos();

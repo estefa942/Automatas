@@ -6,6 +6,7 @@
 package controlador;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -17,7 +18,7 @@ import sun.misc.Queue;
  * @author ACER
  */
 public class ControladorAutomata {
-
+    
     AutomataF af;
     String[] estados;
     String[] simbolos;
@@ -25,16 +26,16 @@ public class ControladorAutomata {
     ArrayList<ArrayList> automataNuevo = new ArrayList<>();
     ArrayList<ArrayList> particiones = new ArrayList<>();
     int[] visitados;
-
+    
     DefaultTableModel dtm;
-
+    
     public ControladorAutomata(AutomataF af, DefaultTableModel dtm) {
         this.af = af;
         this.dtm = dtm;
         estados = af.getEstados();
         simbolos = af.getSimbolos();
     }
-
+    
     public int convertirSimbolos(String a) {
         int valor = 0;
         for (int i = 0; i < simbolos.length; i++) {
@@ -44,7 +45,7 @@ public class ControladorAutomata {
         }
         return valor;
     }
-
+    
     public int convertirEstados(String a) {
         int valor = 0;
         for (int i = 0; i < af.getEstados().length; i++) {
@@ -63,17 +64,17 @@ public class ControladorAutomata {
             visitados[i] = 0;
         }
     }
-
+    
     public ArrayList<ArrayList> guardarAutomata() {
-
-         ArrayList<ArrayList> automata = new ArrayList<>();
+        
+        ArrayList<ArrayList> automata = new ArrayList<>();
         for (int i = 0; i < dtm.getRowCount(); i++) {
             ArrayList<String> transiciones = new ArrayList<>();
             for (int j = 0; j < af.getSimbolos().length; j++) {
                 String estado = (String) dtm.getValueAt(i, j + 1);
-
+                
                 if (estado != null) {
-
+                    
                     transiciones.add(estado);
                 } else {
                     transiciones.add("\u0020");
@@ -83,7 +84,7 @@ public class ControladorAutomata {
         }
         return automata;
     }
-
+    
     public void imprimir(ArrayList<ArrayList> a) {
         for (int i = 0; i < a.size(); i++) {
             ArrayList b = a.get(i);
@@ -115,7 +116,7 @@ public class ControladorAutomata {
                 estRec.add((String) dtm.getValueAt(i, 0));
             }
         }
-
+        
         particiones.add(estRec);
         particiones.add(estAcp);
     }
@@ -165,7 +166,7 @@ public class ControladorAutomata {
             return b;
         }
     }
-
+    
     public void estadosExtraños(int p) {
         visitados[p] = 1;
         automataNuevo.add(af.getTransiciones().get(p));
@@ -194,11 +195,11 @@ public class ControladorAutomata {
                 if (transicionesUnidas.size() == 0) {
                     transicionesUnidas = transiciones;
                 } else if (transicionesUnidas.get(j).contains(estado) == false) {
-
+                    
                     transicionesUnidas.set(j, transicionesUnidas.get(j) + estado);
                 }
             }
-
+            
         }
         return transicionesUnidas;
     }
@@ -222,15 +223,17 @@ public class ControladorAutomata {
         }
         return b;
     }
+
     /**
-     * Este método permite verificar si el simbolo es correcto, para evitar 
+     * Este método permite verificar si el simbolo es correcto, para evitar
      * evaluar simbolos que no pertenecen al autómata.
+     *
      * @param simbolo
-     * @return 
+     * @return
      */
-    public boolean existeSimbolo(String simbolo){
-        boolean b=false;
-        String[] simbolos= af.getSimbolos();
+    public boolean existeSimbolo(String simbolo) {
+        boolean b = false;
+        String[] simbolos = af.getSimbolos();
         for (int i = 0; i < simbolos.length; i++) {
             String a = simbolos[i];
             if (a.equals(simbolo)) {
@@ -240,13 +243,16 @@ public class ControladorAutomata {
         }
         return b;
     }
+
     /**
-     * Permite verificar decidir que estado de aceptación va a tener la unión de avrios estados
+     * Permite verificar decidir que estado de aceptación va a tener la unión de
+     * avrios estados
+     *
      * @param estados
-     * @return 
+     * @return
      */
-    public boolean definirEstadoDeAceptacion(String[] estados){
-        boolean b=false;
+    public boolean definirEstadoDeAceptacion(String[] estados) {
+        boolean b = false;
         for (int i = 0; i < estados.length; i++) {
             if (esEstadoDeAceptacion(estados[i])) {
                 b = true;
@@ -278,7 +284,7 @@ public class ControladorAutomata {
             } else {
                 transicionesNuevas.add(a);
             }
-
+            
         }
         return transicionesNuevas;
     }
@@ -301,7 +307,7 @@ public class ControladorAutomata {
             estadosAceptacion.add(af.getEstados()[0]);
         }
         automataD.add(revisarTransiciones(af.getTransiciones().get(0)));
-
+        
         for (int i = 0; i < automata.size(); i++) {
             ArrayList<String> transicionesD = new ArrayList<>();
             ArrayList<String> transiciones = automata.get(i);
@@ -309,7 +315,7 @@ public class ControladorAutomata {
                 String estado = transiciones.get(j);
                 if (estado != "\u0020") {
                     if (estado.contains("-")) {
-
+                        
                         String[] concatenado = estado.split("-"); //Acá
                         String nuevoEstado = String.join("", concatenado);
                         if (existeEstado(estados, nuevoEstado) == false) {
@@ -320,7 +326,7 @@ public class ControladorAutomata {
                             ArrayList<String> a = unirTransiciones(concatenado);
                             automataD.add(a);
                         }
-
+                        
                     } else if (existeEstado(estados, estado) == false && estado != "\u0020") {
                         estados.add(estado);
                         if (esEstadoDeAceptacion(estado)) {
@@ -328,7 +334,7 @@ public class ControladorAutomata {
                         }
                         int b = convertirEstados(estado);
                         automataD.add(revisarTransiciones(automata.get(b)));
-
+                        
                     }
                 }
             }
@@ -337,15 +343,15 @@ public class ControladorAutomata {
         String[] nEstados = new String[estados.size()];
         String[] nAceptacion = new String[estadosAceptacion.size()];
         for (int i = 0; i < estados.size(); i++) {
-           
+            
             nEstados[i] = estados.get(i);
-         
+            
         }
         for (int i = 0; i < estadosAceptacion.size(); i++) {
-           String a = estadosAceptacion.get(i);
-           
+            String a = estadosAceptacion.get(i);
+            
             nAceptacion[i] = estadosAceptacion.get(i);
-      
+            
         }
         af.setEstados(nEstados);
         af.setEstadosAceptacion(nAceptacion);
@@ -353,39 +359,39 @@ public class ControladorAutomata {
         return automataD;
     }
     
-    public boolean verificarHilera(String hilera){
-        boolean b=true;
+    public boolean verificarHilera(String hilera) {
+        boolean b = true;
         ArrayList<ArrayList> automata = af.getTransiciones();
-        ArrayList<String> transicionesEstado= new ArrayList<>();
-        String siguienteEstado="";
-        if (hilera==null) {
-            b=false;
+        ArrayList<String> transicionesEstado = new ArrayList<>();
+        String siguienteEstado = "";
+        if (hilera == null) {
+            b = false;
             return b;
         }
         for (int i = 0; i < hilera.length(); i++) {
-            char c= hilera.charAt(i);
-            String caracter =  (new StringBuffer().append(c)).toString();
+            char c = hilera.charAt(i);
+            String caracter = (new StringBuffer().append(c)).toString();
             if (caracter.equals("*")) {
-                if (esEstadoDeAceptacion(siguienteEstado)==false) {
-                   b=false;
+                if (esEstadoDeAceptacion(siguienteEstado) == false) {
+                    b = false;
                 }
             }
-            if(existeSimbolo(caracter)){
-                if (i==0) {
-                    transicionesEstado= automata.get(0);
-                     siguienteEstado= transicionesEstado.get(convertirSimbolos(caracter));
-                    if(siguienteEstado.equals("\u0020")){
-                        b=false;
+            if (existeSimbolo(caracter)) {
+                if (i == 0) {
+                    transicionesEstado = automata.get(0);
+                    siguienteEstado = transicionesEstado.get(convertirSimbolos(caracter));
+                    if (siguienteEstado.equals("\u0020")) {
+                        b = false;
                         break;
-                    }else{
+                    } else {
                         
                     }
-                }else{
-                    int a= convertirEstados(siguienteEstado);
-                    transicionesEstado= automata.get(a);
-                     siguienteEstado= transicionesEstado.get(convertirSimbolos(caracter));
-                    if(siguienteEstado.equals("\u0020")){
-                        b=false;
+                } else {
+                    int a = convertirEstados(siguienteEstado);
+                    transicionesEstado = automata.get(a);
+                    siguienteEstado = transicionesEstado.get(convertirSimbolos(caracter));
+                    if (siguienteEstado.equals("\u0020")) {
+                        b = false;
                         break;
                     }
                 }
@@ -393,10 +399,10 @@ public class ControladorAutomata {
         }
         return b;
     }
-   
 
     /**
-     * Método iniciado a las 1854 horas del jueves 6 de abril del 2017
+     * Método iniciado a las 1854 horas del jueves 6 de abril del 2017 La
+     * funcionalidad del método fue terminada el viernes 14 de abril del 2017 :v
      *
      * @return
      */
@@ -412,22 +418,45 @@ public class ControladorAutomata {
                 estEnPart = enEvaluacion.get(cpee);
                 posEstado = convertirEstados(estEnPart);
                 transEstado = af.getTransiciones().get(posEstado);
-                if(!enEvaluacion.containsAll(transEstado)){
+                if (!enEvaluacion.containsAll(transEstado) && enEvaluacion.size() > 1) {
                     //Aquí ya estoy ordenando qué hacer si la particion no contiene los estados de transición posibles.
                     excluido = new ArrayList<>();
                     excluido.add(estEnPart);
                     enEvaluacion.remove(enEvaluacion.indexOf(estEnPart));
-                    if(enEvaluacion.size() == 1){
-                        particiones.remove(particiones.indexOf(enEvaluacion));
-                    }
                     particiones.add(excluido);
-                    contPart = 0; //Es esta madafakin línea la que no creo que me esté haciendo lo que yo quiero :c
-                    cpee = 0;
+                    contPart = -1;
+                    cpee = -1;
                 }
             }
         }
         //Aquí ya solo es hacer la carpintería de llevar las particiones que ya tengo a la tabla :v
         //gg izi
+        return null;
+    }
+    
+    public DefaultTableModel ParticionesEnTabla() {
+        String[] estados = af.getEstados();
+        String[] sTabla = new String[af.getSimbolos().length + 2];
+        sTabla[0] = "Estados";
+        sTabla[sTabla.length - 1] = "E.A.";
+        DefaultTableModel dtm;
+        Random rnd = new Random();
+        ArrayList<String> enEvaluacion;
+        ArrayList<String> transEstado;
+        String representante;
+        int posEstado;
+        
+        for (int csym = 0; csym < af.getSimbolos().length; csym++) {
+            sTabla[csym + 1] = af.getSimbolos()[csym];
+        }
+        dtm = new DefaultTableModel(sTabla, 0);
+        //Aquí ya voy a llevarme las particiones a la tabla
+        for (int cep = 0; cep < particiones.size(); cep++) {
+            enEvaluacion = particiones.get(cep);
+            if(enEvaluacion.size() > 1){
+                representante = enEvaluacion.get(rnd.nextInt()%enEvaluacion.size());
+            }
+        }
         return null;
     }
 }
