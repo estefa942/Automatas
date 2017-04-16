@@ -62,7 +62,6 @@ public class PantallaIngreso extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Fondo = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaEstados = new javax.swing.JTable();
@@ -90,8 +89,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnEvaluar = new javax.swing.JButton();
         mostrarDecision = new javax.swing.JTextField();
         btnGuardarArchivo = new javax.swing.JButton();
-
-        Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
+        Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1244, 514));
@@ -236,6 +234,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
         btnGuardarArchivo.setText("Guardar en Archivo");
         getContentPane().add(btnGuardarArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 480, 180, -1));
+
+        Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
+        getContentPane().add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -20, 1240, 550));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
