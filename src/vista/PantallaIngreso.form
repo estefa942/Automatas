@@ -68,7 +68,6 @@
     </Container>
     <Component class="javax.swing.JTextField" name="txtSimbolos">
       <Properties>
-        <Property name="text" type="java.lang.String" value="0,1"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -92,7 +91,6 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtEstados">
       <Properties>
-        <Property name="text" type="java.lang.String" value="a,b,c"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -288,11 +286,14 @@
     </Component>
     <Component class="javax.swing.JLabel" name="textVeri">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ingrese la secuencia a verificar,al final de la hilera ingrese el simbolo &apos;*&apos; :"/>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Ingrese la secuencia a verificar,al final de la hilera ingrese el simbolo &apos;*&apos; (asterisco):"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="780" y="320" width="440" height="-1"/>
+          <AbsoluteConstraints x="750" y="320" width="480" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -322,7 +323,19 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="810" y="450" width="330" height="-1"/>
+          <AbsoluteConstraints x="810" y="430" width="330" height="-1"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/recursos/fondo1.jpg"/>
+        </Property>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="0" y="0" width="1240" height="500"/>
         </Constraint>
       </Constraints>
     </Component>

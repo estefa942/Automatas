@@ -88,6 +88,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         secuenciaIngresada = new javax.swing.JTextField();
         btnEvaluar = new javax.swing.JButton();
         mostrarDecision = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1244, 514));
@@ -113,7 +114,6 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 40, 360, -1));
 
-        txtSimbolos.setText("0,1");
         txtSimbolos.setToolTipText("");
         getContentPane().add(txtSimbolos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 240, -1));
 
@@ -121,7 +121,6 @@ public class PantallaIngreso extends javax.swing.JFrame {
         jLabel3.setText("Ingrese un nuevo estado:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 180, -1));
 
-        txtEstados.setText("a,b,c");
         txtEstados.setToolTipText("");
         getContentPane().add(txtEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 240, -1));
 
@@ -216,8 +215,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
         getContentPane().add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 310, 460, 10));
 
-        textVeri.setText("Ingrese la secuencia a verificar,al final de la hilera ingrese el simbolo '*' :");
-        getContentPane().add(textVeri, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 320, 440, -1));
+        textVeri.setForeground(new java.awt.Color(255, 255, 255));
+        textVeri.setText("Ingrese la secuencia a verificar,al final de la hilera ingrese el simbolo '*' (asterisco):");
+        getContentPane().add(textVeri, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 320, 480, -1));
         getContentPane().add(secuenciaIngresada, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 350, 320, -1));
 
         btnEvaluar.setText("Evaluar");
@@ -229,7 +229,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
         getContentPane().add(btnEvaluar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 390, 150, -1));
 
         mostrarDecision.setEditable(false);
-        getContentPane().add(mostrarDecision, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 450, 330, -1));
+        getContentPane().add(mostrarDecision, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 430, 330, -1));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1240, 500));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -538,6 +541,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private javax.swing.JButton btnRestaurar;
     private javax.swing.JButton btnSimplificar;
     private javax.swing.JButton btnVerificarHilera;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
