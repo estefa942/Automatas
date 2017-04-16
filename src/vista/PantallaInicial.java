@@ -30,10 +30,10 @@ public class PantallaInicial extends javax.swing.JFrame {
 
         jLabel2 = new javax.swing.JLabel();
         btn_Continuar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(850, 537));
@@ -56,15 +56,6 @@ public class PantallaInicial extends javax.swing.JFrame {
         getContentPane().add(btn_Continuar);
         btn_Continuar.setBounds(630, 430, 160, 32);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/icon-pregunta.png"))); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton2);
-        jButton2.setBounds(50, 420, 50, 50);
-
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Bienvenido, para poder descubrir las diferente funcionalidad con autómatas finitos por favor presione en continuar.");
         getContentPane().add(jLabel3);
@@ -75,19 +66,19 @@ public class PantallaInicial extends javax.swing.JFrame {
         getContentPane().add(jLabel4);
         jLabel4.setBounds(100, 300, 660, 16);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo2.jpg"))); // NOI18N
-        jLabel1.setMaximumSize(new java.awt.Dimension(850, 537));
-        jLabel1.setMinimumSize(new java.awt.Dimension(850, 537));
-        jLabel1.setName(""); // NOI18N
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 850, 537);
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/rsz_help.png"))); // NOI18N
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(80, 410, 50, 50);
+
+        Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo2.jpg"))); // NOI18N
+        Fondo.setMaximumSize(new java.awt.Dimension(850, 537));
+        Fondo.setMinimumSize(new java.awt.Dimension(850, 537));
+        Fondo.setName(""); // NOI18N
+        getContentPane().add(Fondo);
+        Fondo.setBounds(0, 0, 850, 537);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btn_ContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ContinuarActionPerformed
       PantallaIngreso p = new PantallaIngreso();
@@ -131,11 +122,11 @@ public class PantallaInicial extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Fondo;
     private javax.swing.JButton btn_Continuar;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     // End of variables declaration//GEN-END:variables
 }
