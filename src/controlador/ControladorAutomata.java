@@ -16,11 +16,11 @@ import modelo.AutomataF;
 import sun.misc.Queue;
 
 /**
- *@author Estefany Muriel Cano
- *@author Alejandro Castaño Rojas
+ * @author Estefany Muriel Cano
+ * @author Alejandro Castaño Rojas
  */
 public class ControladorAutomata {
-    
+
     AutomataF af;
     String[] estados;
     String[] simbolos;
@@ -28,19 +28,20 @@ public class ControladorAutomata {
     ArrayList<ArrayList> automataNuevo = new ArrayList<>();
     ArrayList<ArrayList> particiones = new ArrayList<>();
     int[] visitados;
-    
+
     DefaultTableModel dtm;
-    
+
     public ControladorAutomata(AutomataF af, DefaultTableModel dtm) {
         this.af = af;
         this.dtm = dtm;
         estados = af.getEstados();
         simbolos = af.getSimbolos();
     }
-    
+
     /**
-     * Este método permite retornar la posición del simbolo que se le entra por parámetro
-     * para saber su ubicación dentro del arreglo.
+     * Este método permite retornar la posición del simbolo que se le entra por
+     * parámetro para saber su ubicación dentro del arreglo.
+     *
      * @param a String con el simbolo que se quiere buscar
      * @return entero con la posición del símbolo del estado en el arreglo
      */
@@ -53,9 +54,11 @@ public class ControladorAutomata {
         }
         return valor;
     }
+
     /**
-     * Este método permite retornar la posición del estado que se le entra por parámetro
-     * para saber su ubicación dentro del arreglo.
+     * Este método permite retornar la posición del estado que se le entra por
+     * parámetro para saber su ubicación dentro del arreglo.
+     *
      * @param a String con el simbolo que se quiere buscar
      * @return entero con la posición del estado en el arreglo
      */
@@ -70,11 +73,12 @@ public class ControladorAutomata {
         return -1;
     }
 
- /**
-  * Este método trae de la tabla todas las transiciones y las guarda en un ArrayList de ArrayList con datos 
-  * de tipo String
-  * @return un ArrayLsit con todas las transiciones del autómata
-  */    
+    /**
+     * Este método trae de la tabla todas las transiciones y las guarda en un
+     * ArrayList de ArrayList con datos de tipo String
+     *
+     * @return un ArrayLsit con todas las transiciones del autómata
+     */
     public ArrayList<ArrayList> guardarAutomata() {
 
         ArrayList<ArrayList> automata = new ArrayList<>();
@@ -82,9 +86,9 @@ public class ControladorAutomata {
             ArrayList<String> transiciones = new ArrayList<>();
             for (int j = 0; j < af.getSimbolos().length; j++) {
                 String estado = (String) dtm.getValueAt(i, j + 1);
-                
+
                 if (estado != null) {
-                    
+
                     transiciones.add(estado);
                 } else {
                     transiciones.add("\u0020");
@@ -94,7 +98,7 @@ public class ControladorAutomata {
         }
         return automata;
     }
-    
+
     public void imprimir(ArrayList<ArrayList> a) {
         for (int i = 0; i < a.size(); i++) {
             ArrayList b = a.get(i);
@@ -124,7 +128,7 @@ public class ControladorAutomata {
                 estRec.add((String) dtm.getValueAt(i, 0));
             }
         }
-        
+
         particiones.add(estRec);
         particiones.add(estAcp);
     }
@@ -132,7 +136,8 @@ public class ControladorAutomata {
     /**
      * Permite determinar si el estado ingresado es de aceptación.
      *
-     * @param estado String con el estado que se desea conocer si es de aceptación
+     * @param estado String con el estado que se desea conocer si es de
+     * aceptación
      * @return un booleano con la confirmación de si es un estado de acepetación
      * o no.
      */
@@ -174,14 +179,16 @@ public class ControladorAutomata {
             return b;
         }
     }
-    
- /**
-  * Este método compara dos estados y evita que hayan repeticiones de estados cuando se realice la unión
-  * de los mismos.
-  * @param a String con el primer estado a comparar
-  * @param b String con el segundo estado a comparar
-  * @return Un String con el nuevo estado sin repeticiones de estados en el mismo.
-  */
+
+    /**
+     * Este método compara dos estados y evita que hayan repeticiones de estados
+     * cuando se realice la unión de los mismos.
+     *
+     * @param a String con el primer estado a comparar
+     * @param b String con el segundo estado a comparar
+     * @return Un String con el nuevo estado sin repeticiones de estados en el
+     * mismo.
+     */
     public String quitarEstadosRepetidos(String a, String b) {
         String estado = a;
         if (a == "\u0020") {
@@ -200,11 +207,15 @@ public class ControladorAutomata {
     }
 
     /**
-     * Este método permite hacer la unión de las transiciones de varios estados, tomando las transiciones de cada estado
-     * que se va unir y luego compara las transiciones que se van a unir para evitar la repetición de estados en las transiciones finales.
+     * Este método permite hacer la unión de las transiciones de varios estados,
+     * tomando las transiciones de cada estado que se va unir y luego compara
+     * las transiciones que se van a unir para evitar la repetición de estados
+     * en las transiciones finales.
      *
-     * @param estados Arreglo de Strings con los estados a los cuales se les va a hacer la unión de transiciones.
-     * @return Un Array de Strings con las transciones previamente concatenadas y sin repeticiones en ellas.
+     * @param estados Arreglo de Strings con los estados a los cuales se les va
+     * a hacer la unión de transiciones.
+     * @return Un Array de Strings con las transciones previamente concatenadas
+     * y sin repeticiones en ellas.
      */
     public ArrayList<String> unirTransiciones(String[] estados) {
         ArrayList<String> transicionesUnidas = new ArrayList<>();
@@ -220,7 +231,7 @@ public class ControladorAutomata {
                     transicionesUnidas.set(j, nEstado);
                 }
             }
-            
+
         }
         return transicionesUnidas;
     }
@@ -231,7 +242,8 @@ public class ControladorAutomata {
      *
      * @param estados Lista con los estados existentes hasta el momento.
      * @param estado String con el estado a comparar.
-     * @return un booleano en true si el estado ya existe, o false de lo contrario.
+     * @return un booleano en true si el estado ya existe, o false de lo
+     * contrario.
      */
     public boolean existeEstado(ArrayList<String> estados, String estado) {
         boolean b = false;
@@ -246,7 +258,7 @@ public class ControladorAutomata {
                 }
             }
 
-            if (count == estado.length()&& estado.length()==a.length()) {
+            if (count == estado.length() && estado.length() == a.length()) {
                 b = true;
                 break;
             }
@@ -258,10 +270,10 @@ public class ControladorAutomata {
      * Este método permite verificar si el simbolo es correcto, para evitar
      * evaluar simbolos que no pertenecen al autómata.
      *
-     * @param simbolo String con el simbolo a verificar.    
-     * @return un booleano en true si el simbolo es correcto, o false de lo contrario.
+     * @param simbolo String con el simbolo a verificar.
+     * @return un booleano en true si el simbolo es correcto, o false de lo
+     * contrario.
      */
-    
     public boolean existeSimbolo(String simbolo) {
         boolean b = false;
         String[] simbolos = af.getSimbolos();
@@ -276,13 +288,14 @@ public class ControladorAutomata {
     }
 
     /**
-     * Permite  decidir que estado de aceptación va a tener la unión de
-     * varios estados
+     * Permite decidir que estado de aceptación va a tener la unión de varios
+     * estados
      *
-     * @param estados Arreglo con los estados a verificar su estado de aceptación   
-     * @return un booleano en true si al menos uno de los estados es de aceptación, o false de lo contrario.
+     * @param estados Arreglo con los estados a verificar su estado de
+     * aceptación
+     * @return un booleano en true si al menos uno de los estados es de
+     * aceptación, o false de lo contrario.
      */
-     
     public boolean definirEstadoDeAceptacion(String[] estados) {
         boolean b = false;
         for (int i = 0; i < estados.length; i++) {
@@ -299,7 +312,7 @@ public class ControladorAutomata {
      * que un transición vaya a dos estados, los concatena.
      *
      * @param transiciones Array de String con las transciones a revisar.
-     * @return Un ArrayList de Strings con las transiciones concatenadas 
+     * @return Un ArrayList de Strings con las transiciones concatenadas
      */
     public ArrayList<String> revisarTransiciones(ArrayList<String> transiciones) {
         ArrayList<String> transicionesNuevas = new ArrayList<>();
@@ -316,22 +329,27 @@ public class ControladorAutomata {
             } else {
                 transicionesNuevas.add(a);
             }
-            
+
         }
         return transicionesNuevas;
     }
-  /**
-   * Este método analiza los estados de aceptación que se tienen en el momento y verifica que el estado que va a entrar 
-   * no se encuentre repetido entre los estados de aceptación que ya están.
-   * @param estadosAceptacion Lista que contiene los estados de aceptación que se tienen hasta el momento
-   * @param estado String con el estado a verificar.
-   * @return un booleano en true si el estado ya existe en la lista o false si no existe
-   */
-    public boolean existeEstadoAceptacion(ArrayList<String> estadosAceptacion,String estado){
+
+    /**
+     * Este método analiza los estados de aceptación que se tienen en el momento
+     * y verifica que el estado que va a entrar no se encuentre repetido entre
+     * los estados de aceptación que ya están.
+     *
+     * @param estadosAceptacion Lista que contiene los estados de aceptación que
+     * se tienen hasta el momento
+     * @param estado String con el estado a verificar.
+     * @return un booleano en true si el estado ya existe en la lista o false si
+     * no existe
+     */
+    public boolean existeEstadoAceptacion(ArrayList<String> estadosAceptacion, String estado) {
         boolean b = false;
         for (int i = 0; i < estadosAceptacion.size(); i++) {
             String a = estadosAceptacion.get(i);
-           
+
             if (a.equals(estado)) {
                 b = true;
                 break;
@@ -339,27 +357,31 @@ public class ControladorAutomata {
         }
         return b;
     }
-    
+
     /**
-     * Este método actualiza las particiones de aceptación o de rechazo cuando el autómata es convertido a determinístico,
-     * dichas particiones son utilizadas en simplificar y en verificar la hilera. Para actualizar se toman los estados 
-     * que no pertenecen a la lista de estado de aceptación y se asigan en la partición de estados de rechazo.
-     * 
-     * @param estadosAceptacion Lista con los estados de aceptación del autómata.
+     * Este método actualiza las particiones de aceptación o de rechazo cuando
+     * el autómata es convertido a determinístico, dichas particiones son
+     * utilizadas en simplificar y en verificar la hilera. Para actualizar se
+     * toman los estados que no pertenecen a la lista de estado de aceptación y
+     * se asigan en la partición de estados de rechazo.
+     *
+     * @param estadosAceptacion Lista con los estados de aceptación del
+     * autómata.
      * @param estados lista con los estados del autómata.
      */
-    public void actualizarParticiones(ArrayList<String> estadosAceptacion,ArrayList<String> estados){
+    public void actualizarParticiones(ArrayList<String> estadosAceptacion, ArrayList<String> estados) {
         particiones.clear();
         ArrayList<String> estadosRechazo = new ArrayList<>();
         for (int i = 0; i < estados.size(); i++) {
             String estado = estados.get(i);
-            if(estadosAceptacion.contains(estado)==false){
+            if (estadosAceptacion.contains(estado) == false) {
                 estadosRechazo.add(estado);
             }
         }
         particiones.add(estadosRechazo);
         particiones.add(estadosAceptacion);
     }
+
     /**
      * Este método permite convertir un autómata no deterministico a
      * deterministico, tomando el primer estado con sus transiciones del
@@ -368,7 +390,7 @@ public class ControladorAutomata {
      *
      * @return un ArrayList de ArrayList de tipo String con el nuevo autómata.
      */
-     public ArrayList<ArrayList> convertirEnDeterministico() {
+    public ArrayList<ArrayList> convertirEnDeterministico() {
         ArrayList<String> estadosAceptacion = new ArrayList<>();
         ArrayList<ArrayList> automataD = new ArrayList<>();
         ArrayList<String> estados = new ArrayList<>();
@@ -381,13 +403,14 @@ public class ControladorAutomata {
         for (int i = 0; i < transiciones.size(); i++) {
             String estado = transiciones.get(i);
             if (existeEstado(estados, estado) == false) {
-                if(estado!="\u0020"){
-                estados.add(estado);
+                if (estado != "\u0020") {
+                    estados.add(estado);
                 }
                 String[] concatenado = convertirString(estado);
                 if (definirEstadoDeAceptacion(concatenado)) {
-                   if(existeEstadoAceptacion(estadosAceptacion, estado)==false)
-                    estadosAceptacion.add(estado);
+                    if (existeEstadoAceptacion(estadosAceptacion, estado) == false) {
+                        estadosAceptacion.add(estado);
+                    }
                 }
 
             }
@@ -399,15 +422,15 @@ public class ControladorAutomata {
             String[] estadoConca = convertirString(estado1);
             ArrayList<String> a = unirTransiciones(estadoConca);
             if (definirEstadoDeAceptacion(estadoConca)) {
-                if(estado1!="\u0020" && existeEstadoAceptacion(estadosAceptacion, estado1)==false){
-                estadosAceptacion.add(estado1);
+                if (estado1 != "\u0020" && existeEstadoAceptacion(estadosAceptacion, estado1) == false) {
+                    estadosAceptacion.add(estado1);
                 }
             }
             automataD.add(a);
             for (int j = 0; j < a.size(); j++) {
                 if (existeEstado(estados, a.get(j)) == false) {
-                    if(a.get(j)!="\u0020"){
-                    estados.add(a.get(j));
+                    if (a.get(j) != "\u0020") {
+                        estados.add(a.get(j));
                     }
 
                 }
@@ -435,11 +458,13 @@ public class ControladorAutomata {
         return automataD;
     }
 
- /**
-  * Este método permite tomar un String y llevarlo a un arreglo con un caracter del String en cada posición.
-  * @param a String que se quiere almacenar en un arreglo.
-  * @return Un arreglo con el String inicial.
-  */
+    /**
+     * Este método permite tomar un String y llevarlo a un arreglo con un
+     * caracter del String en cada posición.
+     *
+     * @param a String que se quiere almacenar en un arreglo.
+     * @return Un arreglo con el String inicial.
+     */
     public String[] convertirString(String a) {
         String[] estadoConca = new String[a.length()];
         for (int i = 0; i < a.length(); i++) {
@@ -450,21 +475,23 @@ public class ControladorAutomata {
         return estadoConca;
     }
 
- /**
-  * Este método permite tomar un estado que se encuentra desordenado, y ordenarlo de la forma en que se define previamente,
-  * es decir, si existe un estado compuesto de más estados con un orden específico, los otros estados que contenga sus mismos estados, 
-  * tambien van a estar con el mismo orden del estado previamente definido.
-  * @param estados Lista con los estados del autómata.
-  * @param estado String con el estado que se quiere reordenar.
-  * @return String con el estado ordenado.
-  */  
-    
-    public String intercambiarEstados(ArrayList<String> estados,String estado){
-       String estadoN="";
-       String estadoA="";
+    /**
+     * Este método permite tomar un estado que se encuentra desordenado, y
+     * ordenarlo de la forma en que se define previamente, es decir, si existe
+     * un estado compuesto de más estados con un orden específico, los otros
+     * estados que contenga sus mismos estados, tambien van a estar con el mismo
+     * orden del estado previamente definido.
+     *
+     * @param estados Lista con los estados del autómata.
+     * @param estado String con el estado que se quiere reordenar.
+     * @return String con el estado ordenado.
+     */
+    public String intercambiarEstados(ArrayList<String> estados, String estado) {
+        String estadoN = "";
+        String estadoA = "";
         for (int i = 0; i < estados.size(); i++) {
             estadoA = estados.get(i);
-            int count=0;
+            int count = 0;
             for (int j = 0; j < estado.length(); j++) {
                 char c = estado.charAt(j);
                 String caracter = (new StringBuffer().append(c)).toString();
@@ -472,31 +499,34 @@ public class ControladorAutomata {
                     count++;
                 }
             }
-            if(count==estado.length()){
+            if (count == estado.length()) {
                 estadoN = estadoA;
                 break;
             }
         }
         return estadoN;
     }
-    
+
     /**
-     * Toma el autómata que se construyó y reordena los estados de las transiciones,para que coincidan con los
-     * estados ya definidos, para evitar confusiones en el usuario,y sea más ordenado  el proceso de reconocimiento.
+     * Toma el autómata que se construyó y reordena los estados de las
+     * transiciones,para que coincidan con los estados ya definidos, para evitar
+     * confusiones en el usuario,y sea más ordenado el proceso de
+     * reconocimiento.
+     *
      * @param estados Lista con los estdos del autómata.
      * @param automata ArrayList con todas las transiciones del autómata.
      * @return Un ArrayList con todas las transiciones ordenadas del autómata.
      */
-    public ArrayList<ArrayList> organizarAutomata(ArrayList<String> estados,ArrayList<ArrayList> automata ){
+    public ArrayList<ArrayList> organizarAutomata(ArrayList<String> estados, ArrayList<ArrayList> automata) {
         ArrayList<ArrayList> automataNuevo = new ArrayList<>();
         for (int i = 0; i < automata.size(); i++) {
             ArrayList<String> transiciones = automata.get(i);
             ArrayList<String> transicionesN = new ArrayList<>();
             for (int j = 0; j < transiciones.size(); j++) {
-                String estado=transiciones.get(j);
-                if(estado.length()!=1){
+                String estado = transiciones.get(j);
+                if (estado.length() != 1) {
                     transicionesN.add(intercambiarEstados(estados, estado));
-                }else{
+                } else {
                     transicionesN.add(estado);
                 }
             }
@@ -504,16 +534,20 @@ public class ControladorAutomata {
         }
         return automataNuevo;
     }
-    
+
     /**
-     * Este método permite que al tener un autómata ya definido, podamos relaizar un reconocimiento de secuencias
-     * mediante el autómata, para saber si la secuencia es válida o no, nos ubicamos en el estado inicial, luego 
-     * miramos que simbolo entra y avanzamos al estado que indique la transición, hasta llegar al final de la hilera que es denotada por
-     * el símbolo '*', cuando se llega al final se mira en que tipo de estado se finalizó y si es de aceptación se acepta la secuencia,
-     * de lo contrario se rechaza.
-     * 
+     * Este método permite que al tener un autómata ya definido, podamos
+     * relaizar un reconocimiento de secuencias mediante el autómata, para saber
+     * si la secuencia es válida o no, nos ubicamos en el estado inicial, luego
+     * miramos que simbolo entra y avanzamos al estado que indique la
+     * transición, hasta llegar al final de la hilera que es denotada por el
+     * símbolo '*', cuando se llega al final se mira en que tipo de estado se
+     * finalizó y si es de aceptación se acepta la secuencia, de lo contrario se
+     * rechaza.
+     *
      * @param hilera String con la secuencia que se quiere verificar
-     * @return un booleano en true si la secuencia se acepta, o false de lo contrario.
+     * @return un booleano en true si la secuencia se acepta, o false de lo
+     * contrario.
      */
     public boolean verificarHilera(String hilera) {
         boolean b = true;
@@ -562,7 +596,7 @@ public class ControladorAutomata {
      *
      * @return
      */
-    public ArrayList<ArrayList> Simplificar() {
+    public DefaultTableModel Simplificar() {
         ArrayList<String> enEvaluacion;
         ArrayList<String> transEstado;
         ArrayList<String> excluido;
@@ -574,25 +608,21 @@ public class ControladorAutomata {
                 estEnPart = enEvaluacion.get(cpee);
                 posEstado = convertirEstados(estEnPart);
                 transEstado = af.getTransiciones().get(posEstado);
-                if (!enEvaluacion.containsAll(transEstado)) {
+                if (!enEvaluacion.containsAll(transEstado) && enEvaluacion.size() > 1) {
                     //Aquí ya estoy ordenando qué hacer si la particion no contiene los estados de transición posibles.
                     excluido = new ArrayList<>();
                     excluido.add(estEnPart);
                     enEvaluacion.remove(enEvaluacion.indexOf(estEnPart));
-                    if (enEvaluacion.size() == 1) {
-                        particiones.remove(particiones.indexOf(enEvaluacion));
-                    }
                     particiones.add(excluido);
                     contPart = -1;
                     cpee = -1;
                 }
             }
         }
-        //Aquí ya solo es hacer la carpintería de llevar las particiones que ya tengo a la tabla :v
-        //gg izi
-        return null;
+        DefaultTableModel simple = ParticionesEnTabla();
+        return simple;
     }
-    
+
     public DefaultTableModel ParticionesEnTabla() {
         String[] estados = af.getEstados();
         String[] sTabla = new String[af.getSimbolos().length + 2];
@@ -604,7 +634,7 @@ public class ControladorAutomata {
         ArrayList<String> transEstado;
         String representante;
         int posEstado;
-        
+
         for (int csym = 0; csym < af.getSimbolos().length; csym++) {
             sTabla[csym + 1] = af.getSimbolos()[csym];
         }
@@ -612,10 +642,16 @@ public class ControladorAutomata {
         //Aquí ya voy a llevarme las particiones a la tabla
         for (int cep = 0; cep < particiones.size(); cep++) {
             enEvaluacion = particiones.get(cep);
-            if(enEvaluacion.size() > 1){
-                representante = enEvaluacion.get(rnd.nextInt()%enEvaluacion.size());
+            if (enEvaluacion.size() > 1) {
+                representante = enEvaluacion.get(rnd.nextInt() % enEvaluacion.size());
+                for (int contTrans = 0; contTrans < af.getTransiciones().size(); contTrans++) {
+                    transEstado = af.getTransiciones().get(contTrans);
+                    if(transEstado.contains(representante)){
+                        posEstado = transEstado.indexOf(representante);
+                    }
+                }
             }
         }
-        return null;
+        return dtm;
     }
 }

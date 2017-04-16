@@ -14,18 +14,11 @@ import java.util.Vector;
  */
 public class AutomataF {
      
-    public String[] simbolos;
-    public String[] estados;
-    public String[] estadosAceptacion;
-    public ArrayList<ArrayList> Transiciones;
-    public ArrayList<ArrayList> automataSinExtraños;
-//
-//    public AutomataF(String[] simbolos, String[] estados, String[] estadosAceptacion, int[][] matrizTransiciones) {
-//        this.simbolos = simbolos;
-//        this.estados = estados;
-//        this.estadosAceptacion = estadosAceptacion;
-//        this.matrizTransiciones = matrizTransiciones;
-//    }
+    private String[] simbolos;
+    private String[] estados;
+    private String[] estadosAceptacion;
+    private ArrayList<ArrayList> Transiciones;
+    private ArrayList<ArrayList> automataSinExtraños;
 
     public String[] getSimbolos() {
         return simbolos;
@@ -67,7 +60,4 @@ public class AutomataF {
         this.automataSinExtraños = automataSinExtraños;
     }
 
- 
-    
-     
 }
