@@ -18,7 +18,7 @@ import sun.misc.Queue;
  * @author ACER
  */
 public class ControladorAutomata {
-
+    
     AutomataF af;
     String[] estados;
     String[] simbolos;
@@ -26,16 +26,16 @@ public class ControladorAutomata {
     ArrayList<ArrayList> automataNuevo = new ArrayList<>();
     ArrayList<ArrayList> particiones = new ArrayList<>();
     int[] visitados;
-
+    
     DefaultTableModel dtm;
-
+    
     public ControladorAutomata(AutomataF af, DefaultTableModel dtm) {
         this.af = af;
         this.dtm = dtm;
         estados = af.getEstados();
         simbolos = af.getSimbolos();
     }
-
+    
     public int convertirSimbolos(String a) {
         int valor = 0;
         for (int i = 0; i < simbolos.length; i++) {
@@ -45,7 +45,7 @@ public class ControladorAutomata {
         }
         return valor;
     }
-
+    
     public int convertirEstados(String a) {
         int valor = 0;
         for (int i = 0; i < af.getEstados().length; i++) {
@@ -64,7 +64,7 @@ public class ControladorAutomata {
             visitados[i] = 0;
         }
     }
-
+    
     public ArrayList<ArrayList> guardarAutomata() {
 
         ArrayList<ArrayList> automata = new ArrayList<>();
@@ -72,9 +72,9 @@ public class ControladorAutomata {
             ArrayList<String> transiciones = new ArrayList<>();
             for (int j = 0; j < af.getSimbolos().length; j++) {
                 String estado = (String) dtm.getValueAt(i, j + 1);
-
+                
                 if (estado != null) {
-
+                    
                     transiciones.add(estado);
                 } else {
                     transiciones.add("\u0020");
@@ -84,7 +84,7 @@ public class ControladorAutomata {
         }
         return automata;
     }
-
+    
     public void imprimir(ArrayList<ArrayList> a) {
         for (int i = 0; i < a.size(); i++) {
             ArrayList b = a.get(i);
@@ -114,7 +114,7 @@ public class ControladorAutomata {
                 estRec.add((String) dtm.getValueAt(i, 0));
             }
         }
-
+        
         particiones.add(estRec);
         particiones.add(estAcp);
     }
@@ -164,7 +164,7 @@ public class ControladorAutomata {
             return b;
         }
     }
-
+    
     public void estadosExtraños(int p) {
         visitados[p] = 1;
         automataNuevo.add(af.getTransiciones().get(p));
@@ -214,7 +214,7 @@ public class ControladorAutomata {
                     transicionesUnidas.set(j, nEstado);
                 }
             }
-
+            
         }
         return transicionesUnidas;
     }
@@ -308,7 +308,7 @@ public class ControladorAutomata {
             } else {
                 transicionesNuevas.add(a);
             }
-
+            
         }
         return transicionesNuevas;
     }
@@ -479,7 +479,8 @@ public class ControladorAutomata {
     }
 
     /**
-     * Método iniciado a las 1854 horas del jueves 6 de abril del 2017
+     * Método iniciado a las 1854 horas del jueves 6 de abril del 2017 La
+     * funcionalidad del método fue terminada el viernes 14 de abril del 2017 :v
      *
      * @return
      */
@@ -504,13 +505,39 @@ public class ControladorAutomata {
                         particiones.remove(particiones.indexOf(enEvaluacion));
                     }
                     particiones.add(excluido);
-                    contPart = 0; //Es esta madafakin línea la que no creo que me esté haciendo lo que yo quiero :c
-                    cpee = 0;
+                    contPart = -1;
+                    cpee = -1;
                 }
             }
         }
         //Aquí ya solo es hacer la carpintería de llevar las particiones que ya tengo a la tabla :v
         //gg izi
+        return null;
+    }
+    
+    public DefaultTableModel ParticionesEnTabla() {
+        String[] estados = af.getEstados();
+        String[] sTabla = new String[af.getSimbolos().length + 2];
+        sTabla[0] = "Estados";
+        sTabla[sTabla.length - 1] = "E.A.";
+        DefaultTableModel dtm;
+        Random rnd = new Random();
+        ArrayList<String> enEvaluacion;
+        ArrayList<String> transEstado;
+        String representante;
+        int posEstado;
+        
+        for (int csym = 0; csym < af.getSimbolos().length; csym++) {
+            sTabla[csym + 1] = af.getSimbolos()[csym];
+        }
+        dtm = new DefaultTableModel(sTabla, 0);
+        //Aquí ya voy a llevarme las particiones a la tabla
+        for (int cep = 0; cep < particiones.size(); cep++) {
+            enEvaluacion = particiones.get(cep);
+            if(enEvaluacion.size() > 1){
+                representante = enEvaluacion.get(rnd.nextInt()%enEvaluacion.size());
+            }
+        }
         return null;
     }
 }

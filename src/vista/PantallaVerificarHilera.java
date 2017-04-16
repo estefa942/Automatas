@@ -114,11 +114,16 @@ public class PantallaVerificarHilera extends javax.swing.JFrame {
         // TODO add your handling code here:
            
         ca= new ControladorAutomata(af,dtm);
-           
-         if(ca.verificarHilera(secuenciaIngresada.getText())){
-             mostrarDecision.setText("La secuencia es aceptada");          
+           String hilera = secuenciaIngresada.getText();
+//         if(ca.verificarHilera(hilera)){
+//             mostrarDecision.setText("La secuencia es aceptada");          
+//         }else{
+//             mostrarDecision.setText("La secuencia es rechazada");
+//         }
+ if(ca.verificarHilera("00011*")){
+             System.out.println("aceptada");
          }else{
-             mostrarDecision.setText("La secuencia es rechazada");
+             System.out.println("rechazada");
          }
          
     }//GEN-LAST:event_btnEvaluarActionPerformed
