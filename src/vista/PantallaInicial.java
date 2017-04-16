@@ -5,6 +5,10 @@
  */
 package vista;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+
 /**
  *
  * @author ACER
@@ -17,6 +21,7 @@ public class PantallaInicial extends javax.swing.JFrame {
     public PantallaInicial() {
         initComponents();
         setLocationRelativeTo(null);
+        setTitle("Autómatas Finitos");
     }
 
     /**
@@ -67,6 +72,11 @@ public class PantallaInicial extends javax.swing.JFrame {
         jLabel4.setBounds(100, 300, 660, 16);
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/rsz_help.png"))); // NOI18N
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
+        });
         getContentPane().add(jLabel5);
         jLabel5.setBounds(80, 410, 50, 50);
 
@@ -85,6 +95,16 @@ public class PantallaInicial extends javax.swing.JFrame {
       p.setVisible(true);
       dispose();              
     }//GEN-LAST:event_btn_ContinuarActionPerformed
+
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+     
+        try {
+            Desktop.getDesktop().open(new File("src\\modelo\\MANUAL DE USUARIO.pdf"));
+        } catch (Exception e) {
+            System.out.println();
+        }
+
+    }//GEN-LAST:event_jLabel5MouseClicked
 
     /**
      * @param args the command line arguments

@@ -22,8 +22,8 @@ import javax.swing.table.DefaultTableModel;
 import modelo.AutomataF;
 
 /**
- *
- * @author alejandro.castanor
+ *@author Estefany Muriel Cano
+ * @author Alejandro Castaño Rojas
  */
 public class PantallaIngreso extends javax.swing.JFrame {
 
@@ -31,7 +31,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     File archivo;
     ControladorAutomata ca;
 
-//    ControladorEntradaDatos ced;
+
     AutomataF af = new AutomataF();
     Vector vEstados = new Vector();
     private String[] estadosAceptacion;
@@ -42,6 +42,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
      */
     public PantallaIngreso() {
         initComponents();
+        setTitle("Autómatas Finitos");
         setLocationRelativeTo(null);
         btnConversor.setVisible(false);
         btnVerificarHilera.setVisible(false);
@@ -293,11 +294,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
         String[] estados = txtEstados.getText().split(",");
 
         dtm = new DefaultTableModel(simbolosArr, 0);
-        for (int machete = 0; machete < estados.length; machete++) {
-            String[] charles = new String[1];
-            charles[0] = estados[machete];
-            dtm.addRow(charles);
-            vEstados.add(estados[machete]);
+        for (int i = 0; i < estados.length; i++) {
+            String[] st = new String[1];
+            st[0] = estados[i];
+            dtm.addRow(st);
+            vEstados.add(estados[i]);
         }
         af.setEstados(estados);
         af.setSimbolos(simbolosEntrando);
@@ -323,7 +324,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
      */
     private void btnConversorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConversorActionPerformed
         // TODO add your handling code here:
-        ca.imprimir(ca.convertirEnDeterministico());
+        ca.convertirEnDeterministico();
         llenarTabla(tablaNuevoAutomata);
         btnSimplificar.setVisible(true);
         btnVerificarHilera.setVisible(true);
@@ -337,7 +338,6 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private void btnOperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperarActionPerformed
         ca = new ControladorAutomata(af, dtm);
         af.setTransiciones(ca.guardarAutomata());
-        //ca.imprimir(ca.guardarAutomata());
         ca.estadosAceptacion();
         if (ca.esDeterministico()) {
             JOptionPane.showMessageDialog(rootPane, "El autómata es deterministico");

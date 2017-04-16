@@ -84,7 +84,7 @@ public class ControladorAutomata {
             for (int j = 0; j < af.getSimbolos().length; j++) {
                 String estado = (String) dtm.getValueAt(i, j + 1);
 
-                if (estado != null) {
+                if (estado != null && estadoValido(estados, estado) ) {
 
                     transiciones.add(estado);
                 } else {
@@ -95,17 +95,22 @@ public class ControladorAutomata {
         }
         return automata;
     }
-
-    public void imprimir(ArrayList<ArrayList> a) {
-        for (int i = 0; i < a.size(); i++) {
-            ArrayList b = a.get(i);
-            for (int j = 0; j < b.size(); j++) {
-                System.out.print("|" + b.get(j) + "|");
+ /**
+  * Permite verificar si el estado que se va a guardar es válido
+  * @param estados Arreglo con los estados del autómata
+  * @param estado String con el estado a verificar
+  * @return boolen en true si existe estado, false de lo contrario.
+  */
+    public boolean estadoValido(String[] estados,String estado){
+        boolean b= false;
+        for (int i = 0; i < estados.length; i++) {
+            if(estados[i].equals(estado)){
+                b=true;
+                break;
             }
-            System.out.println("");
         }
+        return b;
     }
-
     /**
      * Aunque su nombre indique que selecciona los estados de aceptación, en
      * realidad separa estados de aceptación de los estados de rechazo generando
