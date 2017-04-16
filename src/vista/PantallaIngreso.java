@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
 import modelo.AutomataF;
 
 /**
- *@author Estefany Muriel Cano
+ * @author Estefany Muriel Cano
  * @author Alejandro Castaño Rojas
  */
 public class PantallaIngreso extends javax.swing.JFrame {
@@ -30,7 +30,6 @@ public class PantallaIngreso extends javax.swing.JFrame {
     JFileChooser abrirArchivo = new JFileChooser();
     File archivo;
     ControladorAutomata ca;
-
 
     AutomataF af = new AutomataF();
     Vector vEstados = new Vector();
@@ -336,7 +335,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
      * @param evt
      */
     private void btnOperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperarActionPerformed
-        ca = new ControladorAutomata(af, dtm);
+       try
+        {
+            ca = new ControladorAutomata(af, dtm);
         af.setTransiciones(ca.guardarAutomata());
         ca.estadosAceptacion();
         if (ca.esDeterministico()) {
@@ -349,10 +350,21 @@ public class PantallaIngreso extends javax.swing.JFrame {
             btnConversor.setVisible(true);
 
         }
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(rootPane, "Ingreso inválido");
+        }
+        
 
 
     }//GEN-LAST:event_btnOperarActionPerformed
-
+    /**
+     * Este botón permite abrir un archivo con el autómata de algún lugar de
+     * nuestro ordenador
+     *
+     * @param evt
+     */
     private void btnArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArchivoActionPerformed
         String[] estadotes;
         String[] ouch = null;
@@ -425,7 +437,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnArchivoActionPerformed
-
+    /**
+     * Este botón simplifica el autómata ingresado
+     *
+     * @param evt
+     */
     private void btnSimplificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimplificarActionPerformed
         // TODO add your handling code here:
         btnVerificarHilera.setVisible(true);
@@ -444,7 +460,12 @@ public class PantallaIngreso extends javax.swing.JFrame {
         secuenciaIngresada.setEnabled(true);
         mostrarDecision.setEnabled(true);
     }//GEN-LAST:event_btnVerificarHileraActionPerformed
-
+    /**
+     * Este botón permite agregar un nuevo estado en el autómata que se está
+     * trabajando
+     *
+     * @param evt
+     */
     private void btnAddEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEstadoActionPerformed
         // TODO add your handling code here:
         String[] otroMx = new String[1];
@@ -453,14 +474,22 @@ public class PantallaIngreso extends javax.swing.JFrame {
         dtm.addRow(otroMx);
         JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
     }//GEN-LAST:event_btnAddEstadoActionPerformed
-
+    /**
+     * Este botón permite ingresar un nuevo autómata
+     *
+     * @param evt
+     */
     private void btnRestaurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestaurarActionPerformed
         // TODO add your handling code here:
         btnIngreso.setEnabled(true);
         txtEstados.setEnabled(true);
         txtSimbolos.setEnabled(true);
         btnArchivo.setEnabled(true);
-
+        btnEvaluar.setEnabled(false);
+        textVeri.setEnabled(false);
+        secuenciaIngresada.setText("");
+        secuenciaIngresada.setEnabled(false);
+        mostrarDecision.setEnabled(false);
         btnConversor.setVisible(false);
         btnSimplificar.setVisible(false);
         btnVerificarHilera.setVisible(false);
@@ -471,18 +500,33 @@ public class PantallaIngreso extends javax.swing.JFrame {
         DefaultTableModel empty = new DefaultTableModel();
         tablaNuevoAutomata.setModel(empty);
     }//GEN-LAST:event_btnRestaurarActionPerformed
-
+    /**
+     * Este botón permite verificar la hilera ingresada y decidir si es aceptada
+     * o rechaza por el autómata
+     *
+     * @param evt
+     */
     private void btnEvaluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEvaluarActionPerformed
         // TODO add your handling code here:
-
+        try
+        {
+            mostrarDecision.setText("");
         String hilera = secuenciaIngresada.getText();
-        if (ca.verificarHilera(hilera)) {
+        if (hilera.contains("*") == false) {
+            JOptionPane.showMessageDialog(rootPane, "Hilera inválida, ingrese el símbolo para el final de secuencia");
+        } else if (ca.verificarHilera(hilera)) {
 
             mostrarDecision.setText("La secuencia es aceptada");
         } else {
 
             mostrarDecision.setText("La secuencia es rechazada");
         }
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(rootPane, "Hilera inválida");
+        }
+       
 
     }//GEN-LAST:event_btnEvaluarActionPerformed
 
@@ -499,21 +543,21 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 FileWriter fw = new FileWriter(archivo);
                 BufferedWriter bw = new BufferedWriter(fw);
                 PrintWriter pw = new PrintWriter(bw);
-                if(archivo.exists()){
+                if (archivo.exists()) {
                     archivo.delete();
                 }
                 pw.print("simbolos:");
                 for (int i = 0; i < af.getSimbolos().length; i++) {
-                    if(i != af.getSimbolos().length - 1){
+                    if (i != af.getSimbolos().length - 1) {
                         pw.print(af.getSimbolos()[i] + ",");
-                    } else{
+                    } else {
                         pw.print(af.getSimbolos()[i]);
                         pw.println();
                     }
                 }
                 pw.print("estados:");
                 for (int i = 0; i < af.getEstados().length; i++) {
-                    if(i != af.getEstados().length - 1){
+                    if (i != af.getEstados().length - 1) {
                         pw.print(af.getEstados()[i] + ",");
                     } else {
                         pw.print(af.getEstados()[i]);
@@ -522,9 +566,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 }
                 for (int i = 0; i < dtm.getRowCount(); i++) {
                     for (int j = 0; j < dtm.getColumnCount(); j++) {
-                        if(j == 0){
+                        if (j == 0) {
                             pw.print(dtm.getValueAt(i, j).toString() + ":");
-                        } else if(j == dtm.getColumnCount() - 1){
+                        } else if (j == dtm.getColumnCount() - 1) {
                             pw.print(dtm.getValueAt(i, j).toString());
                             pw.println();
                         } else {

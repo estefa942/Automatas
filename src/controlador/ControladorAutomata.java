@@ -84,7 +84,7 @@ public class ControladorAutomata {
             for (int j = 0; j < af.getSimbolos().length; j++) {
                 String estado = (String) dtm.getValueAt(i, j + 1);
 
-                if (estado != null && estadoValido(estados, estado) ) {
+                if (estado != null && estadoValido(estados, estado)) {
 
                     transiciones.add(estado);
                 } else {
@@ -95,22 +95,27 @@ public class ControladorAutomata {
         }
         return automata;
     }
- /**
-  * Permite verificar si el estado que se va a guardar es válido
-  * @param estados Arreglo con los estados del autómata
-  * @param estado String con el estado a verificar
-  * @return boolen en true si existe estado, false de lo contrario.
-  */
-    public boolean estadoValido(String[] estados,String estado){
-        boolean b= false;
+
+    /**
+     * Permite verificar si el estado que se va a guardar es válido
+     *
+     * @param estados Arreglo con los estados del autómata
+     * @param estado String con el estado a verificar
+     * @return boolen en true si existe estado, false de lo contrario.
+     */
+    public boolean estadoValido(String[] estados, String estado) {
+        boolean b = false;
         for (int i = 0; i < estados.length; i++) {
-            if(estados[i].equals(estado)){
-                b=true;
+            if (estados[i].equals(estado)) {
+                b = true;
                 break;
             }
         }
         return b;
     }
+
+  
+
     /**
      * Aunque su nombre indique que selecciona los estados de aceptación, en
      * realidad separa estados de aceptación de los estados de rechazo generando
@@ -598,10 +603,12 @@ public class ControladorAutomata {
     }
 
     /**
-     * Este método usa las variables globales de particion para determinar si
-     * el automata en cuestión contiene estados equivalentes y reducirlo a su
-     * forma mínima.
-     * @return DefaultTableModel Un modelo de tabla para poder visualizarlo en pantalla
+     * Este método usa las variables globales de particion para determinar si el
+     * automata en cuestión contiene estados equivalentes y reducirlo a su forma
+     * mínima.
+     *
+     * @return DefaultTableModel Un modelo de tabla para poder visualizarlo en
+     * pantalla
      */
     public DefaultTableModel Simplificar() {
         ArrayList<String> enEvaluacion;
@@ -686,7 +693,7 @@ public class ControladorAutomata {
             }
             if (estaEnAceptacion(estadosPET[i])) {
                 fila[dtm.getColumnCount() - 1] = "1";
-            } else{
+            } else {
                 fila[dtm.getColumnCount() - 1] = "0";
             }
             dtm.addRow(fila);
@@ -696,6 +703,7 @@ public class ControladorAutomata {
 
     /**
      * Este método determina si un estado es de aceptación o no
+     *
      * @param estado
      * @version 1.5
      * @return boolean

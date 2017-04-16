@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 /**
- *
- * @author ACER
+ *@author Alejandro Castaño Rojas
+ * @author Estefany Muriel Cano
  */
 public class AutomataF {
      
