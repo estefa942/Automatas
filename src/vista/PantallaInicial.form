@@ -79,7 +79,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Para conocer la dorma en que se tratan los aut&#xf3;matas en el programa por favor presione el bot&#xf3;n de ayuda."/>
+        <Property name="text" type="java.lang.String" value="Para conocer la forma en que se tratan los aut&#xf3;matas en el programa por favor presione el bot&#xf3;n de ayuda."/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">

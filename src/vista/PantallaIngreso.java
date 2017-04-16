@@ -94,6 +94,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnEvaluar = new javax.swing.JButton();
         mostrarDecision = new javax.swing.JTextField();
         btnGuardarArchivo = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -244,6 +246,28 @@ public class PantallaIngreso extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnGuardarArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 480, 180, -1));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/rsz_minhelp.png"))); // NOI18N
+        jLabel1.setMaximumSize(new java.awt.Dimension(30, 30));
+        jLabel1.setMinimumSize(new java.awt.Dimension(30, 30));
+        jLabel1.setPreferredSize(new java.awt.Dimension(30, 30));
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 90, 30, 30));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/rsz_minhelp.png"))); // NOI18N
+        jLabel5.setMaximumSize(new java.awt.Dimension(30, 30));
+        jLabel5.setMinimumSize(new java.awt.Dimension(30, 30));
+        jLabel5.setPreferredSize(new java.awt.Dimension(30, 30));
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 30, 30));
 
         Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
         getContentPane().add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -20, 1240, 550));
@@ -508,6 +532,16 @@ public class PantallaIngreso extends javax.swing.JFrame {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_btnGuardarArchivoActionPerformed
+
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(rootPane, "Para ingresar los símbolos, debe ingresarlos separados por comas (,)");
+    }//GEN-LAST:event_jLabel5MouseClicked
+
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(rootPane, "Para ingresar los estados, debe ingresarlos separados por comas (,)");
+    }//GEN-LAST:event_jLabel1MouseClicked
     /**
      * Este método permite saber si un estado es de aceptación para llenar la
      * tabla cuando se convierte de no determinístico a determinístico
@@ -618,9 +652,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private javax.swing.JButton btnRestaurar;
     private javax.swing.JButton btnSimplificar;
     private javax.swing.JButton btnVerificarHilera;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;

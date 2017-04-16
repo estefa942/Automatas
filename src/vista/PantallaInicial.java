@@ -62,7 +62,7 @@ public class PantallaInicial extends javax.swing.JFrame {
         jLabel3.setBounds(90, 250, 700, 30);
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Para conocer la dorma en que se tratan los autómatas en el programa por favor presione el botón de ayuda.");
+        jLabel4.setText("Para conocer la forma en que se tratan los autómatas en el programa por favor presione el botón de ayuda.");
         getContentPane().add(jLabel4);
         jLabel4.setBounds(100, 300, 660, 16);
 
