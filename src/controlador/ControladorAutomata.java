@@ -593,10 +593,10 @@ public class ControladorAutomata {
     }
 
     /**
-     * Método iniciado a las 1854 horas del jueves 6 de abril del 2017 La
-     * funcionalidad del método fue terminada el viernes 14 de abril del 2017 :v
-     *
-     * @return
+     * Este método usa las variables globales de particion para determinar si
+     * el automata en cuestión contiene estados equivalentes y reducirlo a su
+     * forma mínima.
+     * @return DefaultTableModel Un modelo de tabla para poder visualizarlo en pantalla
      */
     public DefaultTableModel Simplificar() {
         ArrayList<String> enEvaluacion;
@@ -611,7 +611,6 @@ public class ControladorAutomata {
                 posEstado = convertirEstados(estEnPart);
                 transEstado = af.getTransiciones().get(posEstado);
                 if (!enEvaluacion.containsAll(transEstado) && enEvaluacion.size() > 1) {
-                    //Aquí ya estoy ordenando qué hacer si la particion no contiene los estados de transición posibles.
                     excluido = new ArrayList<>();
                     excluido.add(estEnPart);
                     enEvaluacion.remove(enEvaluacion.indexOf(estEnPart));
@@ -636,16 +635,13 @@ public class ControladorAutomata {
         ArrayList<String> transEstado;
         String representante;
         int posEstado;
-
         for (int csym = 0; csym < af.getSimbolos().length; csym++) {
             sTabla[csym + 1] = af.getSimbolos()[csym];
         }
         dtm = new DefaultTableModel(sTabla, 0);
-        //Aquí ya voy a llevarme las particiones a la tabla
         for (int cep = 0; cep < particiones.size(); cep++) {
             enEvaluacion = particiones.get(cep);
             if (enEvaluacion.size() > 1) {
-                //rnd.nextInt() % enEvaluacion.size()
                 representante = enEvaluacion.get(0);
                 for (int contTrans = 0; contTrans < af.getTransiciones().size(); contTrans++) {
                     transEstado = af.getTransiciones().get(contTrans);
@@ -693,6 +689,12 @@ public class ControladorAutomata {
         return dtm;
     }
 
+    /**
+     * Este método determina si un estado es de aceptación o no
+     * @param estado
+     * @version 1.5
+     * @return boolean
+     */
     public boolean estaEnAceptacion(String estado) {
         boolean b = false;
         for (int i = 0; i < af.getEstadosAceptacion().length; i++) {

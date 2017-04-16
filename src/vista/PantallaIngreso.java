@@ -459,11 +459,17 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnIngreso.setEnabled(true);
         txtEstados.setEnabled(true);
         txtSimbolos.setEnabled(true);
+        btnArchivo.setEnabled(true);
 
+        btnConversor.setVisible(false);
+        btnSimplificar.setVisible(false);
+        btnVerificarHilera.setVisible(false);
         btnOperar.setEnabled(false);
         txtNuevoEstado.setEnabled(false);
         btnRestaurar.setEnabled(false);
         btnAddEstado.setEnabled(false);
+        DefaultTableModel empty = new DefaultTableModel();
+        tablaNuevoAutomata.setModel(empty);
     }//GEN-LAST:event_btnRestaurarActionPerformed
 
     private void btnEvaluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEvaluarActionPerformed
