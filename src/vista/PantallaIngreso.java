@@ -6,9 +6,13 @@
 package vista;
 
 import controlador.ControladorAutomata;
+import java.io.BufferedWriter;
 //import controlador.ControladorEntradaDatos;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Vector;
 import javax.swing.JFileChooser;
@@ -46,6 +50,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         txtNuevoEstado.setEnabled(false);
         btnRestaurar.setEnabled(false);
         btnAddEstado.setEnabled(false);
+        btnGuardarArchivo.setEnabled(false);
 
         btnEvaluar.setEnabled(false);
         textVeri.setEnabled(false);
@@ -233,6 +238,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
         getContentPane().add(mostrarDecision, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 430, 330, -1));
 
         btnGuardarArchivo.setText("Guardar en Archivo");
+        btnGuardarArchivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarArchivoActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnGuardarArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 480, 180, -1));
 
         Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
@@ -273,6 +283,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnAddEstado.setEnabled(true);
         btnRestaurar.setEnabled(true);
         txtNuevoEstado.setEnabled(true);
+        btnGuardarArchivo.setEnabled(true);
 
         btnIngreso.setEnabled(false);
         txtEstados.setEnabled(false);
@@ -330,6 +341,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                         btnAddEstado.setEnabled(true);
                         btnRestaurar.setEnabled(true);
                         txtNuevoEstado.setEnabled(true);
+                        btnGuardarArchivo.setEnabled(true);
 
                         btnIngreso.setEnabled(false);
                         txtEstados.setEnabled(false);
@@ -443,6 +455,59 @@ public class PantallaIngreso extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_btnEvaluarActionPerformed
+
+    private void btnGuardarArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarArchivoActionPerformed
+        // TODO add your handling code here:
+        String ruta = "";
+        String[] aiuda = null;
+        JFileChooser jfc = new JFileChooser();
+        try {
+            if (jfc.showSaveDialog(null) == jfc.APPROVE_OPTION) {
+                ruta = jfc.getSelectedFile().getAbsolutePath();
+                aiuda = ruta.split("\\\\");
+                File archivo = new File(ruta);
+                FileWriter fw = new FileWriter(archivo);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter pw = new PrintWriter(bw);
+                if(archivo.exists()){
+                    archivo.delete();
+                }
+                pw.print("simbolos:");
+                for (int i = 0; i < af.getSimbolos().length; i++) {
+                    if(i != af.getSimbolos().length - 1){
+                        pw.print(af.getSimbolos()[i] + ",");
+                    } else{
+                        pw.print(af.getSimbolos()[i]);
+                        pw.println();
+                    }
+                }
+                pw.print("estados:");
+                for (int i = 0; i < af.getEstados().length; i++) {
+                    if(i != af.getEstados().length - 1){
+                        pw.print(af.getEstados()[i] + ",");
+                    } else {
+                        pw.print(af.getEstados()[i]);
+                        pw.println();
+                    }
+                }
+                for (int i = 0; i < dtm.getRowCount(); i++) {
+                    for (int j = 0; j < dtm.getColumnCount(); j++) {
+                        if(j == 0){
+                            pw.print(dtm.getValueAt(i, j).toString() + ":");
+                        } else if(j == dtm.getColumnCount() - 1){
+                            pw.print(dtm.getValueAt(i, j).toString());
+                            pw.println();
+                        } else {
+                            pw.print(dtm.getValueAt(i, j).toString() + ",");
+                        }
+                    }
+                }
+                pw.close();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_btnGuardarArchivoActionPerformed
     /**
      * Este método permite saber si un estado es de aceptación para llenar la
      * tabla cuando se convierte de no determinístico a determinístico
