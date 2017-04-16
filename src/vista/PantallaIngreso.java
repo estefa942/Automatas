@@ -235,7 +235,12 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
         }
         ca.EstadosAceptacion();
-
+         if(ca.verificarHilera("00011*")){
+             System.out.println("aceptada");
+         }else{
+             System.out.println("rechazada");
+         }
+         
     }//GEN-LAST:event_btnOperarActionPerformed
 
     private void btnArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArchivoActionPerformed
@@ -312,6 +317,16 @@ public class PantallaIngreso extends javax.swing.JFrame {
         p.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnVerificarHileraActionPerformed
+    public boolean definirEstadoAceptacion(String estado){
+        boolean b = false;
+        for (int i = 0; i < af.getEstadosAceptacion().length; i++) {
+            if(af.getEstadosAceptacion()[i].equals(estado)){
+                b=true;
+                break;
+            }
+        }
+       return b;
+    }
     public void llenarTabla(JTable tabla) {
 
         String[] simbolosEntrando = af.getSimbolos();
@@ -332,7 +347,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
             for (int j = 0; j < transiciones.size(); j++) {
                 fila[j + 1] = transiciones.get(j);
             }
-            if (ca.esEstadoDeAceptacion(estados[i])) {
+            if (definirEstadoAceptacion(estados[i])) {
                 fila[simbolosArr.length - 1] = "1";
             } else {
                 fila[simbolosArr.length - 1] = "0";
