@@ -62,6 +62,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Fondo = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaEstados = new javax.swing.JTable();
@@ -89,7 +90,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnEvaluar = new javax.swing.JButton();
         mostrarDecision = new javax.swing.JTextField();
         btnGuardarArchivo = new javax.swing.JButton();
-        Fondo = new javax.swing.JLabel();
+
+        Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1244, 514));
@@ -113,7 +115,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tablaEstados);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 40, 360, -1));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 40, 360, 410));
 
         txtSimbolos.setToolTipText("");
         getContentPane().add(txtSimbolos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 240, -1));
@@ -148,7 +150,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 btnOperarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnOperar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 460, 160, -1));
+        getContentPane().add(btnOperar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 480, 160, -1));
 
         btnArchivo.setText("Abrir archivo");
         btnArchivo.addActionListener(new java.awt.event.ActionListener() {
@@ -176,7 +178,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 312, 240, 10));
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 30, 20, 440));
+        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 30, 20, 470));
 
         btnVerificarHilera.setText("Verificar hilera");
         btnVerificarHilera.addActionListener(new java.awt.event.ActionListener() {
@@ -233,10 +235,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         getContentPane().add(mostrarDecision, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 430, 330, -1));
 
         btnGuardarArchivo.setText("Guardar en Archivo");
-        getContentPane().add(btnGuardarArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(547, 460, 180, -1));
-
-        Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
-        getContentPane().add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1240, 500));
+        getContentPane().add(btnGuardarArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 480, 180, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -302,7 +301,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private void btnOperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperarActionPerformed
         ca = new ControladorAutomata(af, dtm);
         af.setTransiciones(ca.guardarAutomata());
-        ca.imprimir(ca.guardarAutomata());
+        //ca.imprimir(ca.guardarAutomata());
         ca.estadosAceptacion();
         if (ca.esDeterministico()) {
             JOptionPane.showMessageDialog(rootPane, "El autómata es deterministico");
@@ -394,7 +393,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         // TODO add your handling code here:
         btnVerificarHilera.setVisible(true);
         dtm = ca.Simplificar();
-        tablaEstados.setModel(dtm);
+        tablaNuevoAutomata.setModel(dtm);
     }//GEN-LAST:event_btnSimplificarActionPerformed
     /**
      * Este botón permite verificar si una secuencia es reconocida por el
