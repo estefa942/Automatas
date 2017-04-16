@@ -26,7 +26,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     JFileChooser abrirArchivo = new JFileChooser();
     File archivo;
     ControladorAutomata ca;
-    PantallaVerificarHilera pv;
+ 
 //    ControladorEntradaDatos ced;
     AutomataF af = new AutomataF();
     Vector vEstados = new Vector();
@@ -46,6 +46,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
         txtNuevoEstado.setEnabled(false);
         btnRestaurar.setEnabled(false);
         btnAddEstado.setEnabled(false);
+        
+        btnEvaluar.setEnabled(false);
+        textVeri.setEnabled(false);
+        secuenciaIngresada.setEnabled(false);
+        mostrarDecision.setEnabled(false);
     }
 
     /**
@@ -78,6 +83,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnAddEstado = new javax.swing.JButton();
         btnRestaurar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        textVeri = new javax.swing.JLabel();
+        secuenciaIngresada = new javax.swing.JTextField();
+        btnEvaluar = new javax.swing.JButton();
+        mostrarDecision = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1244, 514));
@@ -161,8 +171,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
         ));
         scroll2.setViewportView(tablaNuevoAutomata);
 
-        getContentPane().add(scroll2, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 370, -1));
-        getContentPane().add(panel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 360, 400));
+        getContentPane().add(scroll2, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 370, 240));
+        getContentPane().add(panel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 360, 240));
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 312, 240, 10));
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
@@ -204,10 +214,30 @@ public class PantallaIngreso extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Ingrese los estados:");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
+        getContentPane().add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 310, 460, 10));
+
+        textVeri.setText("Ingrese la secuencia a verificar,al final de la hilera ingrese el simbolo '*' :");
+        getContentPane().add(textVeri, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 320, 440, -1));
+        getContentPane().add(secuenciaIngresada, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 350, 320, -1));
+
+        btnEvaluar.setText("Evaluar");
+        btnEvaluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEvaluarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEvaluar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 390, 150, -1));
+
+        mostrarDecision.setEditable(false);
+        getContentPane().add(mostrarDecision, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 450, 330, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+ * Este botón permite crear la tabla para el autómata de acuerdo a los simbolos y estdos que el usurio ingrese,
+ * además activa y desactiva algunas funciones.
+ * @param evt 
+ */
     private void btnIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresoActionPerformed
         // TODO add your handling code here:
         String[] simbolosEntrando = txtSimbolos.getText().split(",");
@@ -238,9 +268,14 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnIngreso.setEnabled(false);
         txtEstados.setEnabled(false);
         txtSimbolos.setEnabled(false);
+        
+        
         JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
     }//GEN-LAST:event_btnIngresoActionPerformed
-
+/**
+ * Este botón permite convertir un autómata no determinístico en determinístico.
+ * @param evt 
+ */
     private void btnConversorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConversorActionPerformed
         // TODO add your handling code here:
         ca.imprimir(ca.convertirEnDeterministico());
@@ -248,11 +283,15 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnSimplificar.setVisible(true);
         btnVerificarHilera.setVisible(true);
     }//GEN-LAST:event_btnConversorActionPerformed
-
+/**
+ * Este botón guardar el autómata que se ingresó y además verifica si el autómata es determinístico o no determinístico
+ * @param evt 
+ */
     private void btnOperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperarActionPerformed
         ca = new ControladorAutomata(af, dtm);
         af.setTransiciones(ca.guardarAutomata());
         ca.imprimir(ca.guardarAutomata());
+        ca.estadosAceptacion();
         if (ca.esDeterministico()) {
             JOptionPane.showMessageDialog(rootPane, "El autómata es deterministico");
             btnSimplificar.setVisible(true);
@@ -263,12 +302,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
             btnConversor.setVisible(true);
 
         }
-        ca.EstadosAceptacion();
-         if(ca.verificarHilera("00011*")){
-             System.out.println("aceptada");
-         }else{
-             System.out.println("rechazada");
-         }
+          
+      
          
     }//GEN-LAST:event_btnOperarActionPerformed
 
@@ -349,11 +384,16 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnVerificarHilera.setVisible(true);
         af.setTransiciones(ca.Simplificar());
     }//GEN-LAST:event_btnSimplificarActionPerformed
-
+/**
+ * Este botón permite verificar si una secuencia es reconocida por el autómata,y mostrar si es aceptada
+ * o rechazada
+ * @param evt 
+ */
     private void btnVerificarHileraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarHileraActionPerformed
-        PantallaVerificarHilera p = new PantallaVerificarHilera(af, dtm);
-        p.setVisible(true);
-        dispose();
+       btnEvaluar.setEnabled(true);
+        textVeri.setEnabled(true);
+        secuenciaIngresada.setEnabled(true);
+        mostrarDecision.setEnabled(true);
     }//GEN-LAST:event_btnVerificarHileraActionPerformed
 
     private void btnAddEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEstadoActionPerformed
@@ -377,6 +417,28 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnAddEstado.setEnabled(false);
     }//GEN-LAST:event_btnRestaurarActionPerformed
 
+    private void btnEvaluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEvaluarActionPerformed
+        // TODO add your handling code here:
+
+       
+        String hilera = secuenciaIngresada.getText();
+                 if(ca.verificarHilera(hilera)){
+                     
+                         mostrarDecision.setText("La secuencia es aceptada");
+                     }else{
+                    
+                         mostrarDecision.setText("La secuencia es rechazada");
+                     }
+       
+
+
+    }//GEN-LAST:event_btnEvaluarActionPerformed
+/**
+ * Este método permite saber si un estado es de aceptación  para llenar la tabla
+ * cuando se convierte de no determinístico a determinístico
+ * @param estado String con el estado que se quiere verificar.
+ * @return un booleano en true si el estado es de aceptación, o false de lo contrario.
+ */
     public boolean definirEstadoAceptacion(String estado){
         boolean b = false;
         for (int i = 0; i < af.getEstadosAceptacion().length; i++) {
@@ -387,6 +449,12 @@ public class PantallaIngreso extends javax.swing.JFrame {
         }
        return b;
     }
+    
+    /**
+     * Este método permite mostrar el autómata en un tabla para que el usuario pueda
+     * interactuar dinámicamente con ella.
+     * @param tabla 
+     */
     public void llenarTabla(JTable tabla) {
 
         String[] simbolosEntrando = af.getSimbolos();
@@ -464,6 +532,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private javax.swing.JButton btnAddEstado;
     private javax.swing.JButton btnArchivo;
     private javax.swing.JButton btnConversor;
+    private javax.swing.JButton btnEvaluar;
     private javax.swing.JButton btnIngreso;
     private javax.swing.JButton btnOperar;
     private javax.swing.JButton btnRestaurar;
@@ -475,10 +544,14 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JTextField mostrarDecision;
     private javax.swing.JPanel panel2;
     private javax.swing.JScrollPane scroll2;
+    private javax.swing.JTextField secuenciaIngresada;
     private javax.swing.JTable tablaEstados;
     private javax.swing.JTable tablaNuevoAutomata;
+    private javax.swing.JLabel textVeri;
     private javax.swing.JTextField txtEstados;
     private javax.swing.JTextField txtNuevoEstado;
     private javax.swing.JTextField txtSimbolos;
