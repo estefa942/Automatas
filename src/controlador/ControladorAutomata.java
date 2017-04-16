@@ -626,7 +626,7 @@ public class ControladorAutomata {
     }
 
     public DefaultTableModel ParticionesEnTabla() {
-        String[] estados = af.getEstados();
+        String[] estadosPET = af.getEstados();
         String[] sTabla = new String[af.getSimbolos().length + 2];
         sTabla[0] = "Estados";
         sTabla[sTabla.length - 1] = "E.A.";
@@ -649,8 +649,8 @@ public class ControladorAutomata {
                 representante = enEvaluacion.get(0);
                 for (int contTrans = 0; contTrans < af.getTransiciones().size(); contTrans++) {
                     transEstado = af.getTransiciones().get(contTrans);
-                    if(enEvaluacion.contains(estados[contTrans])){
-                        estados[contTrans] = representante;
+                    if (enEvaluacion.contains(estadosPET[contTrans])) {
+                        estadosPET[contTrans] = representante;
                     }
                     for (int ceev = 0; ceev < enEvaluacion.size(); ceev++) {
                         if (transEstado.contains(enEvaluacion.get(ceev)) && enEvaluacion.get(ceev).compareTo(representante) != 0) {
@@ -664,10 +664,10 @@ public class ControladorAutomata {
         }
         ArrayList<String> nuevosEstados = new ArrayList<>();
         int posRelativa = 0;
-        for (int i = 0; i < estados.length; i++) {
-            if(!nuevosEstados.contains(estados[i])){
-                nuevosEstados.add(estados[i]);
-            } else{
+        for (int i = 0; i < estadosPET.length; i++) {
+            if (!nuevosEstados.contains(estadosPET[i])) {
+                nuevosEstados.add(estadosPET[i]);
+            } else {
                 af.getTransiciones().remove(i - posRelativa);
                 posRelativa++;
             }
@@ -677,31 +677,30 @@ public class ControladorAutomata {
             estadosPulidos[n] = nuevosEstados.get(n);
         }
         af.setEstados(estadosPulidos);
-        
+        String[] fila = new String[dtm.getColumnCount()];
+        for (int i = 0; i < af.getEstados().length; i++) {
+            fila[0] = estadosPET[i];
+            for (int j = 0; j < af.getTransiciones().get(i).size(); j++) {
+                fila[j + 1] = af.getTransiciones().get(i).get(j).toString();
+            }
+            if (estaEnAceptacion(estadosPET[i])) {
+                fila[dtm.getColumnCount() - 1] = "1";
+            } else{
+                fila[dtm.getColumnCount() - 1] = "0";
+            }
+            dtm.addRow(fila);
+        }
         return dtm;
     }
-    
-    public int conteoRepetidos(ArrayList<String> arr, String dato){
-        ArrayList<String> copia = new ArrayList<>();
-        int conteo = 0;
-        for (int i = 0; i < arr.size(); i++) {
-            copia.add(arr.get(i));
+
+    public boolean estaEnAceptacion(String estado) {
+        boolean b = false;
+        for (int i = 0; i < af.getEstadosAceptacion().length; i++) {
+            if (af.getEstadosAceptacion()[i].compareTo(estado) == 0) {
+                b = true;
+                return b;
+            }
         }
-        while(copia.indexOf(dato) != -1){
-            conteo++;
-            copia.remove(copia.indexOf(dato));
-        }
-        return conteo;
-    }
-    
-    public String[] dameUnArreglo(ArrayList<String> arr){
-        String[] elArreglo = new String[arr.size() + 2];
-        int pos = af.getTransiciones().indexOf(arr);
-        elArreglo[0] = af.getEstados()[pos];
-        for (int i = 0; i < elArreglo.length; i++) {
-            elArreglo[i+1] = arr.get(i);
-        }
-        elArreglo[elArreglo.length - 1] = dtm.getValueAt(pos, dtm.getColumnCount() - 1).toString();
-        return elArreglo;
+        return b;
     }
 }
