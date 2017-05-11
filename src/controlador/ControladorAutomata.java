@@ -563,6 +563,7 @@ public class ControladorAutomata {
      */
     public boolean verificarHilera(String hilera) {
         boolean b = true;
+        hilera = hilera + "*";
         ArrayList<ArrayList> automata = af.getTransiciones();
         ArrayList<String> transicionesEstado = new ArrayList<>();
         String siguienteEstado = "";
@@ -622,13 +623,13 @@ public class ControladorAutomata {
                 estEnPart = enEvaluacion.get(cpee);
                 posEstado = convertirEstados(estEnPart);
                 transEstado = af.getTransiciones().get(posEstado);
-                if (!enEvaluacion.containsAll(transEstado) && enEvaluacion.size() > 1) {
+                if (/*!enEvaluacion.containsAll(transEstado)*/!enLaMismaParticion(transEstado) && enEvaluacion.size() > 1) {
                     excluido = new ArrayList<>();
                     excluido.add(estEnPart);
                     enEvaluacion.remove(enEvaluacion.indexOf(estEnPart));
                     particiones.add(excluido);
                     contPart = -1;
-                    cpee = -1;
+                    /*cpee = -1;*/
                 }
             }
         }
@@ -642,7 +643,6 @@ public class ControladorAutomata {
         sTabla[0] = "Estados";
         sTabla[sTabla.length - 1] = "E.A.";
         DefaultTableModel dtm;
-        Random rnd = new Random();
         ArrayList<String> enEvaluacion;
         ArrayList<String> transEstado;
         String representante;
@@ -717,5 +717,14 @@ public class ControladorAutomata {
             }
         }
         return b;
+    }
+    
+    public boolean enLaMismaParticion(ArrayList<String> transiciones){
+        for (int i = 0; i < particiones.size(); i++) {
+            if(particiones.get(i).containsAll(transiciones)){
+                return true;
+            }
+        }
+        return false;
     }
 }
