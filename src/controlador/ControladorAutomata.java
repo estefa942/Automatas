@@ -78,7 +78,7 @@ public class ControladorAutomata {
             for (int j = 0; j < af.getSimbolos().length; j++) {
                 String estado = (String) dtm.getValueAt(i, j + 1);
 
-                if (estado != null && estadoValido(estados, estado)) {
+                if (estado != null) {
 
                     transiciones.add(estado);
                 } else {
@@ -116,7 +116,7 @@ public class ControladorAutomata {
      * así 2 particiones; una partición P0 con los estados de rechazo y una
      * particion P1 con los estados de aceptación.
      */
-    public void estadosAceptacion() {
+    public void estadosAceptacion() { //OJO ACÁ
 
         ArrayList<String> estAcp = new ArrayList<>();
         ArrayList<String> estRec = new ArrayList<>();
@@ -147,7 +147,7 @@ public class ControladorAutomata {
      * @return un booleano con la confirmación de si es un estado de acepetación
      * o no.
      */
-    public boolean esEstadoDeAceptacion(String estado) {
+   public boolean esEstadoDeAceptacion(String estado) {
         boolean b = false;
         ArrayList<String> aceptacion = particiones.get(1);
         for (int i = 0; i < aceptacion.size(); i++) {
@@ -195,7 +195,7 @@ public class ControladorAutomata {
      * @return Un String con el nuevo estado sin repeticiones de estados en el
      * mismo.
      */
-    public String quitarEstadosRepetidos(String a, String b) {
+   public String quitarEstadosRepetidos(String a, String b) {
         String estado = a;
         if (a == "\u0020") {
             estado = "";
@@ -223,7 +223,7 @@ public class ControladorAutomata {
      * @return Un Array de Strings con las transciones previamente concatenadas
      * y sin repeticiones en ellas.
      */
-    public ArrayList<String> unirTransiciones(String[] estados) {
+     public ArrayList<String> unirTransiciones(String[] estados) {
         ArrayList<String> transicionesUnidas = new ArrayList<>();
         for (int i = 0; i < estados.length; i++) {
             int a = convertirEstados(estados[i]);
@@ -264,7 +264,7 @@ public class ControladorAutomata {
                 }
             }
 
-            if (count == estado.length() && estado.length() == a.length()) {
+            if (count == estado.length()&& estado.length()==a.length()) {
                 b = true;
                 break;
             }
@@ -302,7 +302,7 @@ public class ControladorAutomata {
      * @return un booleano en true si al menos uno de los estados es de
      * aceptación, o false de lo contrario.
      */
-    public boolean definirEstadoDeAceptacion(String[] estados) {
+     public boolean definirEstadoDeAceptacion(String[] estados) {
         boolean b = false;
         for (int i = 0; i < estados.length; i++) {
             if (esEstadoDeAceptacion(estados[i])) {
@@ -396,7 +396,7 @@ public class ControladorAutomata {
      *
      * @return un ArrayList de ArrayList de tipo String con el nuevo autómata.
      */
-    public ArrayList<ArrayList> convertirEnDeterministico() {
+  public ArrayList<ArrayList> convertirEnDeterministico() {
         ArrayList<String> estadosAceptacion = new ArrayList<>();
         ArrayList<ArrayList> automataD = new ArrayList<>();
         ArrayList<String> estados = new ArrayList<>();
@@ -409,14 +409,13 @@ public class ControladorAutomata {
         for (int i = 0; i < transiciones.size(); i++) {
             String estado = transiciones.get(i);
             if (existeEstado(estados, estado) == false) {
-                if (estado != "\u0020") {
-                    estados.add(estado);
+                if(estado!="\u0020"){
+                estados.add(estado);
                 }
                 String[] concatenado = convertirString(estado);
                 if (definirEstadoDeAceptacion(concatenado)) {
-                    if (existeEstadoAceptacion(estadosAceptacion, estado) == false) {
-                        estadosAceptacion.add(estado);
-                    }
+                   
+                    estadosAceptacion.add(estado);
                 }
 
             }
@@ -428,15 +427,15 @@ public class ControladorAutomata {
             String[] estadoConca = convertirString(estado1);
             ArrayList<String> a = unirTransiciones(estadoConca);
             if (definirEstadoDeAceptacion(estadoConca)) {
-                if (estado1 != "\u0020" && existeEstadoAceptacion(estadosAceptacion, estado1) == false) {
-                    estadosAceptacion.add(estado1);
+                if(estado1!="\u0020"){
+                estadosAceptacion.add(estado1);
                 }
             }
             automataD.add(a);
             for (int j = 0; j < a.size(); j++) {
                 if (existeEstado(estados, a.get(j)) == false) {
-                    if (a.get(j) != "\u0020") {
-                        estados.add(a.get(j));
+                    if(a.get(j)!="\u0020"){
+                    estados.add(a.get(j));
                     }
 
                 }
@@ -459,10 +458,11 @@ public class ControladorAutomata {
         }
         af.setEstados(nEstados);
         af.setEstadosAceptacion(nAceptacion);
-        actualizarParticiones(estadosAceptacion, estados);
         af.setTransiciones(organizarAutomata(estados, automataD));
         return automataD;
     }
+
+  
 
     /**
      * Este método permite tomar un String y llevarlo a un arreglo con un
@@ -471,7 +471,7 @@ public class ControladorAutomata {
      * @param a String que se quiere almacenar en un arreglo.
      * @return Un arreglo con el String inicial.
      */
-    public String[] convertirString(String a) {
+     public String[] convertirString(String a) {
         String[] estadoConca = new String[a.length()];
         for (int i = 0; i < a.length(); i++) {
             char c = a.charAt(i);
@@ -480,7 +480,6 @@ public class ControladorAutomata {
         }
         return estadoConca;
     }
-
     /**
      * Este método permite tomar un estado que se encuentra desordenado, y
      * ordenarlo de la forma en que se define previamente, es decir, si existe
@@ -492,12 +491,12 @@ public class ControladorAutomata {
      * @param estado String con el estado que se quiere reordenar.
      * @return String con el estado ordenado.
      */
-    public String intercambiarEstados(ArrayList<String> estados, String estado) {
-        String estadoN = "";
-        String estadoA = "";
+   public String intercambiarEstados(ArrayList<String> estados,String estado){
+       String estadoN="";
+       String estadoA="";
         for (int i = 0; i < estados.size(); i++) {
             estadoA = estados.get(i);
-            int count = 0;
+            int count=0;
             for (int j = 0; j < estado.length(); j++) {
                 char c = estado.charAt(j);
                 String caracter = (new StringBuffer().append(c)).toString();
@@ -505,7 +504,7 @@ public class ControladorAutomata {
                     count++;
                 }
             }
-            if (count == estado.length()) {
+            if(count==estado.length()){
                 estadoN = estadoA;
                 break;
             }
@@ -523,16 +522,16 @@ public class ControladorAutomata {
      * @param automata ArrayList con todas las transiciones del autómata.
      * @return Un ArrayList con todas las transiciones ordenadas del autómata.
      */
-    public ArrayList<ArrayList> organizarAutomata(ArrayList<String> estados, ArrayList<ArrayList> automata) {
+    public ArrayList<ArrayList> organizarAutomata(ArrayList<String> estados,ArrayList<ArrayList> automata ){
         ArrayList<ArrayList> automataNuevo = new ArrayList<>();
         for (int i = 0; i < automata.size(); i++) {
             ArrayList<String> transiciones = automata.get(i);
             ArrayList<String> transicionesN = new ArrayList<>();
             for (int j = 0; j < transiciones.size(); j++) {
-                String estado = transiciones.get(j);
-                if (estado.length() != 1) {
+                String estado=transiciones.get(j);
+                if(estado.length()!=1){
                     transicionesN.add(intercambiarEstados(estados, estado));
-                } else {
+                }else{
                     transicionesN.add(estado);
                 }
             }
