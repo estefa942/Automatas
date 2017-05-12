@@ -183,7 +183,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 312, 240, 10));
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 30, 20, 470));
+        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 30, 20, 490));
 
         btnVerificarHilera.setText("Verificar hilera");
         btnVerificarHilera.addActionListener(new java.awt.event.ActionListener() {
