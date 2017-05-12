@@ -6,14 +6,8 @@
 package controlador;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.StringTokenizer;
-import java.util.Vector;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.AutomataF;
-import sun.misc.Queue;
 
 /**
  * @author Estefany Muriel Cano
