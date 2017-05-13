@@ -17,6 +17,7 @@ public class AutomataF {
     private String[] simbolos;
     private String[] estados;
     private String[] estadosAceptacion;
+    private String[] estadosIniciales;
     private ArrayList<ArrayList> Transiciones;
     private ArrayList<ArrayList> automataSinExtraños;
 
@@ -59,5 +60,15 @@ public class AutomataF {
     public void setAutomataSinExtraños(ArrayList<ArrayList> automataSinExtraños) {
         this.automataSinExtraños = automataSinExtraños;
     }
+
+    public String[] getEstadosIniciales() {
+        return estadosIniciales;
+    }
+
+    public void setEstadosIniciales(String[] estadosIniciales) {
+        this.estadosIniciales = estadosIniciales;
+    }
+
+   
 
 }

@@ -289,12 +289,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private void btnIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresoActionPerformed
         // TODO add your handling code here:
         String[] simbolosEntrando = txtSimbolos.getText().split(",");
-        String[] simbolosArr = new String[simbolosEntrando.length + 2];
+        String[] simbolosArr = new String[simbolosEntrando.length + 3];
         simbolosArr[0] = "Estados";
-        for (int sym = 1; sym < simbolosArr.length - 1; sym++) {
+        for (int sym = 1; sym < simbolosArr.length - 2; sym++) {
             simbolosArr[sym] = simbolosEntrando[sym - 1];
         }
-        simbolosArr[simbolosArr.length - 1] = "E.A.";
+        simbolosArr[simbolosArr.length - 2] = "E.A.";
+        simbolosArr[simbolosArr.length - 1] = "E.I.";
         String[] estados = txtEstados.getText().split(",");
 
         dtm = new DefaultTableModel(simbolosArr, 0);
@@ -327,7 +328,15 @@ public class PantallaIngreso extends javax.swing.JFrame {
      */
     private void btnConversorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConversorActionPerformed
         // TODO add your handling code here:
-        ca.convertirEnDeterministico();
+
+     
+        if (af.getEstadosIniciales().length == 1) {
+            ca.convertirEnDeterministico();
+        } else {
+           ca.unionAutomata(true);
+           // ca.unionAutomata(false);
+        }
+
         llenarTabla(tablaSeleccionada());
         btnSimplificar.setVisible(true);
         btnVerificarHilera.setVisible(true);
@@ -343,6 +352,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
             ca = new ControladorAutomata(af, dtm);
             af.setTransiciones(ca.guardarAutomata());
             ca.estadosAceptacion();
+            ca.estadosIniciales();
             if (ca.esDeterministico()) {
                 JOptionPane.showMessageDialog(rootPane, "El autómata es deterministico");
                 btnSimplificar.setVisible(true);
@@ -403,12 +413,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
                                     lineaExtraida = slapChop[1];
                                     txtEstados.setText(lineaExtraida);
                                     ouch = symbols.split(",");
-                                    slapChop = new String[ouch.length + 2];
+                                    slapChop = new String[ouch.length + 3];
                                     slapChop[0] = "Estados";
                                     for (int i = 0; i < ouch.length; i++) {
                                         slapChop[i + 1] = ouch[i];
                                     }
-                                    slapChop[slapChop.length - 1] = "E.A.";
+                                    slapChop[slapChop.length - 2] = "E.A.";
+                                    slapChop[slapChop.length - 1] = "E.I.";
                                     dtm = new DefaultTableModel(slapChop, 0);
                                     break;
                                 default:
