@@ -191,7 +191,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 btnVerificarHileraActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVerificarHilera, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 240, -1));
+        getContentPane().add(btnVerificarHilera, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 490, 240, -1));
 
         btnSimplificar.setText("Simplificar autómata");
         btnSimplificar.addActionListener(new java.awt.event.ActionListener() {
@@ -455,7 +455,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private void btnSimplificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimplificarActionPerformed
         // TODO add your handling code here:
         btnVerificarHilera.setVisible(true);
-        dtm = ca.Simplificar();
+        dtm = ca.Ximplificar();
         tablaSeleccionada().setModel(dtm);
     }//GEN-LAST:event_btnSimplificarActionPerformed
     /**

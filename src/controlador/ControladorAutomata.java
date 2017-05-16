@@ -741,7 +741,7 @@ public class ControladorAutomata {
                 estEnPart = enEvaluacion.get(cpee);
                 posEstado = convertirEstados(estEnPart);
                 transEstado = af.getTransiciones().get(posEstado);
-                if (/*!enEvaluacion.containsAll(transEstado)*/!enLaMismaParticion(transEstado) && enEvaluacion.size() > 1) {
+                if (!enEvaluacion.containsAll(transEstado) && enEvaluacion.size() > 1) {
                     excluido = new ArrayList<>();
                     excluido.add(estEnPart);
                     enEvaluacion.remove(enEvaluacion.indexOf(estEnPart));
@@ -837,13 +837,17 @@ public class ControladorAutomata {
         return b;
     }
 
-    public boolean enLaMismaParticion(ArrayList<String> transiciones) {
-        for (int i = 0; i < particiones.size(); i++) {
-            if (particiones.get(i).containsAll(transiciones)) {
-                return true;
+    public DefaultTableModel Ximplificar(){
+        ArrayList<ArrayList> arrSimb = new ArrayList<>();
+        ArrayList<String> simbian;
+        for (int contEstados = 0; contEstados < af.getTransiciones().size(); contEstados++) {
+            simbian = new ArrayList<>();
+            for (int colSimb = 0; colSimb < af.getSimbolos().length; colSimb++) {
+                simbian.add(String.valueOf(af.getTransiciones().get(contEstados).get(colSimb)));
             }
+            arrSimb.add(simbian);
         }
-        return false;
+        return null;
     }
 
 }
