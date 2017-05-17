@@ -19,6 +19,7 @@ public class ControladorAutomata {
     String[] estados;
     String[] simbolos;
     ArrayList<ArrayList> particiones = new ArrayList<>();
+    ArrayList<ArrayList> transDePart = new ArrayList<>();
 
     DefaultTableModel dtm;
 
@@ -340,14 +341,14 @@ public class ControladorAutomata {
             }
 
         } else {
-            int count=0;
+            int count = 0;
             for (int i = 0; i < estados.length; i++) {
                 if (esEstadoDeAceptacion(estados[i])) {
                     count++;
-                   
+
                 }
-                if(count==estados.length){
-                    b=true;
+                if (count == estados.length) {
+                    b = true;
                 }
             }
         }
@@ -455,7 +456,7 @@ public class ControladorAutomata {
                     estados.add(estado);
                 }
                 String[] concatenado = convertirString(estado);
-                if (definirEstadoDeAceptacion(concatenado,c)) {
+                if (definirEstadoDeAceptacion(concatenado, c)) {
 
                     estadosAceptacion.add(estado);
                 }
@@ -468,7 +469,7 @@ public class ControladorAutomata {
             String estado1 = estados.get(k);
             String[] estadoConca = convertirString(estado1);
             ArrayList<String> a = unirTransiciones(estadoConca);
-            if (definirEstadoDeAceptacion(estadoConca,c)) {
+            if (definirEstadoDeAceptacion(estadoConca, c)) {
                 if (estado1 != "\u0020") {
                     if (!existeEstadoAceptacion(estadosAceptacion, estado1)) {
                         estadosAceptacion.add(estado1);
@@ -511,13 +512,13 @@ public class ControladorAutomata {
         ArrayList<String> estadosAceptacion = new ArrayList<>();
         ArrayList<String> estados = new ArrayList<>();
         ArrayList<String> transiciones = new ArrayList<>();
-        boolean c= true;
+        boolean c = true;
         String[] estadosIniciales = af.getEstadosIniciales();
-        if (definirEstadoDeAceptacion(estadosIniciales,c) == true) {
+        if (definirEstadoDeAceptacion(estadosIniciales, c) == true) {
             String nEstado = String.join("", estadosIniciales);
             estados.add(nEstado);
-            if(definirEstadoDeAceptacion(estadosIniciales, tipo)){
-            estadosAceptacion.add(nEstado);
+            if (definirEstadoDeAceptacion(estadosIniciales, tipo)) {
+                estadosAceptacion.add(nEstado);
             }
             transiciones = unirTransiciones(estadosIniciales);
             automataFinal.add(transiciones);
@@ -528,7 +529,7 @@ public class ControladorAutomata {
                         estados.add(estado);
                     }
                     String[] concatenado = convertirString(estado);
-                    if (definirEstadoDeAceptacion(concatenado,tipo)) {
+                    if (definirEstadoDeAceptacion(concatenado, tipo)) {
 
                         estadosAceptacion.add(estado);
                     }
@@ -540,7 +541,7 @@ public class ControladorAutomata {
                 String estado1 = estados.get(k);
                 String[] estadoConca = convertirString(estado1);
                 transiciones = unirTransiciones(estadoConca);
-                if (definirEstadoDeAceptacion(estadoConca,tipo)) {
+                if (definirEstadoDeAceptacion(estadoConca, tipo)) {
                     if (estado1 != "\u0020") {
                         if (!existeEstadoAceptacion(estadosAceptacion, estado1)) {
                             estadosAceptacion.add(estado1);
@@ -837,17 +838,52 @@ public class ControladorAutomata {
         return b;
     }
 
-    public DefaultTableModel Ximplificar(){
-        ArrayList<ArrayList> arrSimb = new ArrayList<>();
+    public DefaultTableModel Ximplificar() {
+        ArrayList<ArrayList> tdcs = new ArrayList<>();
+        ArrayList<ArrayList> arrSimb;
         ArrayList<String> simbian;
-        for (int contEstados = 0; contEstados < af.getTransiciones().size(); contEstados++) {
-            simbian = new ArrayList<>();
-            for (int colSimb = 0; colSimb < af.getSimbolos().length; colSimb++) {
-                simbian.add(String.valueOf(af.getTransiciones().get(contEstados).get(colSimb)));
+        ArrayList<String> part;
+        int rsimb;
+        //Aquí va el código que tengo comentado por si las moscas
+        for (int recS = 0; recS < af.getSimbolos().length; recS++) {
+            arrSimb = new ArrayList<>();
+            for (int pps = 0; pps < particiones.size(); pps++) {
+                part = particiones.get(pps);
+                simbian = new ArrayList<>();
+                for (int rp = 0; rp < part.size(); rp++) {
+                    simbian.add(String.valueOf(af.getTransiciones().get(convertirEstados(part.get(rp))).get(recS)));
+                }
+                arrSimb.add(simbian);
             }
-            arrSimb.add(simbian);
+            tdcs.add(arrSimb);
         }
+        transDePart = tdcs;
+        //Aquí va otro método
+        VerificarTransDePart();
         return null;
+    }
+
+    public int VerificarTransDePart() {
+        int[] existencia;
+        //Recorrido de particiones
+        for (int recPart = 0; recPart < particiones.size(); recPart++) {
+            //Recorrido por símbolos
+            for (int recPorSimb = 0; recPorSimb < af.getSimbolos().length; recPorSimb++) {
+                existencia = new int[particiones.get(recPart).size()];
+                ArrayList<ArrayList> transSimb = transDePart.get(recPorSimb);
+                //Recorrido de las transiciones por símbolos
+                for (int recTransPorSimb = 0; recTransPorSimb < transSimb.size(); recTransPorSimb++) {
+                    ArrayList<String> transiciones = transSimb.get(recTransPorSimb);
+                    //Verificando la existencia de la transicion a la particion
+                    for (int recTrans = 0; recTrans < transiciones.size(); recTrans++) {
+                        if (particiones.get(recPart).contains(transiciones.get(recTrans))) {
+                            existencia[recTrans] = recPart;
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
     }
 
 }
