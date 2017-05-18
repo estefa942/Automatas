@@ -723,104 +723,6 @@ public class ControladorAutomata {
     }
 
     /**
-     * Este método usa las variables globales de particion para determinar si el
-     * automata en cuestión contiene estados equivalentes y reducirlo a su forma
-     * mínima.
-     *
-     * @return DefaultTableModel Un modelo de tabla para poder visualizarlo en
-     * pantalla
-     */
-    public DefaultTableModel Simplificar() {
-        ArrayList<String> enEvaluacion;
-        ArrayList<String> transEstado;
-        ArrayList<String> excluido;
-        String estEnPart;
-        int posEstado;
-        for (int contPart = 0; contPart < particiones.size(); contPart++) {
-            enEvaluacion = particiones.get(contPart);
-            for (int cpee = 0; cpee < enEvaluacion.size(); cpee++) {
-                estEnPart = enEvaluacion.get(cpee);
-                posEstado = convertirEstados(estEnPart);
-                transEstado = af.getTransiciones().get(posEstado);
-                if (!enEvaluacion.containsAll(transEstado) && enEvaluacion.size() > 1) {
-                    excluido = new ArrayList<>();
-                    excluido.add(estEnPart);
-                    enEvaluacion.remove(enEvaluacion.indexOf(estEnPart));
-                    particiones.add(excluido);
-                    contPart = -1;
-                    /*cpee = -1;*/
-                }
-            }
-        }
-        DefaultTableModel simple = ParticionesEnTabla();
-        return simple;
-    }
-
-    public DefaultTableModel ParticionesEnTabla() {
-        String[] estadosPET = af.getEstados();
-        String[] sTabla = new String[af.getSimbolos().length + 2];
-        sTabla[0] = "Estados";
-        sTabla[sTabla.length - 1] = "E.A.";
-        DefaultTableModel dtm;
-        ArrayList<String> enEvaluacion;
-        ArrayList<String> transEstado;
-        String representante;
-        int posEstado;
-        for (int csym = 0; csym < af.getSimbolos().length; csym++) {
-            sTabla[csym + 1] = af.getSimbolos()[csym];
-        }
-        dtm = new DefaultTableModel(sTabla, 0);
-        for (int cep = 0; cep < particiones.size(); cep++) {
-            enEvaluacion = particiones.get(cep);
-            if (enEvaluacion.size() > 1) {
-                representante = enEvaluacion.get(0);
-                for (int contTrans = 0; contTrans < af.getTransiciones().size(); contTrans++) {
-                    transEstado = af.getTransiciones().get(contTrans);
-                    if (enEvaluacion.contains(estadosPET[contTrans])) {
-                        estadosPET[contTrans] = representante;
-                    }
-                    for (int ceev = 0; ceev < enEvaluacion.size(); ceev++) {
-                        if (transEstado.contains(enEvaluacion.get(ceev)) && enEvaluacion.get(ceev).compareTo(representante) != 0) {
-                            posEstado = transEstado.indexOf(enEvaluacion.get(ceev));
-                            transEstado.set(posEstado, representante);
-                            ceev = -1;
-                        }
-                    }
-                }
-            }
-        }
-        ArrayList<String> nuevosEstados = new ArrayList<>();
-        int posRelativa = 0;
-        for (int i = 0; i < estadosPET.length; i++) {
-            if (!nuevosEstados.contains(estadosPET[i])) {
-                nuevosEstados.add(estadosPET[i]);
-            } else {
-                af.getTransiciones().remove(i - posRelativa);
-                posRelativa++;
-            }
-        }
-        String[] estadosPulidos = new String[nuevosEstados.size()];
-        for (int n = 0; n < estadosPulidos.length; n++) {
-            estadosPulidos[n] = nuevosEstados.get(n);
-        }
-        af.setEstados(estadosPulidos);
-        String[] fila = new String[dtm.getColumnCount()];
-        for (int i = 0; i < af.getEstados().length; i++) {
-            fila[0] = estadosPET[i];
-            for (int j = 0; j < af.getTransiciones().get(i).size(); j++) {
-                fila[j + 1] = af.getTransiciones().get(i).get(j).toString();
-            }
-            if (estaEnAceptacion(estadosPET[i])) {
-                fila[dtm.getColumnCount() - 1] = "1";
-            } else {
-                fila[dtm.getColumnCount() - 1] = "0";
-            }
-            dtm.addRow(fila);
-        }
-        return dtm;
-    }
-
-    /**
      * Este método determina si un estado es de aceptación o no
      *
      * @param estado
@@ -838,88 +740,194 @@ public class ControladorAutomata {
         return b;
     }
 
-    public DefaultTableModel Ximplificar() {
-        ArrayList<ArrayList> tdcs = new ArrayList<>();
-        ArrayList<ArrayList> arrSimb;
-        ArrayList<String> simbian;
-        ArrayList<String> part;
-        int rsimb;
-        //Aquí va el código que tengo comentado por si las moscas
-        for (int recS = 0; recS < af.getSimbolos().length; recS++) {
-            arrSimb = new ArrayList<>();
-            for (int pps = 0; pps < particiones.size(); pps++) {
-                part = particiones.get(pps);
-                simbian = new ArrayList<>();
-                for (int rp = 0; rp < part.size(); rp++) {
-                    simbian.add(String.valueOf(af.getTransiciones().get(convertirEstados(part.get(rp))).get(recS)));
-                }
-                arrSimb.add(simbian);
+    public void imprimir(ArrayList<ArrayList> a) {
+        for (int i = 0; i < a.size(); i++) {
+            ArrayList b = a.get(i);
+            for (int j = 0; j < b.size(); j++) {
+                System.out.print("|" + b.get(j) + "|");
             }
-            tdcs.add(arrSimb);
+            System.out.println("");
         }
-        transDePart = tdcs;
-        //Aquí va otro método
-        VerificarTransDePart();
-        DefaultTableModel simple = ParticionesEnTabla();
-        return simple;
     }
 
-    public void VerificarTransDePart() {
-        int[] existencia;
-        int[] estado;
-        //Recorrido de particiones
-        for (int recPart = 0; recPart < particiones.size(); recPart++) {
-            //Recorrido por símbolos
-            if (particiones.get(recPart).size() > 1) {
-                for (int recPorSimb = 0; recPorSimb < af.getSimbolos().length; recPorSimb++) {
-                    ArrayList<ArrayList> transSimb = transDePart.get(recPorSimb);
-                    //Recorrido de las transiciones por partición
-                    for (int recTransPorSimb = 0; recTransPorSimb < transSimb.size(); recTransPorSimb++) {
-                        ArrayList<String> transPorPart = transSimb.get(recTransPorSimb);
-                        existencia = new int[transPorPart.size()];
-                        //Verificando la existencia de la transicion a la particion
-                        for (int rtpp = 0; rtpp < transPorPart.size(); rtpp++) {
-                            if (particiones.get(recPart).contains(transPorPart.get(rtpp))) {
-                                existencia[rtpp] = recPart;
-                            }
+    public ArrayList<ArrayList> transicionesParticion(ArrayList<String> particion) {
+        ArrayList<ArrayList> transiciones = new ArrayList<>();
+        for (int i = 0; i < particion.size(); i++) {
+            String a = particion.get(i);
+            int numEstado = convertirEstados(a);
+            transiciones.add(af.getTransiciones().get(numEstado));
+        }
+        return transiciones;
+    }
+//entra el array con la particiona tratar y otro array con los simbolos a bsucar dentro del primer array, este arrojará el array con los simbolos
+    //que no estan en esa particion.
+
+    public ArrayList<String> estadosNoContenidos(ArrayList<String> particion, ArrayList<String> transicionASym) {
+        ArrayList<String> noContenidos = new ArrayList<>();
+
+        for (int i = 0; i < transicionASym.size(); i++) {
+            String a = transicionASym.get(i);
+            int count = 0;
+            for (int j = 0; j < particion.size(); j++) {
+                String b = particion.get(j);
+                if (a.equals(b)) {
+                    count++;
+                }
+            }
+            if (count == 0) {
+                noContenidos.add(a);
+            }
+        }
+        return noContenidos;
+    }
+
+    //Va a recibir la aprticion a modificar, el simbolo en ques e esta en el momento y los no contenidos en la aprticion
+    public ArrayList<String> creaNuevaParticion(ArrayList<String> particion, ArrayList<String> noContenidos, int posSym) {
+        ArrayList<ArrayList> transicionesParticion = transicionesParticion(particion);
+        ArrayList<String> nuevaParticion = new ArrayList<>();
+        for (int i = 0; i < noContenidos.size(); i++) {
+            int a = particion.size();
+            for (int j = 0; j < a; j++) {
+                String x = noContenidos.get(i);
+                if (transicionesParticion.get(j).get(posSym).equals(x)) {
+                    nuevaParticion.add(particion.get(j));
+                    particion.remove(j);
+                    transicionesParticion.remove(j);
+                    if (particion.size() != 1) {
+                        j--;
+                    }
+                    a = particion.size();
+                }
+            }
+
+        }
+        return nuevaParticion;
+    }
+
+    public void simplificar() {
+        ArrayList<String> particionesR = copiaArray(particiones.get(0));
+        ArrayList<String> particionesA = copiaArray(particiones.get(1));
+        ArrayList<ArrayList> transicionesA;
+        ArrayList<ArrayList> particionesT = new ArrayList<>();
+        particionesT.add(particionesR);
+        particionesT.add(particionesA);
+
+        int f = 0;
+        for (int k = 0; k < particionesT.size(); k++) {
+
+            for (int i = 0; i < af.getSimbolos().length; i++) {//empeizo a evaluar las transiciones de rechazo
+                boolean d = false;
+                while (d == false) {
+                    ArrayList<String> transicionesASym = new ArrayList<>();
+                    for (int j = 0; j < particionesT.get(k).size(); j++) {
+
+                        transicionesA = transicionesParticion(particionesT.get(k));
+                        ArrayList<String> actualTransicion = transicionesA.get(j);
+                        String b = actualTransicion.get(i);
+                        if (!existeEstado(transicionesASym, b)) {
+                            transicionesASym.add(actualTransicion.get(i));
                         }
-                        if (!aLaMismaParticion(existencia)) {
-                            ChopDaParts(recPorSimb, existencia);
-                            recPart = -1;
-                            recPorSimb = af.getSimbolos().length;
-                            recTransPorSimb = transSimb.size();
+
+                    }
+
+                    for (int j = 0; j < particionesT.size(); j++) {
+                        ArrayList<String> particion = particionesT.get(j);
+                        if (particion.containsAll(transicionesASym)) {
+                            d = true;
                         }
                     }
+                    if (d == false) {//VA UN CICLO
+                        ArrayList<String> particionPrincipal = particionesT.get(k);
+                        for (int j = 0; j < particionesT.size(); j++) {
+                            ArrayList<String> particion = particionesT.get(j);
+                            ArrayList<String> noContenidos = estadosNoContenidos(particion, transicionesASym);
+                            if (noContenidos.size() != transicionesASym.size()) {//mirar condicion para que no entre acá
+                                particionesT.add(creaNuevaParticion(particionPrincipal, noContenidos, i));
+                                break;
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+        imprimir(particionesT);
+        construirAutomata(particionesT);
+
+    }
+
+    //Actualizar estdos despues en la clase automata
+    public void construirAutomata(ArrayList<ArrayList> particiones) {
+        String[] estados = new String[particiones.size()];
+        ArrayList<String> estados1 = new ArrayList<>();
+        ArrayList<String> estadosAceptacion1 = new ArrayList<>();
+
+        String[] estadoInicial = new String[1];
+        ArrayList<ArrayList> automata = new ArrayList<>();
+        for (int i = 0; i < particiones.size(); i++) {
+            String nEstado = String.join("", particiones.get(i));
+
+            if (nEstado.contains(af.getEstados()[0])) {
+
+                estados1.add(nEstado);
+                if (definirEstadoDeAceptacion(convertirString(nEstado), true)) {
+                    estadosAceptacion1.add(nEstado);
+                }
+                break;
+            }
+
+        }
+        for (int i = 0; i < particiones.size(); i++) {
+            String nEstado = String.join("", particiones.get(i));
+            if (!existeEstado(estados1, nEstado)) {
+                estados1.add(nEstado);
+                if (definirEstadoDeAceptacion(convertirString(nEstado), true)) {
+                    estadosAceptacion1.add(nEstado);
                 }
             }
         }
+        convertirArray(estados1, estados);
+        String[] estadosAceptacion = new String[estadosAceptacion1.size()];
+        convertirArray(estadosAceptacion1, estadosAceptacion);
+        for (int i = 0; i < particiones.size(); i++) {//estdos de aceptación haer
+            ArrayList<String> transicion = unirTransiciones(convertirString(estados[i]));
+            automata.add(completarTransicion(transicion, estados, estados1));
+        }
+        imprimir(automata);
+        af.setEstados(estados);
+        af.setEstadosAceptacion(estadosAceptacion);
+        af.setEstadosIniciales(estadoInicial);
+        af.setTransiciones(automata);
     }
 
-    public boolean aLaMismaParticion(int[] verificacion) {
-        int valor = verificacion[0];
-        for (int i = 0; i < verificacion.length; i++) {
-            if (valor != verificacion[i]) {
-                return false;
+    public ArrayList<String> completarTransicion(ArrayList<String> transicion, String[] estados, ArrayList<String> estados1) {
+
+        ArrayList<String> nuevaTransicion = new ArrayList<>();
+        for (int i = 0; i < transicion.size(); i++) {
+            String estado = intercambiarEstados(estados1, transicion.get(i));
+            for (int j = 0; j < estados.length; j++) {
+                if (estados[j].contains(estado)) {
+                    estado = estados[j];
+                    nuevaTransicion.add(estado);
+                    break;
+                }
             }
         }
-        return true;
+
+        return nuevaTransicion;
     }
 
-    public void ChopDaParts(int numParticion, int[] aDonde) {
-        ArrayList<String> particion = particiones.get(numParticion);
-        ArrayList<String> nuevaParticion = new ArrayList<>();
-        int id = aDonde[0];
-        int posRelativa = 0;
-        String state;
-        for (int i = 0; i < aDonde.length - 1; i++) {
-            if (id != aDonde[i]) {
-                state = particion.get(i - posRelativa);
-                nuevaParticion.add(state);
-                particion.remove(i - posRelativa);
-                posRelativa++;
-            }
+    /**
+     * Este método crea una copia con todos los elementos de un Arraylist
+     *
+     */
+    public ArrayList<String> copiaArray(ArrayList<String> array) {
+        ArrayList<String> copiaArray = new ArrayList<>();
+        for (int i = 0; i < array.size(); i++) {
+            copiaArray.add(array.get(i));
         }
-        particiones.add(nuevaParticion);
+        return copiaArray;
     }
-
 }

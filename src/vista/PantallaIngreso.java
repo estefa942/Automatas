@@ -468,8 +468,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private void btnSimplificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimplificarActionPerformed
         // TODO add your handling code here:
         btnVerificarHilera.setVisible(true);
-        dtm = ca.Ximplificar();
-        tablaSeleccionada().setModel(dtm);
+        ca.simplificar();
+        llenarTabla(tablaEstados);
+       
     }//GEN-LAST:event_btnSimplificarActionPerformed
     /**
      * Este botón permite verificar si una secuencia es reconocida por el
@@ -659,12 +660,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
         String[] simbolosEntrando = af.getSimbolos();
         String[] estados = af.getEstados();
         ArrayList<ArrayList> automata = af.getTransiciones();
-        String[] simbolosArr = new String[simbolosEntrando.length + 2];
+        String[] simbolosArr = new String[simbolosEntrando.length + 3];
         simbolosArr[0] = "Estados";
-        for (int sym = 1; sym < simbolosArr.length - 1; sym++) {
+        for (int sym = 1; sym < simbolosArr.length - 2; sym++) {
             simbolosArr[sym] = simbolosEntrando[sym - 1];
         }
-        simbolosArr[simbolosArr.length - 1] = "E.A.";
+        simbolosArr[simbolosArr.length - 2] = "E.A.";
+        simbolosArr[simbolosArr.length - 1] = "E.I.";
         dtm = new DefaultTableModel(simbolosArr, 0);
 
         for (int i = 0; i < estados.length; i++) {
@@ -675,9 +677,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 fila[j + 1] = transiciones.get(j);
             }
             if (definirEstadoAceptacion(estados[i])) {
-                fila[simbolosArr.length - 1] = "1";
+                fila[simbolosArr.length - 2] = "1";
             } else {
-                fila[simbolosArr.length - 1] = "0";
+                fila[simbolosArr.length - 2] = "0";
             }
             dtm.addRow(fila);
         }
