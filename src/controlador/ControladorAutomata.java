@@ -504,6 +504,7 @@ public class ControladorAutomata {
         af.setEstados(nEstados);
         af.setEstadosAceptacion(nAceptacion);
         af.setTransiciones(organizarAutomata(estados, automataD));
+        actualizarParticiones(estadosAceptacion, estados);
         return automataD;
     }
 
@@ -567,6 +568,7 @@ public class ControladorAutomata {
             af.setEstados(nEstados);
             af.setEstadosAceptacion(nAceptacion);
             af.setTransiciones(organizarAutomata(estados, automataFinal));
+            actualizarParticiones(estadosAceptacion, estados);
 
         }
         return automataFinal;
@@ -749,7 +751,12 @@ public class ControladorAutomata {
             System.out.println("");
         }
     }
-
+/**
+ * Este método evalua la partición que se le ingresa por parámetro, y trae del autómata inicial las transiciones
+ * pertenecientes a cada elemento del Array.
+ * @param particion
+ * @return Retorna todas las transciones de la particion que se entren por parámetro 
+ */
     public ArrayList<ArrayList> transicionesParticion(ArrayList<String> particion) {
         ArrayList<ArrayList> transiciones = new ArrayList<>();
         for (int i = 0; i < particion.size(); i++) {
@@ -858,7 +865,7 @@ public class ControladorAutomata {
 
     }
 
-    //Actualizar estdos despues en la clase automata
+    //Actualizar estados, une las transiciones, agrega los estados de aceptacion, mejor dicho, contruye el autómata final :P
     public void construirAutomata(ArrayList<ArrayList> particiones) {
         String[] estados = new String[particiones.size()];
         ArrayList<String> estados1 = new ArrayList<>();
