@@ -863,27 +863,53 @@ public class ControladorAutomata {
         return null;
     }
 
-    public int VerificarTransDePart() {
+    public void VerificarTransDePart() {
         int[] existencia;
+        int[] estado;
         //Recorrido de particiones
         for (int recPart = 0; recPart < particiones.size(); recPart++) {
             //Recorrido por símbolos
-            for (int recPorSimb = 0; recPorSimb < af.getSimbolos().length; recPorSimb++) {
-                existencia = new int[particiones.get(recPart).size()];
-                ArrayList<ArrayList> transSimb = transDePart.get(recPorSimb);
-                //Recorrido de las transiciones por símbolos
-                for (int recTransPorSimb = 0; recTransPorSimb < transSimb.size(); recTransPorSimb++) {
-                    ArrayList<String> transiciones = transSimb.get(recTransPorSimb);
-                    //Verificando la existencia de la transicion a la particion
-                    for (int recTrans = 0; recTrans < transiciones.size(); recTrans++) {
-                        if (particiones.get(recPart).contains(transiciones.get(recTrans))) {
-                            existencia[recTrans] = recPart;
+            if (particiones.get(recPart).size() > 1) {
+                for (int recPorSimb = 0; recPorSimb < af.getSimbolos().length; recPorSimb++) {
+                    ArrayList<ArrayList> transSimb = transDePart.get(recPorSimb);
+                    //Recorrido de las transiciones por partición
+                    for (int recTransPorSimb = 0; recTransPorSimb < transSimb.size(); recTransPorSimb++) {
+                        ArrayList<String> transPorPart = transSimb.get(recTransPorSimb);
+                        existencia = new int[transPorPart.size()];
+                        //Verificando la existencia de la transicion a la particion
+                        for (int rtpp = 0; rtpp < transPorPart.size(); rtpp++) {
+                            if (particiones.get(recPart).contains(transPorPart.get(rtpp))) {
+                                existencia[rtpp] = recPart;
+                            }
+                        }
+                        if (!aLaMismaParticion(existencia)) {
+                            ChopDaParts(recPorSimb,existencia);
+                            recPart = -1;
+                            recPorSimb = af.getSimbolos().length;
+                            recTransPorSimb = transSimb.size();
                         }
                     }
                 }
             }
         }
-        return 0;
     }
 
+    public boolean aLaMismaParticion(int[] verificacion) {
+        int valor = verificacion[0];
+        for (int i = 0; i < verificacion.length; i++) {
+            if(valor != verificacion[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public void ChopDaParts(int numParticion,int[] aDonde){
+        ArrayList<String> particion = particiones.get(numParticion);
+        ArrayList<String> nuevaParticion = new ArrayList<>();
+        for (int i = 0; i < aDonde.length; i++) {
+            
+        }
+    }
+    
 }
