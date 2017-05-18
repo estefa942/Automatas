@@ -860,7 +860,8 @@ public class ControladorAutomata {
         transDePart = tdcs;
         //Aquí va otro método
         VerificarTransDePart();
-        return null;
+        DefaultTableModel simple = ParticionesEnTabla();
+        return simple;
     }
 
     public void VerificarTransDePart() {
@@ -883,7 +884,7 @@ public class ControladorAutomata {
                             }
                         }
                         if (!aLaMismaParticion(existencia)) {
-                            ChopDaParts(recPorSimb,existencia);
+                            ChopDaParts(recPorSimb, existencia);
                             recPart = -1;
                             recPorSimb = af.getSimbolos().length;
                             recTransPorSimb = transSimb.size();
@@ -897,19 +898,28 @@ public class ControladorAutomata {
     public boolean aLaMismaParticion(int[] verificacion) {
         int valor = verificacion[0];
         for (int i = 0; i < verificacion.length; i++) {
-            if(valor != verificacion[i]){
+            if (valor != verificacion[i]) {
                 return false;
             }
         }
         return true;
     }
-    
-    public void ChopDaParts(int numParticion,int[] aDonde){
+
+    public void ChopDaParts(int numParticion, int[] aDonde) {
         ArrayList<String> particion = particiones.get(numParticion);
         ArrayList<String> nuevaParticion = new ArrayList<>();
-        for (int i = 0; i < aDonde.length; i++) {
-            
+        int id = aDonde[0];
+        int posRelativa = 0;
+        String state;
+        for (int i = 0; i < aDonde.length - 1; i++) {
+            if (id != aDonde[i]) {
+                state = particion.get(i - posRelativa);
+                nuevaParticion.add(state);
+                particion.remove(i - posRelativa);
+                posRelativa++;
+            }
         }
+        particiones.add(nuevaParticion);
     }
-    
+
 }

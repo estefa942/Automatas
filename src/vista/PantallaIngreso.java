@@ -34,6 +34,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
     Vector vEstados = new Vector();
     private String[] estadosAceptacion;
     DefaultTableModel dtm;
+    
+    boolean auto2 = false;
 
     /**
      * Creates new form PantallaIngreso
@@ -50,6 +52,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnRestaurar.setEnabled(false);
         btnAddEstado.setEnabled(false);
         btnGuardarArchivo.setEnabled(false);
+        btnUnion.setEnabled(false);
+        btnUnion.setVisible(false);
 
         btnEvaluar.setEnabled(false);
         textVeri.setEnabled(false);
@@ -97,6 +101,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         rdbtnA1 = new javax.swing.JRadioButton();
         rdbtnA2 = new javax.swing.JRadioButton();
+        btnUnion = new javax.swing.JButton();
         Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -191,7 +196,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 btnVerificarHileraActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVerificarHilera, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 490, 240, -1));
+        getContentPane().add(btnVerificarHilera, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 480, 240, -1));
 
         btnSimplificar.setText("Simplificar autómata");
         btnSimplificar.addActionListener(new java.awt.event.ActionListener() {
@@ -272,7 +277,15 @@ public class PantallaIngreso extends javax.swing.JFrame {
         grupoAutomatas.add(rdbtnA2);
         rdbtnA2.setForeground(new java.awt.Color(255, 255, 255));
         rdbtnA2.setText("Autómata 2");
+        rdbtnA2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbtnA2ActionPerformed(evt);
+            }
+        });
         getContentPane().add(rdbtnA2, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 20, -1, -1));
+
+        btnUnion.setText("Unir automatas");
+        getContentPane().add(btnUnion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 240, -1));
 
         Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
         getContentPane().add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -20, 1240, 570));
@@ -495,6 +508,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         txtEstados.setEnabled(true);
         txtSimbolos.setEnabled(true);
         btnArchivo.setEnabled(true);
+        
         btnEvaluar.setEnabled(false);
         textVeri.setEnabled(false);
         secuenciaIngresada.setText("");
@@ -608,6 +622,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(rootPane, "Para ingresar los estados, debe ingresarlos separados por comas (,)");
     }//GEN-LAST:event_jLabel1MouseClicked
+
+    private void rdbtnA2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnA2ActionPerformed
+        // TODO add your handling code here:
+        btnUnion.setEnabled(true);
+        btnUnion.setVisible(true);
+        auto2 = true;
+    }//GEN-LAST:event_rdbtnA2ActionPerformed
     /**
      * Este método permite saber si un estado es de aceptación para llenar la
      * tabla cuando se convierte de no determinístico a determinístico
@@ -724,6 +745,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private javax.swing.JButton btnOperar;
     private javax.swing.JButton btnRestaurar;
     private javax.swing.JButton btnSimplificar;
+    private javax.swing.JButton btnUnion;
     private javax.swing.JButton btnVerificarHilera;
     private javax.swing.ButtonGroup grupoAutomatas;
     private javax.swing.JLabel jLabel1;
