@@ -30,6 +30,56 @@ public class ControladorAutomata {
         simbolos = af.getSimbolos();
     }
 
+    public AutomataF getAf() {
+        return af;
+    }
+
+    public void setAf(AutomataF af) {
+        this.af = af;
+    }
+
+    public String[] getEstados() {
+        return estados;
+    }
+
+    public void setEstados(String[] estados) {
+        this.estados = estados;
+    }
+
+    public String[] getSimbolos() {
+        return simbolos;
+    }
+
+    public void setSimbolos(String[] simbolos) {
+        this.simbolos = simbolos;
+    }
+
+    public ArrayList<ArrayList> getParticiones() {
+        return particiones;
+    }
+
+    public void setParticiones(ArrayList<ArrayList> particiones) {
+        this.particiones = particiones;
+    }
+
+    public ArrayList<ArrayList> getTransDePart() {
+        return transDePart;
+    }
+
+    public void setTransDePart(ArrayList<ArrayList> transDePart) {
+        this.transDePart = transDePart;
+    }
+
+    public DefaultTableModel getDtm() {
+        return dtm;
+    }
+
+    public void setDtm(DefaultTableModel dtm) {
+        this.dtm = dtm;
+    }
+
+    
+    
     /**
      * Este método permite retornar la posición del simbolo que se le entra por
      * parámetro para saber su ubicación dentro del arreglo.
