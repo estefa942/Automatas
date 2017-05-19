@@ -5,11 +5,15 @@
  */
 package vista;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import controlador.ControladorAutomata;
 import controlador.DobleAutomata;
 import java.io.BufferedWriter;
 //import controlador.ControladorEntradaDatos;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -37,6 +41,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     Vector vEstados = new Vector();
     private String[] estadosAceptacion;
     DefaultTableModel dtm;
+    DefaultTableModel dtm2;
 
     int seleccion = 1;
     boolean auto2 = false;
@@ -58,6 +63,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnGuardarArchivo.setEnabled(false);
         btnUnion.setEnabled(false);
         btnUnion.setVisible(false);
+        btnPDF.setEnabled(false);
 
         btnEvaluar.setEnabled(false);
         textVeri.setEnabled(false);
@@ -106,6 +112,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         rdbtnA1 = new javax.swing.JRadioButton();
         rdbtnA2 = new javax.swing.JRadioButton();
         btnUnion = new javax.swing.JButton();
+        btnPDF = new javax.swing.JButton();
         Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -165,7 +172,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 btnOperarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnOperar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 400, 370, 50));
+        getContentPane().add(btnOperar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 390, 370, 40));
 
         btnArchivo.setText("Abrir archivo");
         btnArchivo.addActionListener(new java.awt.event.ActionListener() {
@@ -248,13 +255,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
         mostrarDecision.setEditable(false);
         getContentPane().add(mostrarDecision, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 500, 330, -1));
 
-        btnGuardarArchivo.setText("Guardar en Archivo");
+        btnGuardarArchivo.setText("Guardar en Archivo de Texto");
         btnGuardarArchivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarArchivoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGuardarArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 460, 370, 50));
+        getContentPane().add(btnGuardarArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 440, 370, 40));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/rsz_minhelp.png"))); // NOI18N
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -276,6 +283,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
         rdbtnA1.setForeground(new java.awt.Color(255, 255, 255));
         rdbtnA1.setSelected(true);
         rdbtnA1.setText("Autómata 1");
+        rdbtnA1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbtnA1ActionPerformed(evt);
+            }
+        });
         getContentPane().add(rdbtnA1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 20, -1, -1));
 
         grupoAutomatas.add(rdbtnA2);
@@ -295,6 +307,14 @@ public class PantallaIngreso extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnUnion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 240, -1));
+
+        btnPDF.setText("Guardar en PDF");
+        btnPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPDFActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnPDF, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 492, 370, 40));
 
         Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
         getContentPane().add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -20, 1240, 570));
@@ -339,7 +359,6 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnAddEstado.setEnabled(true);
         btnRestaurar.setEnabled(true);
         txtNuevoEstado.setEnabled(true);
-        btnGuardarArchivo.setEnabled(true);
 
         btnIngreso.setEnabled(false);
         txtEstados.setEnabled(false);
@@ -397,6 +416,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(rootPane, "El autómata es no deterministico");
                     btnConversor.setVisible(true);
                 }
+                btnGuardarArchivo.setEnabled(true);
+                btnPDF.setEnabled(true);
             } else if (seleccion == 2) {
                 ca2 = new ControladorAutomata(automata2, dtm);
                 automata2.setTransiciones(ca2.guardarAutomata());
@@ -410,6 +431,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(rootPane, "El autómata es no deterministico");
                     btnConversor.setVisible(true);
                 }
+                btnGuardarArchivo.setEnabled(true);
+                btnPDF.setEnabled(true);
                 btnUnion.setVisible(true);
                 btnUnion.setEnabled(true);
             }
@@ -437,7 +460,6 @@ public class PantallaIngreso extends javax.swing.JFrame {
                         btnAddEstado.setEnabled(true);
                         btnRestaurar.setEnabled(true);
                         txtNuevoEstado.setEnabled(true);
-                        btnGuardarArchivo.setEnabled(true);
 
                         btnIngreso.setEnabled(false);
                         txtEstados.setEnabled(false);
@@ -558,6 +580,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
         txtSimbolos.setEnabled(true);
         btnArchivo.setEnabled(true);
 
+        btnPDF.setEnabled(false);
+        btnGuardarArchivo.setEnabled(false);
         btnEvaluar.setEnabled(false);
         textVeri.setEnabled(false);
         secuenciaIngresada.setText("");
@@ -649,8 +673,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
                             if (j == 0) {
                                 pw.print(dtm.getValueAt(i, j).toString() + ":");
                             } else if (j == dtm.getColumnCount() - 1) {
-                                pw.print(dtm.getValueAt(i, j).toString());
-                                pw.println();
+                                if (dtm.getValueAt(i, j) != null) {
+                                    pw.print("#\n");
+                                    pw.println();
+                                } else {
+                                    pw.print("\u0020");
+                                    pw.println();
+                                }
                             } else {
                                 pw.print(dtm.getValueAt(i, j).toString() + ",");
                             }
@@ -692,8 +721,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
                             if (j == 0) {
                                 pw.print(dtm.getValueAt(i, j).toString() + ":");
                             } else if (j == dtm.getColumnCount() - 1) {
-                                pw.print(dtm.getValueAt(i, j).toString());
-                                pw.println();
+                                if (dtm.getValueAt(i, j) != null) {
+                                    pw.print("#\n");
+                                    pw.println();
+                                } else {
+                                    pw.print("\u0020");
+                                    pw.println();
+                                }
                             } else {
                                 pw.print(dtm.getValueAt(i, j).toString() + ",");
                             }
@@ -719,13 +753,15 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
     private void rdbtnA2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnA2ActionPerformed
         // TODO add your handling code here:
-        auto2 = true;
+        seleccion = 2;
 
         btnIngreso.setEnabled(true);
         txtEstados.setEnabled(true);
         txtSimbolos.setEnabled(true);
         btnArchivo.setEnabled(true);
 
+        btnGuardarArchivo.setEnabled(false);
+        btnPDF.setEnabled(false);
         btnEvaluar.setEnabled(false);
         textVeri.setEnabled(false);
         secuenciaIngresada.setText("");
@@ -742,8 +778,124 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
     private void btnUnionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnionActionPerformed
         // TODO add your handling code here:
-        DobleAutomata trabajaConDos = new DobleAutomata(ca1,ca2);
+        DobleAutomata trabajaConDos = new DobleAutomata(ca1, ca2);
     }//GEN-LAST:event_btnUnionActionPerformed
+
+    private void btnPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFActionPerformed
+        // TODO add your handling code here:
+        String ruta = "";
+        JFileChooser jfc = new JFileChooser();
+        if (seleccion == 1) {
+            if (jfc.showSaveDialog(this) == jfc.APPROVE_OPTION) {
+                ruta = jfc.getSelectedFile().getAbsolutePath();
+                File archivo = new File(ruta);
+                String contenido = "";
+                //Aquí debe ir entonces lo que es escritura de archivo
+                if (archivo.exists()) {
+                    archivo.delete();
+                }
+                contenido += "simbolos:";
+                for (int i = 0; i < automata1.getSimbolos().length; i++) {
+                    if (i != automata1.getSimbolos().length - 1) {
+                        contenido += automata1.getSimbolos()[i] + ",";
+                    } else {
+                        contenido += automata1.getSimbolos()[i] + "\n";
+                    }
+                }
+                contenido += "estados:";
+                for (int i = 0; i < automata1.getEstados().length; i++) {
+                    if (i != automata1.getEstados().length - 1) {
+                        contenido += automata1.getEstados()[i] + ",";
+                    } else {
+                        contenido += automata1.getEstados()[i] + "\n";
+                    }
+                }
+                for (int i = 0; i < dtm.getRowCount(); i++) {
+                    for (int j = 0; j < dtm.getColumnCount(); j++) {
+                        if (j == 0) {
+                            contenido += dtm.getValueAt(i, j).toString() + ":";
+                        } else if (j == dtm.getColumnCount() - 1) {
+                            if (dtm.getValueAt(i, j) != null) {
+                                contenido += "#\n";
+                            } else {
+                                contenido += "\u0020" + "\n";
+                            }
+                        } else {
+                            contenido += dtm.getValueAt(i, j).toString() + ",";
+                        }
+                    }
+                }
+                try {
+                    FileOutputStream out = new FileOutputStream(ruta + ".pdf");
+                    Document doc = new Document();
+                    PdfWriter.getInstance(doc, out);
+                    doc.open();
+                    doc.add(new Paragraph(contenido));
+                    doc.close();
+                    JOptionPane msg = new JOptionPane("¡PDF correctamente creado!");
+                } catch (Exception e) {
+                    JOptionPane msg = new JOptionPane("No se pudo crear el PDF");
+                }
+            }
+        } else if (seleccion == 2) {
+            if (jfc.showSaveDialog(this) == jfc.APPROVE_OPTION) {
+                ruta = jfc.getSelectedFile().getAbsolutePath();
+                File archivo = new File(ruta);
+                String contenido = "";
+                //Aquí debe ir entonces lo que es escritura de archivo
+                if (archivo.exists()) {
+                    archivo.delete();
+                }
+                contenido += "simbolos:";
+                for (int i = 0; i < automata2.getSimbolos().length; i++) {
+                    if (i != automata2.getSimbolos().length - 1) {
+                        contenido += automata2.getSimbolos()[i] + ",";
+                    } else {
+                        contenido += automata2.getSimbolos()[i] + "\n";
+                    }
+                }
+                contenido += "estados:";
+                for (int i = 0; i < automata2.getEstados().length; i++) {
+                    if (i != automata2.getEstados().length - 1) {
+                        contenido += automata2.getEstados()[i] + ",";
+                    } else {
+                        contenido += automata2.getEstados()[i] + "\n";
+                    }
+                }
+                for (int i = 0; i < dtm.getRowCount(); i++) {
+                    for (int j = 0; j < dtm.getColumnCount(); j++) {
+                        if (j == 0) {
+                            contenido += dtm.getValueAt(i, j).toString() + ":";
+                        } else if (j == dtm.getColumnCount() - 1) {
+                            if (dtm.getValueAt(i, j) != null) {
+                                contenido += "#\n";
+                            } else {
+                                contenido += "\u0020" + "\n";
+                            }
+                        } else {
+                            contenido += dtm.getValueAt(i, j).toString() + ",";
+                        }
+                    }
+                }
+                try {
+                    FileOutputStream out = new FileOutputStream(ruta + ".pdf");
+                    Document doc = new Document();
+                    PdfWriter.getInstance(doc, out);
+                    doc.open();
+                    doc.add(new Paragraph(contenido));
+                    doc.close();
+                    JOptionPane msg = new JOptionPane("¡PDF correctamente creado!");
+                } catch (Exception e) {
+                    JOptionPane msg = new JOptionPane("No se pudo crear el PDF");
+                }
+            }
+        }
+    }//GEN-LAST:event_btnPDFActionPerformed
+
+    private void rdbtnA1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnA1ActionPerformed
+        // TODO add your handling code here:
+        seleccion = 1;
+    }//GEN-LAST:event_rdbtnA1ActionPerformed
     /**
      * Este método permite saber si un estado es de aceptación para llenar la
      * tabla cuando se convierte de no determinístico a determinístico
@@ -861,6 +1013,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardarArchivo;
     private javax.swing.JButton btnIngreso;
     private javax.swing.JButton btnOperar;
+    private javax.swing.JButton btnPDF;
     private javax.swing.JButton btnRestaurar;
     private javax.swing.JButton btnSimplificar;
     private javax.swing.JButton btnUnion;
