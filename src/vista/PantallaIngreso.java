@@ -6,6 +6,7 @@
 package vista;
 
 import controlador.ControladorAutomata;
+import controlador.DobleAutomata;
 import java.io.BufferedWriter;
 //import controlador.ControladorEntradaDatos;
 import java.io.File;
@@ -28,13 +29,16 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
     JFileChooser abrirArchivo = new JFileChooser();
     File archivo;
-    ControladorAutomata ca;
+    ControladorAutomata ca1;
+    ControladorAutomata ca2;
 
-    AutomataF af = new AutomataF();
+    AutomataF automata1 = new AutomataF();
+    AutomataF automata2 = new AutomataF();
     Vector vEstados = new Vector();
     private String[] estadosAceptacion;
     DefaultTableModel dtm;
-    
+
+    int seleccion = 1;
     boolean auto2 = false;
 
     /**
@@ -285,6 +289,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
         getContentPane().add(rdbtnA2, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 20, -1, -1));
 
         btnUnion.setText("Unir automatas");
+        btnUnion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnionActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnUnion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 240, -1));
 
         Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
@@ -318,8 +327,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
             dtm.addRow(st);
             vEstados.add(estados[i]);
         }
-        af.setEstados(estados);
-        af.setSimbolos(simbolosEntrando);
+        if (seleccion == 1) {
+            automata1.setEstados(estados);
+            automata1.setSimbolos(simbolosEntrando);
+        } else if (seleccion == 2) {
+            automata2.setEstados(estados);
+            automata2.setSimbolos(simbolosEntrando);
+        }
         tablaSeleccionada().setModel(dtm);
         btnOperar.setEnabled(true);
         btnAddEstado.setEnabled(true);
@@ -342,12 +356,20 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private void btnConversorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConversorActionPerformed
         // TODO add your handling code here:
 
-     
-        if (af.getEstadosIniciales().length == 1) {
-            ca.convertirEnDeterministico();
-        } else {
-           ca.unionAutomata(true);
-           // ca.unionAutomata(false);
+        if (seleccion == 1) {
+            if (automata1.getEstadosIniciales().length == 1) {
+                ca1.convertirEnDeterministico();
+            } else {
+                ca1.unionAutomata(true);
+                // ca.unionAutomata(false);
+            }
+        } else if (seleccion == 2) {
+            if (automata2.getEstadosIniciales().length == 1) {
+                ca2.convertirEnDeterministico();
+            } else {
+                ca2.unionAutomata(true);
+                // ca.unionAutomata(false);
+            }
         }
 
         llenarTabla(tablaSeleccionada());
@@ -362,18 +384,34 @@ public class PantallaIngreso extends javax.swing.JFrame {
      */
     private void btnOperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperarActionPerformed
         try {
-            ca = new ControladorAutomata(af, dtm);
-            af.setTransiciones(ca.guardarAutomata());
-            ca.estadosAceptacion();
-            ca.estadosIniciales();
-            if (ca.esDeterministico()) {
-                JOptionPane.showMessageDialog(rootPane, "El autómata es deterministico");
-                btnSimplificar.setVisible(true);
-                btnVerificarHilera.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(rootPane, "El autómata es no deterministico");
-                btnConversor.setVisible(true);
-
+            if (seleccion == 1) {
+                ca1 = new ControladorAutomata(automata1, dtm);
+                automata1.setTransiciones(ca1.guardarAutomata());
+                ca1.estadosAceptacion();
+                ca1.estadosIniciales();
+                if (ca1.esDeterministico()) {
+                    JOptionPane.showMessageDialog(rootPane, "El autómata es deterministico");
+                    btnSimplificar.setVisible(true);
+                    btnVerificarHilera.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "El autómata es no deterministico");
+                    btnConversor.setVisible(true);
+                }
+            } else if (seleccion == 2) {
+                ca2 = new ControladorAutomata(automata2, dtm);
+                automata2.setTransiciones(ca2.guardarAutomata());
+                ca2.estadosAceptacion();
+                ca2.estadosIniciales();
+                if (ca2.esDeterministico()) {
+                    JOptionPane.showMessageDialog(rootPane, "El autómata es deterministico");
+                    btnSimplificar.setVisible(true);
+                    btnVerificarHilera.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "El autómata es no deterministico");
+                    btnConversor.setVisible(true);
+                }
+                btnUnion.setVisible(true);
+                btnUnion.setEnabled(true);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(rootPane, "Ingreso inválido");
@@ -447,9 +485,15 @@ public class PantallaIngreso extends javax.swing.JFrame {
                             datosDeEntrada.add(lineaExtraida);
                         }
                         estadotes = txtEstados.getText().split(",");
-                        af.setEstados(estadotes);
-                        af.setSimbolos(ouch);
-                        ca = new ControladorAutomata(af, dtm);
+                        if (seleccion == 1) {
+                            automata1.setEstados(estadotes);
+                            automata1.setSimbolos(ouch);
+                            ca1 = new ControladorAutomata(automata1, dtm);
+                        } else if (seleccion == 2) {
+                            automata2.setEstados(estadotes);
+                            automata2.setSimbolos(ouch);
+                            ca2 = new ControladorAutomata(automata2, dtm);
+                        }
                         JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
                     } catch (Exception e) {
                         System.out.println("Se ha producido un error " + e + ". Revise argumentos y datos");
@@ -468,9 +512,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private void btnSimplificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimplificarActionPerformed
         // TODO add your handling code here:
         btnVerificarHilera.setVisible(true);
-        ca.simplificar();
+        if (seleccion == 2) {
+            ca1.simplificar();
+        } else if (seleccion == 2) {
+            ca2.simplificar();
+        }
         llenarTabla(tablaEstados);
-       
+
     }//GEN-LAST:event_btnSimplificarActionPerformed
     /**
      * Este botón permite verificar si una secuencia es reconocida por el
@@ -509,7 +557,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         txtEstados.setEnabled(true);
         txtSimbolos.setEnabled(true);
         btnArchivo.setEnabled(true);
-        
+
         btnEvaluar.setEnabled(false);
         textVeri.setEnabled(false);
         secuenciaIngresada.setText("");
@@ -538,7 +586,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
             mostrarDecision.setText("");
             String hilera = secuenciaIngresada.getText();
 
-            String[] symb = af.getSimbolos();
+            String[] symb = automata1.getSimbolos();
             ArrayList<String> arrSymb = new ArrayList<>();
             for (int i = 0; i < symb.length; i++) {
                 arrSymb.add(symb[i]);
@@ -549,7 +597,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
             }
             if (!arrSymb.containsAll(verf)) {
                 mostrarDecision.setText("¡Ha ingresado caracteres inválidos!");
-            } else if (ca.verificarHilera(hilera)) {
+            } else if (ca1.verificarHilera(hilera)) {
                 mostrarDecision.setText("La secuencia es aceptada");
             } else {
                 mostrarDecision.setText("La secuencia es rechazada");
@@ -567,47 +615,92 @@ public class PantallaIngreso extends javax.swing.JFrame {
         String[] aiuda = null;
         JFileChooser jfc = new JFileChooser();
         try {
-            if (jfc.showSaveDialog(null) == jfc.APPROVE_OPTION) {
-                ruta = jfc.getSelectedFile().getAbsolutePath();
-                aiuda = ruta.split("\\\\");
-                File archivo = new File(ruta);
-                FileWriter fw = new FileWriter(archivo);
-                BufferedWriter bw = new BufferedWriter(fw);
-                PrintWriter pw = new PrintWriter(bw);
-                if (archivo.exists()) {
-                    archivo.delete();
-                }
-                pw.print("simbolos:");
-                for (int i = 0; i < af.getSimbolos().length; i++) {
-                    if (i != af.getSimbolos().length - 1) {
-                        pw.print(af.getSimbolos()[i] + ",");
-                    } else {
-                        pw.print(af.getSimbolos()[i]);
-                        pw.println();
+            if (seleccion == 1) {
+                if (jfc.showSaveDialog(null) == jfc.APPROVE_OPTION) {
+                    ruta = jfc.getSelectedFile().getAbsolutePath();
+                    aiuda = ruta.split("\\\\");
+                    File archivo = new File(ruta);
+                    FileWriter fw = new FileWriter(archivo);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    PrintWriter pw = new PrintWriter(bw);
+                    if (archivo.exists()) {
+                        archivo.delete();
                     }
-                }
-                pw.print("estados:");
-                for (int i = 0; i < af.getEstados().length; i++) {
-                    if (i != af.getEstados().length - 1) {
-                        pw.print(af.getEstados()[i] + ",");
-                    } else {
-                        pw.print(af.getEstados()[i]);
-                        pw.println();
-                    }
-                }
-                for (int i = 0; i < dtm.getRowCount(); i++) {
-                    for (int j = 0; j < dtm.getColumnCount(); j++) {
-                        if (j == 0) {
-                            pw.print(dtm.getValueAt(i, j).toString() + ":");
-                        } else if (j == dtm.getColumnCount() - 1) {
-                            pw.print(dtm.getValueAt(i, j).toString());
-                            pw.println();
+                    pw.print("simbolos:");
+                    for (int i = 0; i < automata1.getSimbolos().length; i++) {
+                        if (i != automata1.getSimbolos().length - 1) {
+                            pw.print(automata1.getSimbolos()[i] + ",");
                         } else {
-                            pw.print(dtm.getValueAt(i, j).toString() + ",");
+                            pw.print(automata1.getSimbolos()[i]);
+                            pw.println();
                         }
                     }
+                    pw.print("estados:");
+                    for (int i = 0; i < automata1.getEstados().length; i++) {
+                        if (i != automata1.getEstados().length - 1) {
+                            pw.print(automata1.getEstados()[i] + ",");
+                        } else {
+                            pw.print(automata1.getEstados()[i]);
+                            pw.println();
+                        }
+                    }
+                    for (int i = 0; i < dtm.getRowCount(); i++) {
+                        for (int j = 0; j < dtm.getColumnCount(); j++) {
+                            if (j == 0) {
+                                pw.print(dtm.getValueAt(i, j).toString() + ":");
+                            } else if (j == dtm.getColumnCount() - 1) {
+                                pw.print(dtm.getValueAt(i, j).toString());
+                                pw.println();
+                            } else {
+                                pw.print(dtm.getValueAt(i, j).toString() + ",");
+                            }
+                        }
+                    }
+                    pw.close();
                 }
-                pw.close();
+            } else if (seleccion == 2) {
+                if (jfc.showSaveDialog(null) == jfc.APPROVE_OPTION) {
+                    ruta = jfc.getSelectedFile().getAbsolutePath();
+                    aiuda = ruta.split("\\\\");
+                    File archivo = new File(ruta);
+                    FileWriter fw = new FileWriter(archivo);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    PrintWriter pw = new PrintWriter(bw);
+                    if (archivo.exists()) {
+                        archivo.delete();
+                    }
+                    pw.print("simbolos:");
+                    for (int i = 0; i < automata2.getSimbolos().length; i++) {
+                        if (i != automata2.getSimbolos().length - 1) {
+                            pw.print(automata2.getSimbolos()[i] + ",");
+                        } else {
+                            pw.print(automata2.getSimbolos()[i]);
+                            pw.println();
+                        }
+                    }
+                    pw.print("estados:");
+                    for (int i = 0; i < automata2.getEstados().length; i++) {
+                        if (i != automata2.getEstados().length - 1) {
+                            pw.print(automata2.getEstados()[i] + ",");
+                        } else {
+                            pw.print(automata2.getEstados()[i]);
+                            pw.println();
+                        }
+                    }
+                    for (int i = 0; i < dtm.getRowCount(); i++) {
+                        for (int j = 0; j < dtm.getColumnCount(); j++) {
+                            if (j == 0) {
+                                pw.print(dtm.getValueAt(i, j).toString() + ":");
+                            } else if (j == dtm.getColumnCount() - 1) {
+                                pw.print(dtm.getValueAt(i, j).toString());
+                                pw.println();
+                            } else {
+                                pw.print(dtm.getValueAt(i, j).toString() + ",");
+                            }
+                        }
+                    }
+                    pw.close();
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -626,10 +719,31 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
     private void rdbtnA2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnA2ActionPerformed
         // TODO add your handling code here:
-        btnUnion.setEnabled(true);
-        btnUnion.setVisible(true);
         auto2 = true;
+
+        btnIngreso.setEnabled(true);
+        txtEstados.setEnabled(true);
+        txtSimbolos.setEnabled(true);
+        btnArchivo.setEnabled(true);
+
+        btnEvaluar.setEnabled(false);
+        textVeri.setEnabled(false);
+        secuenciaIngresada.setText("");
+        secuenciaIngresada.setEnabled(false);
+        mostrarDecision.setEnabled(false);
+        btnConversor.setVisible(false);
+        btnSimplificar.setVisible(false);
+        btnVerificarHilera.setVisible(false);
+        btnOperar.setEnabled(false);
+        txtNuevoEstado.setEnabled(false);
+        btnRestaurar.setEnabled(false);
+        btnAddEstado.setEnabled(false);
     }//GEN-LAST:event_rdbtnA2ActionPerformed
+
+    private void btnUnionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnionActionPerformed
+        // TODO add your handling code here:
+        DobleAutomata trabajaConDos = new DobleAutomata(ca1,ca2);
+    }//GEN-LAST:event_btnUnionActionPerformed
     /**
      * Este método permite saber si un estado es de aceptación para llenar la
      * tabla cuando se convierte de no determinístico a determinístico
@@ -640,8 +754,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
      */
     public boolean definirEstadoAceptacion(String estado) {
         boolean b = false;
-        for (int i = 0; i < af.getEstadosAceptacion().length; i++) {
-            if (af.getEstadosAceptacion()[i].equals(estado)) {
+        for (int i = 0; i < automata1.getEstadosAceptacion().length; i++) {
+            if (automata1.getEstadosAceptacion()[i].equals(estado)) {
                 b = true;
                 break;
             }
@@ -657,9 +771,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
      */
     public void llenarTabla(JTable tabla) {
 
-        String[] simbolosEntrando = af.getSimbolos();
-        String[] estados = af.getEstados();
-        ArrayList<ArrayList> automata = af.getTransiciones();
+        String[] simbolosEntrando = automata1.getSimbolos();
+        String[] estados = automata1.getEstados();
+        ArrayList<ArrayList> automata = automata1.getTransiciones();
         String[] simbolosArr = new String[simbolosEntrando.length + 3];
         simbolosArr[0] = "Estados";
         for (int sym = 1; sym < simbolosArr.length - 2; sym++) {
@@ -688,8 +802,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
     public JTable tablaSeleccionada() {
         if (rdbtnA1.isSelected()) {
+            seleccion = 1;
             return tablaEstados;
         }
+        seleccion = 2;
         return tablaNuevoAutomata;
     }
 
