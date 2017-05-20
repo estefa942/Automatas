@@ -8,6 +8,7 @@ package vista;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import controlador.Archivo;
 import controlador.ControladorAutomata;
 import controlador.ControladorVistas;
 import controlador.DobleAutomata;
@@ -65,6 +66,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnGuardarArchivo.setEnabled(false);
         btnUnion2Automatas.setEnabled(false);
         btnUnion2Automatas.setVisible(false);
+        btnInterseccion.setEnabled(false);
+        btnInterseccion.setVisible(false);
         btnPDF.setEnabled(false);
 
         btnEvaluar.setEnabled(false);
@@ -522,6 +525,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 }
                 btnGuardarArchivo.setEnabled(true);
                 btnPDF.setEnabled(true);
+                btnInterseccion.setVisible(true);
+                btnInterseccion.setEnabled(true);
                 btnUnion2Automatas.setVisible(true);
                 btnUnion2Automatas.setEnabled(true);
             }
@@ -688,8 +693,12 @@ public class PantallaIngreso extends javax.swing.JFrame {
         if (choose == JOptionPane.YES_OPTION) {
             tablaEstados.setModel(empty);
             tablaNuevoAutomata.setModel(empty);
+            auto2 = false;
         } else {
             tablaSeleccionada().setModel(empty);
+            if(seleccion == 2){
+                auto2 = false;
+            }
         }
     }//GEN-LAST:event_btnRestaurarActionPerformed
     /**
@@ -729,58 +738,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
     private void btnGuardarArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarArchivoActionPerformed
         // TODO add your handling code here:
-        String ruta = "";
-        JFileChooser jfc = new JFileChooser();
-        try {
-            if (jfc.showSaveDialog(null) == jfc.APPROVE_OPTION) {
-                ruta = jfc.getSelectedFile().getAbsolutePath();
-                File archivo = new File(ruta);
-                FileWriter fw = new FileWriter(archivo);
-                BufferedWriter bw = new BufferedWriter(fw);
-                PrintWriter pw = new PrintWriter(bw);
-                if (archivo.exists()) {
-                    archivo.delete();
-                }
-                pw.print("simbolos:");
-                for (int i = 0; i < automataSeleccionado().getSimbolos().length; i++) {
-                    if (i != automataSeleccionado().getSimbolos().length - 1) {
-                        pw.print(automataSeleccionado().getSimbolos()[i] + ",");
-                    } else {
-                        pw.print(automataSeleccionado().getSimbolos()[i]);
-                        pw.println();
-                    }
-                }
-                pw.print("estados:");
-                for (int i = 0; i < automataSeleccionado().getEstados().length; i++) {
-                    if (i != automataSeleccionado().getEstados().length - 1) {
-                        pw.print(automataSeleccionado().getEstados()[i] + ",");
-                    } else {
-                        pw.print(automataSeleccionado().getEstados()[i]);
-                        pw.println();
-                    }
-                }
-                for (int i = 0; i < dtm.getRowCount(); i++) {
-                    for (int j = 0; j < dtm.getColumnCount(); j++) {
-                        if (j == 0) {
-                            pw.print(dtm.getValueAt(i, j).toString() + ":");
-                        } else if (j == dtm.getColumnCount() - 1) {
-                            if (dtm.getValueAt(i, j) != null) {
-                                pw.print("#\n");
-                                pw.println();
-                            } else {
-                                pw.print("\u0020");
-                                pw.println();
-                            }
-                        } else {
-                            pw.print(dtm.getValueAt(i, j).toString() + ",");
-                        }
-                    }
-                }
-                pw.close();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        Archivo arch = new Archivo();
+        arch.GuardarEnTXT(automataSeleccionado(),dtm);
     }//GEN-LAST:event_btnGuardarArchivoActionPerformed
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
@@ -796,10 +755,11 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private void rdbtnA2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnA2ActionPerformed
         // TODO add your handling code here:
         seleccion = 2;
-
+        auto2 = true;
         btnIngreso.setEnabled(true);
         txtEstados.setEnabled(true);
-        txtSimbolos.setEnabled(true);
+        txtEstados.setText("");
+        txtSimbolos.setEnabled(false);
         btnArchivo.setEnabled(true);
 
         btnGuardarArchivo.setEnabled(false);
@@ -833,60 +793,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
     private void btnPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFActionPerformed
         // TODO add your handling code here:
-        String ruta = "";
-        JFileChooser jfc = new JFileChooser();
-        if (jfc.showSaveDialog(this) == jfc.APPROVE_OPTION) {
-            ruta = jfc.getSelectedFile().getAbsolutePath();
-            File archivo = new File(ruta);
-            String contenido = "";
-            //Aquí debe ir entonces lo que es escritura de archivo
-            if (archivo.exists()) {
-                archivo.delete();
-            }
-            contenido += "simbolos:";
-            for (int i = 0; i < automataSeleccionado().getSimbolos().length; i++) {
-                if (i != automataSeleccionado().getSimbolos().length - 1) {
-                    contenido += automataSeleccionado().getSimbolos()[i] + ",";
-                } else {
-                    contenido += automataSeleccionado().getSimbolos()[i] + "\n";
-                }
-            }
-            contenido += "estados:";
-            for (int i = 0; i < automataSeleccionado().getEstados().length; i++) {
-                if (i != automataSeleccionado().getEstados().length - 1) {
-                    contenido += automataSeleccionado().getEstados()[i] + ",";
-                } else {
-                    contenido += automataSeleccionado().getEstados()[i] + "\n";
-                }
-            }
-            for (int i = 0; i < dtm.getRowCount(); i++) {
-                for (int j = 0; j < dtm.getColumnCount(); j++) {
-                    if (j == 0) {
-                        contenido += dtm.getValueAt(i, j).toString() + ":";
-                    } else if (j == dtm.getColumnCount() - 1) {
-                        if (dtm.getValueAt(i, j) != null) {
-                            contenido += "#\n";
-                        } else {
-                            contenido += "\u0020" + "\n";
-                        }
-                    } else {
-                        contenido += dtm.getValueAt(i, j).toString() + ",";
-                    }
-                }
-            }
-            try {
-                FileOutputStream out = new FileOutputStream(ruta + ".pdf");
-                Document doc = new Document();
-                PdfWriter.getInstance(doc, out);
-                doc.open();
-                doc.add(new Paragraph(contenido));
-                doc.close();
-                JOptionPane msg = new JOptionPane("¡PDF correctamente creado!");
-            } catch (Exception e) {
-                JOptionPane msg = new JOptionPane("No se pudo crear el PDF");
-            }
-        }
-
+        Archivo arch = new Archivo();
+        arch.GuardarEnPDF(automataSeleccionado(),dtm);
     }//GEN-LAST:event_btnPDFActionPerformed
 
     private void rdbtnA1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnA1ActionPerformed
