@@ -692,6 +692,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         txtSimbolos.setText("");
         btnArchivo.setEnabled(true);
 
+        mostrarDecision.setText("");
         btnPDF.setEnabled(false);
         btnGuardarArchivo.setEnabled(false);
         btnEvaluar.setEnabled(false);
