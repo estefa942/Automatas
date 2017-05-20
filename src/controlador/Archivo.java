@@ -64,7 +64,7 @@ public class Archivo {
                             pw.print(dtm.getValueAt(i, j).toString() + ":");
                         } else if (j == dtm.getColumnCount() - 1) {
                             if (dtm.getValueAt(i, j) != null) {
-                                pw.print("#\n");
+                                pw.print("#");
                                 pw.println();
                             } else {
                                 pw.print("\u0020");
