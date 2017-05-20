@@ -20,7 +20,8 @@ public class ControladorAutomata {
     String[] simbolos;
     ArrayList<ArrayList> particiones = new ArrayList<>();
     ArrayList<ArrayList> transDePart = new ArrayList<>();
-
+    int[] visitados;
+    ArrayList<ArrayList> automataNuevo = new ArrayList<>();
     DefaultTableModel dtm;
 
     public ControladorAutomata(AutomataF af, DefaultTableModel dtm) {
@@ -78,8 +79,6 @@ public class ControladorAutomata {
         this.dtm = dtm;
     }
 
-    
-    
     /**
      * Este método permite retornar la posición del simbolo que se le entra por
      * parámetro para saber su ubicación dentro del arreglo.
@@ -95,6 +94,17 @@ public class ControladorAutomata {
             }
         }
         return valor;
+    }
+
+    /**
+     * Este método llena con ceros, el vector de visitados, el cual se utiliza
+     * para sacar los estados extraños
+     */
+    public void llenarVisitados() {
+        visitados = new int[af.getTransiciones().size()];
+        for (int i = 0; i < visitados.length; i++) {
+            visitados[i] = 0;
+        }
     }
 
     /**
@@ -170,16 +180,16 @@ public class ControladorAutomata {
         ArrayList<String> estAcpt = new ArrayList<>();
         ArrayList<String> estRec = new ArrayList<>();
         String[] estadosAcep = af.getEstadosAceptacion();
-        String[] estados= af.getEstados();
+        String[] estados = af.getEstados();
         for (int i = 0; i < estados.length; i++) {
             String estado = estados[i];
-            if(esEstadoDeAceptacion(estado)){
+            if (esEstadoDeAceptacion(estado)) {
                 estAcpt.add(estado);
-            }else{
+            } else {
                 estRec.add(estado);
             }
         }
-            
+
         particiones.add(estRec);
         particiones.add(estAcpt);
 
@@ -218,7 +228,7 @@ public class ControladorAutomata {
      * o no.
      */
     public boolean esEstadoDeAceptacion(String estado) {
-       boolean b = false;
+        boolean b = false;
         String[] aceptacion = af.getEstadosAceptacion();
         for (int i = 0; i < aceptacion.length; i++) {
             if (aceptacion[i].equals(estado)) {
@@ -790,21 +800,16 @@ public class ControladorAutomata {
         return b;
     }
 
-    public void imprimir(ArrayList<ArrayList> a) {
-        for (int i = 0; i < a.size(); i++) {
-            ArrayList b = a.get(i);
-            for (int j = 0; j < b.size(); j++) {
-                System.out.print("|" + b.get(j) + "|");
-            }
-            System.out.println("");
-        }
-    }
-/**
- * Este método evalua la partición que se le ingresa por parámetro, y trae del autómata inicial las transiciones
- * pertenecientes a cada elemento del Array.
- * @param particion
- * @return Retorna todas las transciones de la particion que se entren por parámetro 
- */
+  
+    /**
+     * Este método evalua la partición que se le ingresa por parámetro, y trae
+     * del autómata inicial las transiciones pertenecientes a cada elemento del
+     * Array.
+     *
+     * @param particion
+     * @return Retorna todas las transciones de la particion que se entren por
+     * parámetro
+     */
     public ArrayList<ArrayList> transicionesParticion(ArrayList<String> particion) {
         ArrayList<ArrayList> transiciones = new ArrayList<>();
         for (int i = 0; i < particion.size(); i++) {
@@ -816,9 +821,10 @@ public class ControladorAutomata {
     }
 
     /**
-     *Entra el array con la particiona tratar y otro array con los simbolos a buscar 
-     *dentro del primer array, este arrojará el array con los simbolos que no estan
-     * en esa particion.
+     * Entra el array con la particiona tratar y otro array con los simbolos a
+     * buscar dentro del primer array, este arrojará el array con los simbolos
+     * que no estan en esa particion.
+     *
      * @param particion
      * @param transicionASym
      * @return ArrayList<String> estados no contenidos
@@ -842,7 +848,15 @@ public class ControladorAutomata {
         return noContenidos;
     }
 
-    //Va a recibir la aprticion a modificar, el simbolo en ques e esta en el momento y los no contenidos en la aprticion
+    /**
+     * Este método permite crear una nueva partición para ello se mira la partición que se va a modificar, y la transición 
+     * que hace que esta partición se tenga que modificar, luego miramos los estados de la transición correspondiente y si estos estados
+     * no estan contenidos en la partición se crea un nuevo array con la nueva partición
+     * @param particion
+     * @param noContenidos
+     * @param posSym
+     * @return 
+     */
     public ArrayList<String> creaNuevaParticion(ArrayList<String> particion, ArrayList<String> noContenidos, int posSym) {
         ArrayList<ArrayList> transicionesParticion = transicionesParticion(particion);
         ArrayList<String> nuevaParticion = new ArrayList<>();
@@ -865,7 +879,63 @@ public class ControladorAutomata {
         return nuevaParticion;
     }
 
-    
+    /**
+     * Este método permite tomar las transiciones actuales del autómata, y mira
+     * cuales estados estan contenidos en las transiciones para así ir llenando
+     * el vector de visitados e ir identificando que estados son extraños,
+     * finalmente actulizamos las transiciones sin estados extraños.
+     *
+     * @param p ingresa la posición del estado desde el cual se va a empezar a
+     * analizar.
+     */
+    public void estadosExtraños(int p) {
+        visitados[p] = 1;
+        automataNuevo.add(af.getTransiciones().get(p));
+        for (int i = 0; i < af.getSimbolos().length; i++) {
+            String b = (String) af.getTransiciones().get(p).get(i);
+            if (visitados[convertirEstados(b)] == 0) {
+                estadosExtraños(convertirEstados(b));
+            }
+        }
+        af.setAutomataSinExtraños(automataNuevo);
+    }
+
+    /**
+     * Este método luego de haber sacado los estados extraños, permite
+     * reestablecer todos los valores del autómata, actualiza los estados sin
+     * los estados que fueron extraidos, y los estados de aceptación y las
+     * particiones también los actualiza.
+     */
+    public void actualizarAutomata() {
+        String[] estados = af.getEstados();
+        ArrayList<String> estadosNuevos = new ArrayList<>();
+        ArrayList<String> estadosAceptacion = new ArrayList<>();
+
+        for (int i = 0; i < visitados.length; i++) {
+            if (visitados[i] == 1) {
+                estadosNuevos.add(estados[i]);
+            }
+        }
+        for (int i = 0; i < estadosNuevos.size(); i++) {
+            if (esEstadoDeAceptacion(estadosNuevos.get(i))) {
+                estadosAceptacion.add(estadosNuevos.get(i));
+            }
+        }
+        String[] estadosN = new String[estadosNuevos.size()];
+        String[] estadosA = new String[estadosAceptacion.size()];
+        convertirArray(estadosNuevos, estadosN);
+        convertirArray(estadosAceptacion, estadosA);
+        af.setTransiciones(af.getAutomataSinExtraños());
+        af.setEstadosAceptacion(estadosA);
+        af.setEstados(estadosN);
+        actualizarParticiones(estadosAceptacion, estadosNuevos);
+    }
+/**
+ * Este método permite mirar que estados son equivalente y eliminar los estados extraños, para esto tomamos las particiones
+ * con los estados de aceptación y de rechazo, y vamos mirando sus transiciones cuando entra determinado simbolo, si sus transiciones van a una partición diferente
+ * se crea otra nueva particón con el estado que difiere y se agrega a un array de particiones, se sigue analizando cada partición hasta que terminemos
+ * todas las particiones con los diferentes simbolos, finalmente actualiza los valores del automata: transiciones, estados,estados de Aceptación.
+ */
     public void simplificar() {
         ArrayList<String> particionesR = copiaArray(particiones.get(0));
         ArrayList<String> particionesA = copiaArray(particiones.get(1));
@@ -873,54 +943,61 @@ public class ControladorAutomata {
         ArrayList<ArrayList> particionesT = new ArrayList<>();
         particionesT.add(particionesR);
         particionesT.add(particionesA);
-
         int f = 0;
-        for (int k = 0; k < particionesT.size(); k++) {
+        for (int m = 0; m < 2; m++) {
+            for (int k = 0; k < particionesT.size(); k++) {
+                for (int i = 0; i < af.getSimbolos().length; i++) {
+                    boolean d = false;
+                    while (d == false) {
+                        ArrayList<String> transicionesASym = new ArrayList<>();
+                        for (int j = 0; j < particionesT.get(k).size(); j++) {
 
-            for (int i = 0; i < af.getSimbolos().length; i++) {//empeizo a evaluar las transiciones de rechazo
-                boolean d = false;
-                while (d == false) {
-                    ArrayList<String> transicionesASym = new ArrayList<>();
-                    for (int j = 0; j < particionesT.get(k).size(); j++) {
+                            transicionesA = transicionesParticion(particionesT.get(k));
+                            ArrayList<String> actualTransicion = transicionesA.get(j);
+                            String b = actualTransicion.get(i);
+                            if (!existeEstado(transicionesASym, b)) {
+                                transicionesASym.add(actualTransicion.get(i));
+                            }
 
-                        transicionesA = transicionesParticion(particionesT.get(k));
-                        ArrayList<String> actualTransicion = transicionesA.get(j);
-                        String b = actualTransicion.get(i);
-                        if (!existeEstado(transicionesASym, b)) {
-                            transicionesASym.add(actualTransicion.get(i));
                         }
 
-                    }
-
-                    for (int j = 0; j < particionesT.size(); j++) {
-                        ArrayList<String> particion = particionesT.get(j);
-                        if (particion.containsAll(transicionesASym)) {
-                            d = true;
-                        }
-                    }
-                    if (d == false) {//VA UN CICLO
-                        ArrayList<String> particionPrincipal = particionesT.get(k);
                         for (int j = 0; j < particionesT.size(); j++) {
                             ArrayList<String> particion = particionesT.get(j);
-                            ArrayList<String> noContenidos = estadosNoContenidos(particion, transicionesASym);
-                            if (noContenidos.size() != transicionesASym.size()) {//mirar condicion para que no entre acá
-                                particionesT.add(creaNuevaParticion(particionPrincipal, noContenidos, i));
-                                break;
+                            if (particion.containsAll(transicionesASym)) {
+                                d = true;
                             }
+                        }
+                        if (d == false) {
+                            ArrayList<String> particionPrincipal = particionesT.get(k);
+                            for (int j = 0; j < particionesT.size(); j++) {
+                                ArrayList<String> particion = particionesT.get(j);
+                                ArrayList<String> noContenidos = estadosNoContenidos(particion, transicionesASym);
+                                if (noContenidos.size() != transicionesASym.size()) {
+                                    particionesT.add(creaNuevaParticion(particionPrincipal, noContenidos, i));
+                                    break;
+                                }
+                            }
+
                         }
 
                     }
 
                 }
-
             }
         }
-        imprimir(particionesT);
         construirAutomata(particionesT);
+        llenarVisitados();
+        estadosExtraños(0);
+        actualizarAutomata();
 
     }
 
-    //Actualizar estados, une las transiciones, agrega los estados de aceptacion, mejor dicho, contruye el autómata final :P
+    /**
+     * De acuerdo a las particiones que se tomaron del método simplificar, este método une las transiciones basandose en 
+     * los estados que estan en cada partición, además actualiza las transiciones y finalemte actualiza el autómata, es decir,
+     * sus nuevos estados, estados de aceptación y transiciones.
+     * @param particiones  ingre el Array con todas las particiones obtenidas de los estados equivalentes.
+     */
     public void construirAutomata(ArrayList<ArrayList> particiones) {
         String[] estados = new String[particiones.size()];
         ArrayList<String> estados1 = new ArrayList<>();
@@ -957,13 +1034,19 @@ public class ControladorAutomata {
             ArrayList<String> transicion = unirTransiciones(convertirString(estados[i]));
             automata.add(completarTransicion(transicion, estados, estados1));
         }
-        imprimir(automata);
         af.setEstados(estados);
         af.setEstadosAceptacion(estadosAceptacion);
         af.setEstadosIniciales(estadoInicial);
         af.setTransiciones(automata);
     }
-
+/**
+ * Este método mira el estado en cada transición, y si almenos contiene un caracter que pereteneza a 
+ * a cualquiera de los nuevos estados, se reemplaza con el estado correspondiente 
+ * @param transicion Ingresa la transición que se va a analizar
+ * @param estados  Ingresa un arreglo los estados actuales del autómata
+ * @param estados1 ingresa un array con los estados del autómata
+ * @return Un array con la nueva transición.
+ */
     public ArrayList<String> completarTransicion(ArrayList<String> transicion, String[] estados, ArrayList<String> estados1) {
 
         ArrayList<String> nuevaTransicion = new ArrayList<>();
@@ -992,5 +1075,5 @@ public class ControladorAutomata {
         }
         return copiaArray;
     }
-    
+
 }

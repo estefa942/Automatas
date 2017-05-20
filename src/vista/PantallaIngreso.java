@@ -10,7 +10,6 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import controlador.Archivo;
 import controlador.ControladorAutomata;
-import controlador.ControladorVistas;
 import controlador.DobleAutomata;
 import java.io.BufferedWriter;
 //import controlador.ControladorEntradaDatos;
@@ -38,7 +37,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     ControladorAutomata ca1;
     ControladorAutomata ca2;
     ControladorAutomata caDoble;
-    ControladorVistas cv = new ControladorVistas();
+    
     AutomataF automata1 = new AutomataF();
     AutomataF automata2 = new AutomataF();
     Vector vEstados = new Vector();
@@ -117,9 +116,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
         rdbtnA1 = new javax.swing.JRadioButton();
         rdbtnA2 = new javax.swing.JRadioButton();
         btnUnion2Automatas = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        Fondo = new javax.swing.JLabel();
         btnPDF = new javax.swing.JButton();
         btnInterseccion = new javax.swing.JButton();
-        Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1244, 510));
@@ -315,6 +315,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
         });
         getContentPane().add(btnUnion2Automatas, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, 240, -1));
 
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Seleccione el autómata con el que desea trabajar:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, 300, 20));
+
+        Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
+        getContentPane().add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -20, 1240, 600));
+
         btnPDF.setText("Guardar en PDF");
         btnPDF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -330,9 +337,6 @@ public class PantallaIngreso extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnInterseccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 240, -1));
-
-        Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
-        getContentPane().add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -20, 1240, 600));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -962,6 +966,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
