@@ -671,7 +671,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
         // TODO add your handling code here:
         btnIngreso.setEnabled(true);
         txtEstados.setEnabled(true);
+        txtEstados.setText("");
         txtSimbolos.setEnabled(true);
+        txtSimbolos.setText("");
         btnArchivo.setEnabled(true);
 
         btnPDF.setEnabled(false);
@@ -696,7 +698,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
             auto2 = false;
         } else {
             tablaSeleccionada().setModel(empty);
-            if(seleccion == 2){
+            if(seleccion == 1){
                 auto2 = false;
             }
         }
