@@ -317,7 +317,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Seleccione el autómata con el que desea trabajar:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, 300, 20));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 0, 380, 20));
 
         btnInterseccion.setText("Interseccion de 2 autómatas");
         btnInterseccion.addActionListener(new java.awt.event.ActionListener() {
@@ -397,16 +397,18 @@ public class PantallaIngreso extends javax.swing.JFrame {
         if (seleccion == 1) {
             if (automata1.getEstadosIniciales().length == 1) {
                 ca1.convertirEnDeterministico();
+                ca1.estadosAceptacion();
             } else {
                 ca1.unionAutomata(true);
-                // ca.unionAutomata(false);
+               
             }
         } else if (seleccion == 2) {
             if (automata2.getEstadosIniciales().length == 1) {
                 ca2.convertirEnDeterministico();
+                
             } else {
                 ca2.unionAutomata(true);
-                // ca.unionAutomata(false);
+                
             }
         }
 
@@ -636,6 +638,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
      */
     private void btnSimplificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimplificarActionPerformed
         // TODO add your handling code here:
+        try{
         btnVerificarHilera.setVisible(true);
         if (seleccion == 1) {
             ca1.simplificar();
@@ -643,6 +646,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
             ca2.simplificar();
         }
         llenarTabla(tablaSeleccionada());
+        }catch(Exception e) {
+                        JOptionPane.showMessageDialog(rootPane, " No es posible simplificar");
+                    }
+                
 
     }//GEN-LAST:event_btnSimplificarActionPerformed
     /**

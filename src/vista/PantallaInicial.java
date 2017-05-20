@@ -59,7 +59,7 @@ public class PantallaInicial extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btn_Continuar);
-        btn_Continuar.setBounds(630, 430, 160, 32);
+        btn_Continuar.setBounds(630, 430, 160, 25);
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Bienvenido, para poder descubrir las diferentes funcionalidades con autómatas finitos por favor presione en continuar.");
@@ -69,7 +69,7 @@ public class PantallaInicial extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Para conocer la forma en que se tratan los autómatas en el programa por favor presione el botón de ayuda.");
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(100, 300, 660, 16);
+        jLabel4.setBounds(100, 300, 660, 15);
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/rsz_help.png"))); // NOI18N
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
