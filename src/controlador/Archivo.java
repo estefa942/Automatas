@@ -24,9 +24,19 @@ import modelo.AutomataF;
  */
 public class Archivo {
 
+    /**
+     * Constructor de la clase Archivo
+     */
     public Archivo() {
     }
     
+    /**
+     * Este método recolecta toda la información pertinente para el usuario y
+     * para el sistema, la guarda en la ubicación seleccionada por el usuario
+     * de tal modo que pueda ser ingresado desde allí posteriormente.
+     * @param automata
+     * @param dtm 
+     */
     public void GuardarEnTXT(AutomataF automata, DefaultTableModel dtm){
         String ruta = "";
         JFileChooser jfc = new JFileChooser();
@@ -82,6 +92,13 @@ public class Archivo {
         }
     }
     
+    /**
+     * Este método recolecta toda la información pertinente para el usuario y
+     * para el sistema, la guarda en formato de impresión PDF en la ubicación
+     * seleccionada por el usuario.
+     * @param automata
+     * @param dtm 
+     */
     public void GuardarEnPDF(AutomataF automata, DefaultTableModel dtm){
         String ruta = "";
         JFileChooser jfc = new JFileChooser();

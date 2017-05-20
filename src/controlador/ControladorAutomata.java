@@ -814,9 +814,15 @@ public class ControladorAutomata {
         }
         return transiciones;
     }
-//entra el array con la particiona tratar y otro array con los simbolos a bsucar dentro del primer array, este arrojará el array con los simbolos
-    //que no estan en esa particion.
 
+    /**
+     *Entra el array con la particiona tratar y otro array con los simbolos a buscar 
+     *dentro del primer array, este arrojará el array con los simbolos que no estan
+     * en esa particion.
+     * @param particion
+     * @param transicionASym
+     * @return ArrayList<String> estados no contenidos
+     */
     public ArrayList<String> estadosNoContenidos(ArrayList<String> particion, ArrayList<String> transicionASym) {
         ArrayList<String> noContenidos = new ArrayList<>();
 
@@ -859,6 +865,7 @@ public class ControladorAutomata {
         return nuevaParticion;
     }
 
+    
     public void simplificar() {
         ArrayList<String> particionesR = copiaArray(particiones.get(0));
         ArrayList<String> particionesA = copiaArray(particiones.get(1));
