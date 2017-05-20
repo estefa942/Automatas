@@ -1,0 +1,4 @@
+simbolos:0,1
+estados:a,b
+a:b,a,1,#
+b:a,b,0, 
