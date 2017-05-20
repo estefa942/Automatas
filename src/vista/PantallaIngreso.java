@@ -117,9 +117,9 @@ public class PantallaIngreso extends javax.swing.JFrame {
         rdbtnA2 = new javax.swing.JRadioButton();
         btnUnion2Automatas = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        Fondo = new javax.swing.JLabel();
-        btnPDF = new javax.swing.JButton();
         btnInterseccion = new javax.swing.JButton();
+        btnPDF = new javax.swing.JButton();
+        Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1244, 510));
@@ -319,8 +319,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
         jLabel6.setText("Seleccione el autómata con el que desea trabajar:");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, 300, 20));
 
-        Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
-        getContentPane().add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -20, 1240, 600));
+        btnInterseccion.setText("Interseccion de 2 automatas");
+        btnInterseccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInterseccionActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnInterseccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 240, -1));
 
         btnPDF.setText("Guardar en PDF");
         btnPDF.addActionListener(new java.awt.event.ActionListener() {
@@ -330,13 +335,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
         });
         getContentPane().add(btnPDF, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 470, 370, 30));
 
-        btnInterseccion.setText("Interseccion de 2 automatas");
-        btnInterseccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInterseccionActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnInterseccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 240, -1));
+        Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo1.jpg"))); // NOI18N
+        getContentPane().add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -20, 1240, 600));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
