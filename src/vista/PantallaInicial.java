@@ -99,7 +99,7 @@ public class PantallaInicial extends javax.swing.JFrame {
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
      
         try {
-            Desktop.getDesktop().open(new File("src\\modelo\\MANUAL DE USUARIO.pdf"));
+            Desktop.getDesktop().open(new File("src/modelo/MANUAL DE USUARIO.pdf"));
         } catch (Exception e) {
             System.out.println();
         }
