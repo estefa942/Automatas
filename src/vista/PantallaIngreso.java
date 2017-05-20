@@ -307,7 +307,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         });
         getContentPane().add(rdbtnA2, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 20, -1, -1));
 
-        btnUnion2Automatas.setText("Unir 2 automatas");
+        btnUnion2Automatas.setText("Unir 2 autómatas");
         btnUnion2Automatas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUnion2AutomatasActionPerformed(evt);
@@ -319,7 +319,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         jLabel6.setText("Seleccione el autómata con el que desea trabajar:");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, 300, 20));
 
-        btnInterseccion.setText("Interseccion de 2 automatas");
+        btnInterseccion.setText("Interseccion de 2 autómatas");
         btnInterseccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInterseccionActionPerformed(evt);
@@ -446,6 +446,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                     btnSimplificar.setVisible(true);
                     btnVerificarHilera.setVisible(true);
                 } else {
+                 
                     if (automata1.getEstadosIniciales().length == 1) {
                         JOptionPane.showMessageDialog(rootPane, "El autómata es no deterministico");
                         btnConversor.setVisible(true);
@@ -476,10 +477,13 @@ public class PantallaIngreso extends javax.swing.JFrame {
                             llenarTabla(tablaEstados);
                         }
                     }
+                    
                 }
                 btnGuardarArchivo.setEnabled(true);
                 btnPDF.setEnabled(true);
-            } else if (seleccion == 2) {
+                
+            } 
+                else if (seleccion == 2) {
                 ca2 = new ControladorAutomata(automata2, dtm);
                 automata2.setTransiciones(ca2.guardarAutomata());
                 ArrayList<String> estAcp = new ArrayList<>();
@@ -742,7 +746,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btnEvaluarActionPerformed
-
+/**
+ * Este botón permite guardar el autómata en pantalla en un archivo txt
+ * @param evt 
+ */
     private void btnGuardarArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarArchivoActionPerformed
         // TODO add your handling code here:
         Archivo arch = new Archivo();
@@ -758,7 +765,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(rootPane, "Para ingresar los estados, debe ingresarlos separados por comas (,)");
     }//GEN-LAST:event_jLabel1MouseClicked
-
+/**
+ * Permite trabajar sobre el autómata 2
+ * @param evt 
+ */
     private void rdbtnA2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnA2ActionPerformed
         // TODO add your handling code here:
         seleccion = 2;
@@ -784,7 +794,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
         btnRestaurar.setEnabled(false);
         btnAddEstado.setEnabled(false);
     }//GEN-LAST:event_rdbtnA2ActionPerformed
-
+/**
+ * Botón que permite hacer la unión de dos autómatas
+ * @param evt 
+ */
     private void btnUnion2AutomatasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnion2AutomatasActionPerformed
         // TODO add your handling code here:
         seleccion = 1;
@@ -797,18 +810,27 @@ public class PantallaIngreso extends javax.swing.JFrame {
         DefaultTableModel empty = new DefaultTableModel();
         tablaNuevoAutomata.setModel(empty);
     }//GEN-LAST:event_btnUnion2AutomatasActionPerformed
-
+/**
+ * Botón que permite guarda el autómata en pantalla en un archivo PDF
+ * @param evt 
+ */
     private void btnPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFActionPerformed
         // TODO add your handling code here:
         Archivo arch = new Archivo();
         arch.GuardarEnPDF(automataSeleccionado(),dtm);
     }//GEN-LAST:event_btnPDFActionPerformed
-
+/**
+ * Permite trabajar sobre el autómata 1
+ * @param evt 
+ */
     private void rdbtnA1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtnA1ActionPerformed
         // TODO add your handling code here:
         seleccion = 1;
     }//GEN-LAST:event_rdbtnA1ActionPerformed
-
+/**
+ * Botón que permite hacer la intersección entre dos autómatas
+ * @param evt 
+ */
     private void btnInterseccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInterseccionActionPerformed
         // TODO add your handling code here:
         seleccion=1;
@@ -844,7 +866,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
      * Este método permite mostrar el autómata en un tabla para que el usuario
      * pueda interactuar dinámicamente con ella.
      *
-     * @param tabla
+     * @param tabla la tabla que se va a llenar.
      */
     public void llenarTabla(JTable tabla) {
         String[] simbolosEntrando = automataSeleccionado().getSimbolos();
@@ -879,6 +901,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
         tabla.setModel(dtm);
     }
 
+    /**
+     * Este método permite saber sobre cual tabla vamos a trabajar
+     * @return  la tabla que se va a modificar
+     */
     public JTable tablaSeleccionada() {
         if (rdbtnA1.isSelected()) {
             seleccion = 1;
@@ -887,7 +913,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
         seleccion = 2;
         return tablaNuevoAutomata;
     }
-
+/**
+ * Este método permite saber sobre cuál autómata vamos a trabajar
+ * @return el autómata que se va a modificar o evaluar.
+ */
     public AutomataF automataSeleccionado() {
         if (seleccion == 1) {
             return automata1;

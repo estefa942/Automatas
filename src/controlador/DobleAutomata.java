@@ -10,8 +10,8 @@ import javax.swing.table.DefaultTableModel;
 import modelo.AutomataF;
 
 /**
- *
- * @author Alejo Castaño Rojas
+ *@author  Estefany Muriel Cano
+ * @author Alejandro Castaño Rojas
  */
 public class DobleAutomata {
 
@@ -24,6 +24,10 @@ public class DobleAutomata {
         this.a2 = a2;
     }
     
+/**
+ * Este método permite juntar todas las transiciones, estados, estados de aceptación, estados iniciales de los dos autómatas
+ * que se les va a hacer la unión o la intersección, y crea un nuevo autómata nuevo con todos estos elementos.
+ */    
     public void contruirAutomata(){
         af = new AutomataF();
         ArrayList<ArrayList> total = new ArrayList<>();

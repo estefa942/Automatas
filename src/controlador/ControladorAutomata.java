@@ -24,6 +24,11 @@ public class ControladorAutomata {
     ArrayList<ArrayList> automataNuevo = new ArrayList<>();
     DefaultTableModel dtm;
 
+    /**
+     * Constructor de la clase ControladorAutomata
+     * @param af El autómata a trabajar
+     * @param dtm La tabla perteneciente.
+     */
     public ControladorAutomata(AutomataF af, DefaultTableModel dtm) {
         this.af = af;
         this.dtm = dtm;
@@ -152,7 +157,7 @@ public class ControladorAutomata {
     }
 
     /**
-     * Permite verificar si el estado que se va a guardar es válido
+     * Permite verificar si el estado que se va a guardar es válido.
      *
      * @param estados Arreglo con los estados del autómata
      * @param estado String con el estado a verificar
@@ -175,7 +180,7 @@ public class ControladorAutomata {
      * así 2 particiones; una partición P0 con los estados de rechazo y una
      * particion P1 con los estados de aceptación.
      */
-    public void estadosAceptacion() { //OJO ACÁ
+    public void estadosAceptacion() { 
 
         ArrayList<String> estAcpt = new ArrayList<>();
         ArrayList<String> estRec = new ArrayList<>();
@@ -196,8 +201,8 @@ public class ControladorAutomata {
     }
 
     /**
-     * Este método guarda los estado iniciales que fueron ingrresado en la tabla
-     * del autómata, toma solo los estdos que en el campo "E.I" tienen el
+     * Este método guarda los estado iniciales que fueron ingrresados en la tabla
+     * del autómata, toma solo los estados que en el campo "E.I" tienen el
      * siguiente simbolo "#".
      */
     public void estadosIniciales() {
@@ -207,6 +212,9 @@ public class ControladorAutomata {
         String indicador;
         for (int i = 0; i < dtm.getRowCount(); i++) {
             indicador = (String) dtm.getValueAt(i, af.getSimbolos().length + 2);
+            if(i==0 && indicador==null){
+                estIniciales.add((String) dtm.getValueAt(i, 0));
+            }
             if (indicador != null && indicador.equals("#")) {
                 estIniciales.add((String) dtm.getValueAt(i, 0));
 
@@ -224,7 +232,7 @@ public class ControladorAutomata {
      *
      * @param estado String con el estado que se desea conocer si es de
      * aceptación
-     * @return un booleano con la confirmación de si es un estado de acepetación
+     * @return un booleano con la confirmación de si es un estado de aceptación
      * o no.
      */
     public boolean esEstadoDeAceptacion(String estado) {
@@ -242,7 +250,7 @@ public class ControladorAutomata {
 
     /**
      * Permite verificar si el autómata ingresado es deterministico o no
-     * deterministico, mediante la revision de sus transiciones
+     * deterministico, mediante la revisión de sus transiciones.
      *
      * @return un booleano con la confirmación de si es deterministico o no.
      */
@@ -306,7 +314,7 @@ public class ControladorAutomata {
      *
      * @param estados Arreglo de Strings con los estados a los cuales se les va
      * a hacer la unión de transiciones.
-     * @return Un Array de Strings con las transciones previamente concatenadas
+     * @return Un Array de Strings con las transiciones previamente concatenadas
      * y sin repeticiones en ellas.
      */
     public ArrayList<String> unirTransiciones(String[] estados) {
@@ -380,11 +388,11 @@ public class ControladorAutomata {
     }
 
     /**
-     * Permite decidir que estado de aceptación va a tener la unión de varios
-     * estados
-     *
+     * Permite decidir que estado de aceptación va a tener la unión o intersección de varios
+     * estados     *
      * @param estados Arreglo con los estados a verificar su estado de
      * aceptación
+     * @param tipo Ingresa un booleano que define el tipo de operación
      * @return un booleano en true si al menos uno de los estados es de
      * aceptación, o false de lo contrario.
      */
@@ -491,7 +499,7 @@ public class ControladorAutomata {
     /**
      * Este método permite convertir un autómata no deterministico a
      * deterministico, tomando el primer estado con sus transiciones del
-     * automata inicial, y a partir de este mediante la concatenación de estado
+     * autómata inicial, y a partir de este mediante la concatenación de estados
      * y transiciones, contruir el autómata final.
      *
      * @return un ArrayList de ArrayList de tipo String con el nuevo autómata.
@@ -566,6 +574,15 @@ public class ControladorAutomata {
         return automataD;
     }
 
+   /**
+    * Este método permite realizar la unión e intersección de uno o dos autómatas, para ello se recibe un booleano que indica
+    * el tipo de proceso a seguir, si es true se realiza la unión y si es false, se realiza la intersección, para esto se toman
+    * los estados iniciales y se juntan con sus respectivas transiciones, y a partir de esos nuevos estados se empieza a contruir el nuevo
+    * autómata.
+    * @param tipo booleano que indica si se va a hacer la unión o la intersección.
+    * @return Array con el nuevo autómata. 
+    */
+    
     public ArrayList<ArrayList> unionAutomata(boolean tipo) {
         ArrayList<ArrayList> automataFinal = new ArrayList<>();
         ArrayList<String> estadosAceptacion = new ArrayList<>();
@@ -785,7 +802,7 @@ public class ControladorAutomata {
     /**
      * Este método determina si un estado es de aceptación o no
      *
-     * @param estado
+     * @param estado el estado que se quiere verificar.
      * @version 1.5
      * @return boolean
      */
@@ -806,7 +823,7 @@ public class ControladorAutomata {
      * del autómata inicial las transiciones pertenecientes a cada elemento del
      * Array.
      *
-     * @param particion
+     * @param particion La partición que se quiere analizar
      * @return Retorna todas las transciones de la particion que se entren por
      * parámetro
      */
@@ -821,13 +838,13 @@ public class ControladorAutomata {
     }
 
     /**
-     * Entra el array con la particiona tratar y otro array con los simbolos a
-     * buscar dentro del primer array, este arrojará el array con los simbolos
-     * que no estan en esa particion.
+     * Entra el array con la partición a tratar y otro Array con los símbolos a
+     * buscar dentro del primer Array, este arrojará el Array con los símbolos
+     * que no estan en esa partición.
      *
-     * @param particion
-     * @param transicionASym
-     * @return ArrayList<String> estados no contenidos
+     * @param particion partición que se quiere analizar.
+     * @param transicionASym los simbolos que se van a buscar
+     * @return ArrayList con  los estados no contenidos en la partición.
      */
     public ArrayList<String> estadosNoContenidos(ArrayList<String> particion, ArrayList<String> transicionASym) {
         ArrayList<String> noContenidos = new ArrayList<>();
@@ -852,10 +869,10 @@ public class ControladorAutomata {
      * Este método permite crear una nueva partición para ello se mira la partición que se va a modificar, y la transición 
      * que hace que esta partición se tenga que modificar, luego miramos los estados de la transición correspondiente y si estos estados
      * no estan contenidos en la partición se crea un nuevo array con la nueva partición
-     * @param particion
-     * @param noContenidos
-     * @param posSym
-     * @return 
+     * @param particion partición a analizar
+     * @param noContenidos los estados no contenidos en la determinada partición
+     * @param posSym la posición en el array que pertenece a el símbolo que se está manejando
+     * @return Un Array con la nueva partición creada.
      */
     public ArrayList<String> creaNuevaParticion(ArrayList<String> particion, ArrayList<String> noContenidos, int posSym) {
         ArrayList<ArrayList> transicionesParticion = transicionesParticion(particion);
@@ -933,8 +950,8 @@ public class ControladorAutomata {
 /**
  * Este método permite mirar que estados son equivalente y eliminar los estados extraños, para esto tomamos las particiones
  * con los estados de aceptación y de rechazo, y vamos mirando sus transiciones cuando entra determinado simbolo, si sus transiciones van a una partición diferente
- * se crea otra nueva particón con el estado que difiere y se agrega a un array de particiones, se sigue analizando cada partición hasta que terminemos
- * todas las particiones con los diferentes simbolos, finalmente actualiza los valores del automata: transiciones, estados,estados de Aceptación.
+ * se crea otra nueva partición con el estado que difiere y se agrega a un array de particiones, se sigue analizando cada partición hasta que terminemos
+ * todas las particiones con los diferentes símbolos, finalmente actualiza los valores del autómata: transiciones, estados,estados de Aceptación.
  */
     public void simplificar() {
         ArrayList<String> particionesR = copiaArray(particiones.get(0));
@@ -1065,8 +1082,9 @@ public class ControladorAutomata {
     }
 
     /**
-     * Este método crea una copia con todos los elementos de un Arraylist
-     *
+     * Este método crea una copia con todos los elementos de un Arraylist.
+     * @param array elemento que se quiere clonar.
+     * @return un array con la copia del elemento.
      */
     public ArrayList<String> copiaArray(ArrayList<String> array) {
         ArrayList<String> copiaArray = new ArrayList<>();

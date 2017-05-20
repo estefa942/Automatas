@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import modelo.AutomataF;
 
 /**
- *
+ *@author Estefany Muriel Cano
  * @author Alejo Castaño Rojas
  */
 public class Archivo {
@@ -34,8 +34,8 @@ public class Archivo {
      * Este método recolecta toda la información pertinente para el usuario y
      * para el sistema, la guarda en la ubicación seleccionada por el usuario
      * de tal modo que pueda ser ingresado desde allí posteriormente.
-     * @param automata
-     * @param dtm 
+     * @param automata el elemento que se va a guardar.
+     * @param dtm la tabla que se está tratando.
      */
     public void GuardarEnTXT(AutomataF automata, DefaultTableModel dtm){
         String ruta = "";
@@ -97,8 +97,8 @@ public class Archivo {
      * Este método recolecta toda la información pertinente para el usuario y
      * para el sistema, la guarda en formato de impresión PDF en la ubicación
      * seleccionada por el usuario.
-     * @param automata
-     * @param dtm 
+     * @param automata automta que se va a imprimir
+     * @param dtm la tabla del autómata
      */
     public void GuardarEnPDF(AutomataF automata, DefaultTableModel dtm){
         String ruta = "";
