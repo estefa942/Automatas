@@ -42,7 +42,7 @@ public class Archivo {
         JFileChooser jfc = new JFileChooser();
         try {
             if (jfc.showSaveDialog(null) == jfc.APPROVE_OPTION) {
-                ruta = jfc.getSelectedFile().getAbsolutePath();
+                ruta = jfc.getSelectedFile().getAbsolutePath() + ".txt";
                 File archivo = new File(ruta);
                 FileWriter fw = new FileWriter(archivo);
                 BufferedWriter bw = new BufferedWriter(fw);
@@ -86,9 +86,10 @@ public class Archivo {
                     }
                 }
                 pw.close();
+                JOptionPane.showMessageDialog(jfc, "¡Archivo de texto correctamente creado!");
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(jfc, "No se pudo crear el archivo de texto.\nError: " + ex);
         }
     }
     
@@ -148,9 +149,9 @@ public class Archivo {
                 doc.open();
                 doc.add(new Paragraph(contenido));
                 doc.close();
-                JOptionPane msg = new JOptionPane("¡PDF correctamente creado!");
+                JOptionPane.showMessageDialog(jfc, "¡PDF correctamente creado!");
             } catch (Exception e) {
-                JOptionPane msg = new JOptionPane("No se pudo crear el PDF");
+                JOptionPane.showMessageDialog(jfc, "No se pudo crear el PDF");
             }
         }
     }

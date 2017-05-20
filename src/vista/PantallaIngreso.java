@@ -122,7 +122,8 @@ public class PantallaIngreso extends javax.swing.JFrame {
         Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1244, 514));
+        setMinimumSize(new java.awt.Dimension(1244, 510));
+        setPreferredSize(new java.awt.Dimension(1240, 545));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -256,10 +257,10 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 btnEvaluarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnEvaluar, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 440, 330, 20));
+        getContentPane().add(btnEvaluar, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 440, 330, 30));
 
         mostrarDecision.setEditable(false);
-        getContentPane().add(mostrarDecision, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 470, 330, -1));
+        getContentPane().add(mostrarDecision, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 480, 330, -1));
 
         btnGuardarArchivo.setText("Guardar en Archivo de Texto");
         btnGuardarArchivo.addActionListener(new java.awt.event.ActionListener() {
@@ -267,7 +268,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 btnGuardarArchivoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGuardarArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 420, 370, -1));
+        getContentPane().add(btnGuardarArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 430, 370, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/rsz_minhelp.png"))); // NOI18N
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -320,7 +321,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                 btnPDFActionPerformed(evt);
             }
         });
-        getContentPane().add(btnPDF, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 450, 370, 30));
+        getContentPane().add(btnPDF, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 470, 370, 30));
 
         btnInterseccion.setText("Interseccion de 2 automatas");
         btnInterseccion.addActionListener(new java.awt.event.ActionListener() {
@@ -612,7 +613,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
                         }
                         JOptionPane.showMessageDialog(rootPane, "Señor usuario, si desea operar con el automata finito (AF) \ntiene que llenar la tabla con las respectivas transiciones\ny luego hacer clic en el boton 'Operar'");
                     } catch (Exception e) {
-                        System.out.println("Se ha producido un error " + e + ". Revise argumentos y datos");
+                        JOptionPane.showMessageDialog(rootPane, "Se ha producido un error " + e + ". Revise datos ingresados y operados.");
                     }
                 }
             } else {
