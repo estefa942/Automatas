@@ -435,7 +435,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnInterseccion">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Interseccion de 2 aut&#xf3;matas"/>
+        <Property name="text" type="java.lang.String" value="Intersecci&#xf3;n de 2 aut&#xf3;matas"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInterseccionActionPerformed"/>

@@ -319,7 +319,7 @@ public class PantallaIngreso extends javax.swing.JFrame {
         jLabel6.setText("Seleccione el autómata con el que desea trabajar:");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 0, 380, 20));
 
-        btnInterseccion.setText("Interseccion de 2 autómatas");
+        btnInterseccion.setText("Intersección de 2 autómatas");
         btnInterseccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInterseccionActionPerformed(evt);
